@@ -1,0 +1,32 @@
+{
+  "name": "@cardstamp/renderer",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "Michal Pasierbski <mpasierbski@gmail.com>",
+  "homepage": "https://github.com/pasierb/cardstamp#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pasierb/cardstamp.git"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "bugs": {
+    "url": "https://github.com/pasierb/cardstamp/issues"
+  },
+  "devDependencies": {
+    "@types/intrinsic-scale": "^3.0.0",
+    "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "intrinsic-scale": "^3.0.4"
+  }
+}
