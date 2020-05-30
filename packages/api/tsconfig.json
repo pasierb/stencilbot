@@ -1,0 +1,11 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "target": "ES2017",
+        "outDir": "./lib",
+        "lib": [
+            "es6"
+        ],
+    },
+    "include": ["./src/**/*"]
+}
