@@ -36,11 +36,13 @@ export abstract class Renderer {
     const lines = layer.text.split(/\n/);
 
     // const textMeasure = ctx.measureText(layer.text);
-    const h = layer.fontSize * layer.lineHeight;
-    const offset = (h - layer.fontSize) / 2;
+    const h = +layer.fontSize * +layer.lineHeight;
+    const offset = (h - +layer.fontSize) / 2;
 
     lines.forEach((line, i) => {
-      ctx.fillText(line, layer.x, layer.y + ((i + 1) * h) - offset);
+      const y = +layer.y + ((i + 1) * h) - offset;
+
+      ctx.fillText(line, +layer.x, y);
     });
   }
 
@@ -50,21 +52,21 @@ export abstract class Renderer {
     const image = await this.loadImage(imageUri!);
     const scale = this.getScale(ctx.canvas, image, layer);
 
-    ctx.drawImage(image, x + scale.x, y + scale.y, scale.width, scale.height);
+    ctx.drawImage(image, +x + scale.x, +y + scale.y, scale.width, scale.height);
   }
 
   protected getScale(canvas: HTMLCanvasElement, img: CanvasImageSource, layer: Layer): IntrinsicScale {
     switch (layer.imageFit) {
       case ImageFit.Contain: {
-        return contain(layer.width || canvas.width, layer.height || canvas.height, +img.width, +img.height);
+        return contain(+(layer.width || canvas.width), +(layer.height || canvas.height), +img.width, +img.height);
       }
       case ImageFit.Cover: {
-        return cover(layer.width || canvas.width, layer.height || canvas.height, +img.width, +img.height);
+        return cover(+(layer.width || canvas.width), +(layer.height || canvas.height), +img.width, +img.height);
       }
       default: {
         return {
-          width: layer.width || +img.width,
-          height: layer.height || +img.height,
+          width: +(layer.width || img.width),
+          height: +(layer.height || img.height),
           x: 0,
           y: 0
         }

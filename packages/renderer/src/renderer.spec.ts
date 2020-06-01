@@ -28,4 +28,15 @@ describe('renderer', () => {
 
     expect(y).toBe(17.5);
   });
+
+  it('should render on y axis', () => {
+    const fillText = ctx.fillText as jest.Mock
+    const layer = new Layer({ text: 'as', y: 1, fontSize: 14, lineHeight: 1.5 });
+
+    renderer.render(canvas, layer);
+    
+    const [text, x, y] = fillText.mock.calls[0];
+
+    expect(y).toBe(18.5);
+  })
 });
