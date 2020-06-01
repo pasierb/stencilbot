@@ -1,2 +1,2 @@
-# `@cardstamp/api`
+# `@stencilbot/api`
 

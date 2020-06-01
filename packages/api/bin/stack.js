@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 const cdk = require('@aws-cdk/core');
-const { CardStampApiStack } = require('../lib/stack.js')
+const { stencilbotApiStack } = require('../lib/stack.js')
 
 const app = new cdk.App();
 
-new CardStampApiStack(app, 'CardStampApiStack', {
+new stencilbotApiStack(app, 'stencilbotApiStack', {
   env: {
     region: 'eu-west-1'
   }

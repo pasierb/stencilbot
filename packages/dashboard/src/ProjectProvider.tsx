@@ -1,7 +1,7 @@
 import React from 'react';
 import { createContext, FunctionComponent, useState } from 'react';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { LayerInit, Layer } from '@cardstamp/renderer';
+import { LayerInit, Layer } from '@stencilbot/renderer';
 
 interface ProjectProviderProps {
   width: number

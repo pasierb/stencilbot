@@ -1,5 +1,5 @@
 mkdir -p tmp
 
-docker build . -t cardstamp-api:latest
+docker build . -t stencilbot-api:latest
 
-docker run -v "$(pwd)"/tmp:/app/layers/out cardstamp-api:latest
+docker run -v "$(pwd)"/tmp:/app/layers/out stencilbot-api:latest

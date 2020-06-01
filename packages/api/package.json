@@ -1,9 +1,9 @@
 {
-  "name": "@cardstamp/api",
+  "name": "@stencilbot/api",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "Michal Pasierbski <mpasierbski@gmail.com>",
-  "homepage": "https://github.com/pasierb/cardstamp#readme",
+  "homepage": "https://github.com/pasierb/stencilbot#readme",
   "license": "ISC",
   "main": "lib/api.js",
   "directories": {
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pasierb/cardstamp.git"
+    "url": "git+https://github.com/pasierb/stencilbot.git"
   },
   "scripts": {
     "deploy": "cdk deploy",
@@ -22,7 +22,7 @@
     "build": "tsc && rollup -c && node bin/copyFonts"
   },
   "bugs": {
-    "url": "https://github.com/pasierb/cardstamp/issues"
+    "url": "https://github.com/pasierb/stencilbot/issues"
   },
   "peerDependencies": {
     "aws-sdk": "^2.631.0",
@@ -51,7 +51,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@cardstamp/renderer": "^0.0.1",
+    "@stencilbot/renderer": "^0.0.1",
     "node-fetch": "^2.6.0"
   }
 }

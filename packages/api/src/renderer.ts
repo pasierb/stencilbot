@@ -1,4 +1,4 @@
-import { Renderer, Layer } from '@cardstamp/renderer';
+import { Renderer, Layer } from '@stencilbot/renderer';
 import { loadImage, Image } from 'canvas';
 import fetch from 'node-fetch';
 

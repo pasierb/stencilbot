@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { ProjectLayer } from './ProjectLayer';
-import { Layer } from '@cardstamp/renderer';
+import { Layer } from '@stencilbot/renderer';
 import { Subject } from 'rxjs';
 
 import style from './Project.module.css';

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, FunctionComponent } from 'react';
 import { Subject } from 'rxjs';
-import { Layer } from '@cardstamp/renderer';
+import { Layer } from '@stencilbot/renderer';
 import { BrowserRenderer } from './BrowserRenderer';
 
 interface ProjectLayerProps {

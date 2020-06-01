@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { useForm } from 'react-hook-form';
-import { Layer, LayerInit, ImageFit } from '@cardstamp/renderer';
+import { Layer, LayerInit, ImageFit } from '@stencilbot/renderer';
 
 interface LayerFormProps {
   layer: Layer

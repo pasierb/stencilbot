@@ -1,4 +1,4 @@
-import { Renderer } from '@cardstamp/renderer';
+import { Renderer } from '@stencilbot/renderer';
 
 export class BrowserRenderer extends Renderer {
   loadImage(uri: string): Promise<HTMLImageElement> {
