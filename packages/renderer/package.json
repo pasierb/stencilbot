@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@types/intrinsic-scale": "^3.0.0",
+    "rollup": "^2.11.2",
     "typescript": "^3.9.3"
   },
   "dependencies": {

@@ -1,8 +1,11 @@
 import { Renderer, Layer } from '@cardstamp/renderer';
 import { loadImage, Image } from 'canvas';
+import fetch from 'node-fetch';
 
 export class ServerRenderer extends Renderer {
   loadImage(uri: string) {
-    return loadImage(uri) as unknown as Promise<CanvasImageSource>;
+    return fetch(uri)
+      .then(res => res.buffer())
+      .then(buf => loadImage(buf) as unknown as CanvasImageSource)
   }
 }

@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, FunctionComponent } from 'react';
+import { Subject } from 'rxjs';
 import { Layer } from '@cardstamp/renderer';
 import { BrowserRenderer } from './BrowserRenderer';
 
 interface ProjectLayerProps {
-  layer: Layer
+  layer: Subject<Layer>
   width: number
   height: number
 }
@@ -14,7 +15,11 @@ const ProjectLayer: FunctionComponent<ProjectLayerProps> = ({ layer, width, heig
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    renderer.render(canvasRef.current!, layer);
+    const sub = layer.subscribe(l => {
+      renderer.render(canvasRef.current!, l);
+    });
+
+    return sub.unsubscribe
   });
 
   return (

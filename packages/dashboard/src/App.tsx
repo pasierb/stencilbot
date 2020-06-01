@@ -1,32 +1,52 @@
 import React from 'react';
+import { LayerForm } from './LayerForm';
+import { ProjectProvider, ProjectConsumer } from './ProjectProvider';
 import { Project } from './Project';
 
 function App() {
-  const project = {
+  const data = {
     width: 400,
     height: 400,
     layers: [
       {
-        text: "hell",
-        y: 0,
-        imageUri: "https://i1.kwejk.pl/k/obrazki/2020/05/IaJcVc2s74kLam2l.jpg"
+        imageUri: 'https://i.imgur.com/XRUz8BV.png'
       },
       {
-        text: "woot",
+        text: "woot\nha!",
         y: 40
       },
       {
         text: "From 0x0",
         fontSize: 20,
-        color: 'red'
+        color: '#ff0000'
       }
     ]
   };
 
   return (
-    <div>
-      tu
-      <Project project={project} />
+    <div className="container is-fluid">
+      <ProjectProvider {...data} >
+        <ProjectConsumer>
+          {({ layers, layerSubjects }) => (
+            <div className="columns">
+              <div className="column is-four-fifths">
+                <Project layers={Array.from(layerSubjects.values())} width={data.width} height={data.height} />
+              </div>
+              <div className="column">
+                {layers.map((layer, i) => (
+                  <LayerForm
+                    key={i}
+                    layer={layer}
+                    onSubmit={(l) => {
+                      layerSubjects.get(l)!.next(l)
+                    }}
+                  />)
+                )}
+              </div>
+            </div>
+          )}
+        </ProjectConsumer>
+      </ProjectProvider>
     </div>
   );
 }

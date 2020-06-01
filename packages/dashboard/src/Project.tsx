@@ -1,30 +1,27 @@
 import React, { FunctionComponent } from 'react';
 import { ProjectLayer } from './ProjectLayer';
 import { Layer } from '@cardstamp/renderer';
+import { Subject } from 'rxjs';
 
 import style from './Project.module.css';
 
 interface ProjectProps {
-    project: {
-        width: number,
-        height: number,
-        layers: Layer[]
-    }
+  width: number,
+  height: number,
+  layers: Subject<Layer>[]
 }
 
-export const Project: FunctionComponent<ProjectProps> = ({ project }) => {
-    const { layers, width, height } = project;
-
-    return (
-        <div className={style.Project}>
-            {layers.map((layer, i) =>
-                <ProjectLayer
-                    key={i}
-                    layer={layer}
-                    width={width}
-                    height={height}
-                />
-            )}
-        </div>
-    )
+export const Project: FunctionComponent<ProjectProps> = ({ width, height, layers }) => {
+  return (
+    <div className={style.Project} style={{ width: `${width}px`, height: `${height}px` }}>
+      {layers.map((layer, i) =>
+        <ProjectLayer
+          key={i}
+          layer={layer}
+          width={width}
+          height={height}
+        />
+      )}
+    </div>
+  )
 }

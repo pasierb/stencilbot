@@ -1,58 +1,55 @@
 import { contain, cover, IntrinsicScale } from 'intrinsic-scale';
-
-export interface Layer {
-  x?: number
-  y?: number
-  width?: number
-  height?: number
-  text?: string
-  imageUri?: string
-  imageFit?: string
-  fontUri?: string
-  fontSize?: number
-  fontFamily?: string
-  color?: string
-}
-
-export enum ImageFit {
-  Cover = 'cover',
-  Contain = 'contain'
-}
+import { Layer, ImageFit } from './layer';
 
 export abstract class Renderer {
   abstract loadImage(uri: string): Promise<CanvasImageSource>
 
   async render(canvas: HTMLCanvasElement, layer: Layer) {
-    const ctx = canvas.getContext('2d')!;
-    const {
-      x = 0,
-      y = 0,
-      color = '#000',
-      fontSize = 15,
-      fontFamily = 'Arial'
-    } = layer;
+    this.setupCanvas(canvas, async (ctx) => {
+      if (layer.imageUri) {
+        await this.renderImage(ctx, layer);
+      }
 
-    ctx.fillStyle = color;
+      if (layer.text) {
+        this.renderText(ctx, layer);
+      }
+    })
+  }
 
-    if (layer.imageUri) {
-      const image = await this.loadImage(layer.imageUri);
-      const scale = this.getScale(canvas, image, layer);
+  protected setupCanvas(canvas: HTMLCanvasElement, callback: (ctx: CanvasRenderingContext2D) => void) {
+    const ctx = canvas.getContext("2d");
 
-      ctx.drawImage(image, x + scale.x, y + scale.y, scale.width, scale.height);
-    }
+    if (!ctx) throw new Error("2D Context not available");
 
-    if (layer.text) {
-      ctx.font = `${fontSize}px ${fontFamily}`;
+    ctx.save();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const textMeasure = ctx.measureText(layer.text);
-      const h = textMeasure.actualBoundingBoxAscent;
+    callback(ctx);
 
-      ctx.fillText(layer.text, x, y + h);
-    }
+    ctx.restore();
+  }
+
+  protected renderText(ctx: CanvasRenderingContext2D, layer: Layer) {
+    ctx.fillStyle = layer.color;
+    ctx.font = `${layer.fontSize}px ${layer.fontFamily}`;
+
+    const textMeasure = ctx.measureText(layer.text);
+    const h = textMeasure.actualBoundingBoxAscent;
+
+    ctx.fillText(layer.text, layer.x, layer.y + h);
+  }
+
+  protected async renderImage(ctx: CanvasRenderingContext2D, layer: Layer) {
+    const { x, y, imageUri } = layer;
+
+    const image = await this.loadImage(imageUri!);
+    const scale = this.getScale(ctx.canvas, image, layer);
+
+    ctx.drawImage(image, x + scale.x, y + scale.y, scale.width, scale.height);
   }
 
   getScale(canvas: HTMLCanvasElement, img: CanvasImageSource, layer: Layer): IntrinsicScale {
-    switch(layer.imageFit) {
+    switch (layer.imageFit) {
       case ImageFit.Contain: {
         return contain(layer.width || canvas.width, layer.height || canvas.height, +img.width, +img.height);
       }
