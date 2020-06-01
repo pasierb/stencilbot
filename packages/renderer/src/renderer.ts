@@ -33,10 +33,15 @@ export abstract class Renderer {
     ctx.fillStyle = layer.color;
     ctx.font = `${layer.fontSize}px ${layer.fontFamily}`;
 
-    const textMeasure = ctx.measureText(layer.text);
-    const h = textMeasure.actualBoundingBoxAscent;
+    const lines = layer.text.split(/\n/);
 
-    ctx.fillText(layer.text, layer.x, layer.y + h);
+    // const textMeasure = ctx.measureText(layer.text);
+    const h = layer.fontSize * layer.lineHeight;
+    const offset = (h - layer.fontSize) / 2;
+
+    lines.forEach((line, i) => {
+      ctx.fillText(line, layer.x, layer.y + ((i + 1) * h) - offset);
+    });
   }
 
   protected async renderImage(ctx: CanvasRenderingContext2D, layer: Layer) {
@@ -48,7 +53,7 @@ export abstract class Renderer {
     ctx.drawImage(image, x + scale.x, y + scale.y, scale.width, scale.height);
   }
 
-  getScale(canvas: HTMLCanvasElement, img: CanvasImageSource, layer: Layer): IntrinsicScale {
+  protected getScale(canvas: HTMLCanvasElement, img: CanvasImageSource, layer: Layer): IntrinsicScale {
     switch (layer.imageFit) {
       case ImageFit.Contain: {
         return contain(layer.width || canvas.width, layer.height || canvas.height, +img.width, +img.height);

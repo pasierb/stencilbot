@@ -17,14 +17,19 @@
     "url": "git+https://github.com/pasierb/stencilbot.git"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"
   },
   "devDependencies": {
     "@types/intrinsic-scale": "^3.0.0",
+    "@types/jest": "^25.2.3",
+    "jest": "^26.0.1",
+    "jest-canvas-mock": "^2.2.0",
     "rollup": "^2.11.2",
+    "ts-jest": "^26.1.0",
     "typescript": "^3.9.3"
   },
   "dependencies": {

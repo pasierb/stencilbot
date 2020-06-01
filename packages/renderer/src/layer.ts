@@ -10,6 +10,7 @@ export type LayerInit = {
   fontUri?: string
   fontSize?: number
   fontFamily?: string
+  lineHeight?: number
   color?: string
 }
 
@@ -31,6 +32,7 @@ export class Layer {
   fontUri?: string
   fontSize: number
   fontFamily: string
+  lineHeight: number
 
   imageUri?: string
   imageFit: string
@@ -43,6 +45,7 @@ export class Layer {
     this.color = init.color || '#000';
     this.fontFamily = init.fontFamily || 'Roboto';
     this.fontSize = init.fontSize || 14;
+    this.lineHeight = init.lineHeight || 1.5;
     this.imageUri = init.imageUri;
     this.imageFit = init.imageFit || ImageFit.None;
   }
