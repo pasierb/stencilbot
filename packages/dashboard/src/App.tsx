@@ -34,7 +34,7 @@ function App() {
                 <Project layers={Array.from(layerSubjects.values())} width={data.width} height={data.height} />
               </Layout.Content>
               <Layout.Sider>
-                <Collapse>
+                <Collapse accordion>
                   {layers.map((layer, i) => (
                     <Collapse.Panel key={i} header="">
                       <LayerForm
