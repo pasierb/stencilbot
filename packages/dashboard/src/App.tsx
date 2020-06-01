@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Collapse, Layout } from 'antd';
 import { LayerForm } from './LayerForm';
 import { ProjectProvider, ProjectConsumer } from './ProjectProvider';
 import { Project } from './Project';
@@ -24,30 +25,34 @@ function App() {
   };
 
   return (
-    <div className="container is-fluid">
+    <Layout>
       <ProjectProvider {...data} >
         <ProjectConsumer>
           {({ layers, layerSubjects }) => (
-            <div className="columns">
-              <div className="column is-four-fifths">
+            <Fragment>
+              <Layout.Content>
                 <Project layers={Array.from(layerSubjects.values())} width={data.width} height={data.height} />
-              </div>
-              <div className="column">
-                {layers.map((layer, i) => (
-                  <LayerForm
-                    key={i}
-                    layer={layer}
-                    onSubmit={(l) => {
-                      layerSubjects.get(l)!.next(l)
-                    }}
-                  />)
-                )}
-              </div>
-            </div>
+              </Layout.Content>
+              <Layout.Sider>
+                <Collapse>
+                  {layers.map((layer, i) => (
+                    <Collapse.Panel key={i} header="">
+                      <LayerForm
+                        key={i}
+                        layer={layer}
+                        onSubmit={(l) => {
+                          layerSubjects.get(l)!.next(l)
+                        }}
+                      />
+                    </Collapse.Panel>
+                  ))}
+                </Collapse>
+              </Layout.Sider>
+            </Fragment>
           )}
         </ProjectConsumer>
       </ProjectProvider>
-    </div>
+    </Layout>
   );
 }
 

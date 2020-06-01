@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { Layer, LayerInit, ImageFit } from '@stencilbot/renderer';
+import { Form, Input, Button, Select } from 'antd';
 
 interface LayerFormProps {
   layer: Layer
@@ -8,7 +9,7 @@ interface LayerFormProps {
 }
 
 export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit }) => {
-  const { register, handleSubmit } = useForm<LayerInit>({ defaultValues: layer.attributes });
+  const { handleSubmit, control } = useForm<LayerInit>({ defaultValues: layer.attributes });
 
   const submit = handleSubmit(data => {
     layer.attributes = data;
@@ -17,51 +18,24 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit }
   });
 
   return (
-    <form onSubmit={submit}>
-      <div className="columns">
-        <div className="column is-marginless field">
-          <label className="label is-small">X</label>
-          <div className="control">
-            <input name="x" className="input is-small" type="number" ref={register} />
-          </div>
-        </div>
+    <Form onChange={submit}>
+      <Form.Item label="X">
+        <Controller as={Input} name="x" type="number" control={control} />
+      </Form.Item>
+      <Form.Item label="Y">
+        <Controller as={Input} name="y" type="number" control={control} />
+      </Form.Item>
+      <Form.Item label="Color">
+        <Controller as={Input} name="color" type="color" control={control} />
+      </Form.Item>
+      <Form.Item label="Text">
+        <Controller as={Input.TextArea} name="text" control={control} />
+      </Form.Item>
+      <Form.Item label="imageFit">
+        <Controller name="imageFit" control={control} as={<Select options={[{ value: ImageFit.None }, { value: ImageFit.Contain }]} />} />
+      </Form.Item>
 
-        <div className="column is-marginless field">
-          <label className="label is-small">Y</label>
-          <div className="control">
-            <input name="y" className="input is-small" type="number" ref={register} />
-          </div>
-        </div>
-      </div>
-
-      <div className="field">
-        <label className="label is-small">text</label>
-        <div className="control">
-          <textarea className="textarea is-small" name="text" ref={register} />
-        </div>
-      </div>
-
-      <div className="field">
-        <label className="label is-small">color</label>
-        <div className="control">
-          <input name="color" className="input is-small" type="color" ref={register} />
-        </div>
-      </div>
-
-      <div className="field">
-        <label className="label is-small">image fit</label>
-        <div className="control">
-          <div className="select is-small">
-            <select name="imageFit" ref={register}>
-              <option value={ImageFit.None}>none</option>
-              <option value={ImageFit.Contain}>contain</option>
-              <option value={ImageFit.Cover}>cover</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <button type="submit">Submit</button>
-    </form>
+      <Button htmlType="submit">Submit</Button>
+    </Form>
   );
 }
