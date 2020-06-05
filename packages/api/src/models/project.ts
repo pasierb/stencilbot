@@ -77,7 +77,7 @@ export class Project implements Base {
       id: item.id.S,
       userId: item.userId.S,
       width: +item.width.N,
-      height: +item.width.N
+      height: +item.height.N
     })
   }
 
