@@ -1,36 +1,30 @@
 import path from 'path';
 import { APIGatewayProxyHandler } from 'aws-lambda'
+import { DynamoDB } from 'aws-sdk';
+import { Project } from './models/project';
 import { ServerRenderer } from './renderer';
 import { createCanvas, Canvas, registerFont } from 'canvas';
 
-const project = {
-  width: 400,
-  height: 400,
-  layers: [
-    {
-      text: "hell",
-      y: 0,
-      imageUri: "https://i1.kwejk.pl/k/obrazki/2020/05/IaJcVc2s74kLam2l.jpg"
-    },
-    {
-      text: "woot\nha!",
-      y: 40
-    },
-    {
-      text: "From 0x0",
-      fontSize: 20,
-      color: 'red',
-      fontFamily: 'Roboto'
-    }
-  ]
-};
-
+const dynamoDB = new DynamoDB();
 const renderer = new ServerRenderer();
 
-registerFont('fonts/Roboto-Regular.ttf', { family: 'Roboto' });
+registerFont(path.join(__dirname, 'fonts/Roboto-Regular.ttf'), { family: 'Roboto' });
 
 export const handler: APIGatewayProxyHandler = async (event, context, callback) => {
-  const { width, height, layers } = project;
+  const project = await Project.find(dynamoDB, {
+    id: event.pathParameters.id,
+    userId: event.pathParameters.userId
+  })
+
+  if (!project) {
+    return {
+      statusCode: 404,
+      body: ''
+    }
+  }
+
+  const { width, height } = project;
+  const layers = await project.layers(dynamoDB);
 
   const base = createCanvas(width, height);
   const ctx = base.getContext('2d');

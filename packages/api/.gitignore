@@ -2,3 +2,5 @@ lib
 cdk.out
 tmp
 dist
+.build
+.cache

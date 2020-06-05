@@ -4,13 +4,18 @@ import json from '@rollup/plugin-json';
  
 export default {
   input: 'lib/deliver.js',
-  external: ['canvas'],
+  external: [
+    'canvas',
+    'aws-sdk'
+  ],
   output: {
     dir: 'dist',
     format: 'cjs'
   },
   plugins: [
-    resolve(),
+    resolve({
+      preferBuiltins: true
+    }),
     commonjs(),
     json()
   ]
