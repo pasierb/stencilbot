@@ -1,14 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import { ProjectLayer } from './ProjectLayer';
 import { Layer } from '@stencilbot/renderer';
-import { Subject } from 'rxjs';
 
 import style from './Project.module.css';
 
 interface ProjectProps {
   width: number,
   height: number,
-  layers: Subject<Layer>[]
+  layers: Layer[]
 }
 
 export const Project: FunctionComponent<ProjectProps> = ({ width, height, layers }) => {

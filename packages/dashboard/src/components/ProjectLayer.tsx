@@ -1,10 +1,9 @@
 import React, { useRef, useEffect, FunctionComponent } from 'react';
-import { Subject } from 'rxjs';
 import { Layer } from '@stencilbot/renderer';
-import { BrowserRenderer } from './BrowserRenderer';
+import { BrowserRenderer } from '../BrowserRenderer';
 
 interface ProjectLayerProps {
-  layer: Subject<Layer>
+  layer: Layer
   width: number
   height: number
 }
@@ -15,11 +14,7 @@ const ProjectLayer: FunctionComponent<ProjectLayerProps> = ({ layer, width, heig
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const sub = layer.subscribe(l => {
-      renderer.render(canvasRef.current!, l);
-    });
-
-    return sub.unsubscribe
+    renderer.render(canvasRef.current!, layer);
   });
 
   return (
