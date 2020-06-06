@@ -1,0 +1,28 @@
+{
+  "name": "@stencilbot/product",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export",
+    "deploy": "cdk deploy",
+    "predeploy": "tsc --outDir lib -m commonjs -t ES6 src/stack.ts"
+  },
+  "dependencies": {
+    "next": "9.4.4",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "@aws-cdk/aws-certificatemanager": "^1.44.0",
+    "@aws-cdk/aws-cloudfront": "^1.44.0",
+    "@aws-cdk/aws-codebuild": "^1.44.0",
+    "@aws-cdk/aws-s3": "^1.44.0",
+    "@aws-cdk/core": "^1.44.0",
+    "@types/react": "^16.9.35",
+    "aws-cdk": "^1.44.0",
+    "typescript": "^3.9.5"
+  }
+}
