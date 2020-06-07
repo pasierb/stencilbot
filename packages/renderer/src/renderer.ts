@@ -6,12 +6,17 @@ export abstract class Renderer {
 
   async render(canvas: HTMLCanvasElement, layer: Layer) {
     this.setupCanvas(canvas, async (ctx) => {
+
+      if (layer.bg) {
+        await this.withCleanContext(ctx, c => this.renderBackground(c, layer))
+      }
+
       if (layer.imageUri) {
-        await this.renderImage(ctx, layer);
+        await this.withCleanContext(ctx, c => this.renderImage(c, layer))
       }
 
       if (layer.text) {
-        this.renderText(ctx, layer);
+        await this.withCleanContext(ctx, c => this.renderText(c, layer))
       }
     })
   }
@@ -27,6 +32,29 @@ export abstract class Renderer {
     callback(ctx);
 
     ctx.restore();
+  }
+
+  protected async withCleanContext(ctx: CanvasRenderingContext2D, callback: (ctx: CanvasRenderingContext2D) => void) {
+    ctx.save();
+
+    await callback(ctx);
+    
+    ctx.restore();
+  }
+
+  protected renderBackground(ctx: CanvasRenderingContext2D, layer: Layer) {
+    let { width, height, x, y, bg } = layer;
+
+    if (width === 0) {
+      width = ctx.canvas.width;
+    }
+
+    if (height === 0) {
+      height = ctx.canvas.height;
+    }
+
+    ctx.fillStyle = `${bg}`;
+    ctx.fillRect(x, y, width, height);
   }
 
   protected renderText(ctx: CanvasRenderingContext2D, layer: Layer) {

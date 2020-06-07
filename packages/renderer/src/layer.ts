@@ -13,6 +13,7 @@ export type LayerInit = {
   fontFamily?: string
   lineHeight?: number
   color?: string
+  bg?: string
 }
 
 export enum ImageFit {
@@ -35,6 +36,7 @@ export class Layer {
   y: number
   width: number
   height: number
+  bg: string
 
   text: string
   color: string
@@ -61,6 +63,7 @@ export class Layer {
     this.width = init.width || 0;
     this.height = init.height || 0;
     this.fontUri = init.fontUri || '';
+    this.bg = init.bg || '';
   }
 
   get type(): LayerType {
@@ -91,6 +94,7 @@ export class Layer {
       y: this.y,
       width: this.width,
       height: this.height,
+      bg: this.bg,
       text: this.text,
       color: this.color,
       fontFamily: this.fontFamily,
