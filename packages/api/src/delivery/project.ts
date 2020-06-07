@@ -1,20 +1,20 @@
-import path from 'path';
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import { DynamoDB } from 'aws-sdk';
-import { Project } from './models/project';
-import { ServerRenderer } from './renderer';
-import { createCanvas, Canvas, registerFont } from 'canvas';
+import { createCanvas, Canvas } from 'canvas';
+import { Project } from '../models/project';
+import { ServerRenderer } from '../serverRenderer';
+import { registerDefaultFonts } from '../fonts';
 
 const dynamoDB = new DynamoDB();
 const renderer = new ServerRenderer();
 
-registerFont(path.join(__dirname, 'fonts/Roboto-Regular.ttf'), { family: 'Roboto' });
+registerDefaultFonts();
 
 export const handler: APIGatewayProxyHandler = async (event, context, callback) => {
   const project = await Project.find(dynamoDB, {
     id: event.pathParameters.id,
     userId: event.pathParameters.userId
-  })
+  });
 
   if (!project) {
     return {
@@ -50,3 +50,4 @@ export const handler: APIGatewayProxyHandler = async (event, context, callback) 
     }
   };
 }
+

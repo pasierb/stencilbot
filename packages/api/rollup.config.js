@@ -3,7 +3,10 @@ import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
  
 export default {
-  input: 'lib/deliver.js',
+  input: [
+    'lib/delivery/anonymous.js',
+    'lib/delivery/project.js'
+  ],
   external: [
     'canvas',
     'aws-sdk'

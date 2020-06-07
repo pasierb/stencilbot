@@ -52,14 +52,21 @@ export class StencilbotApiStack extends Stack {
       code: Code.fromAsset(path.join(__dirname, '../tmp/canvas.zip'))
     });
 
-    const deliveryFunction = new Function(this, 'stencilbot-delivery', {
+    const projectDeliveryFunction = new Function(this, 'stencilbot-delivery', {
       code: Code.fromAsset(path.join(__dirname, '../dist')),
-      handler: 'deliver.handler',
+      handler: 'delivery/project.handler',
       runtime: Runtime.NODEJS_12_X,
       layers: [nodeModulesLayer]
     });
 
-    deliveryFunction.addToRolePolicy(new PolicyStatement({
+    const anounymousDeliveryFunction = new Function(this, 'stencil-delivery-anonymous', {
+      code: Code.fromAsset(path.join(__dirname, '../dist')),
+      handler: 'delivery/anonymous.handler',
+      runtime: Runtime.NODEJS_12_X,
+      layers: [nodeModulesLayer]
+    });
+
+    projectDeliveryFunction.addToRolePolicy(new PolicyStatement({
       actions: [
         "dynamodb:Get*",
         "dynamodb:BatchGet*",
@@ -71,7 +78,8 @@ export class StencilbotApiStack extends Stack {
       ]
     }));
 
-    const deliveryIntegration = new LambdaIntegration(deliveryFunction);
+    const projectDeliveryIntegration = new LambdaIntegration(projectDeliveryFunction);
+    const anonymousDeliveryIntegration = new LambdaIntegration(anounymousDeliveryFunction);
 
     const deliveryApi = new RestApi(this, 'stencilbot-delivery-api', {
       binaryMediaTypes: ['image/png', '*/*']
@@ -79,14 +87,18 @@ export class StencilbotApiStack extends Stack {
 
     const usersResource = deliveryApi.root.addResource('users');
     const userResource = usersResource.addResource('{userId}');
-    const projectsResource = userResource.addResource('projects');
-    const projectResource = projectsResource.addResource('{id}');
+    const userProjectsResource = userResource.addResource('projects');
+    const userProjectResource = userProjectsResource.addResource('{id}');
 
-    projectResource.addMethod('GET', deliveryIntegration, {
+    userProjectResource.addMethod('GET', projectDeliveryIntegration, {
       requestParameters: {
         'method.request.path.id': true
       }
     });
+
+    const projectResource = deliveryApi.root.addResource('project');
+
+    projectResource.addMethod('GET', anonymousDeliveryIntegration, {});
 
     /**
      * Admin API
