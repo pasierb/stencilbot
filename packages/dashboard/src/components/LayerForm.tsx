@@ -1,6 +1,6 @@
 import React, { FunctionComponent, Fragment } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Layer, LayerInit, ImageFit } from '@stencilbot/renderer';
+import { Layer, LayerInit, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
 import { Form, Input, Button, Select } from 'antd';
 
 interface LayerFormProps {
@@ -9,10 +9,12 @@ interface LayerFormProps {
 }
 
 export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit }) => {
-  const { handleSubmit, control } = useForm<LayerInit>({ defaultValues: layer.attributes });
+  const { handleSubmit, control } = useForm<LayerInit>({ defaultValues: layer });
 
   const submit = handleSubmit(data => {
-    onSubmit(new Layer({ ...layer.attributes, ...data }));
+    const newLayer = new Layer({ ...data, id: layer.id, order: layer.order });
+
+    onSubmit(newLayer);
   });
 
   return (
@@ -63,6 +65,34 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit }
           />
         </Form.Item>
       </Fragment>)}
+
+      <Form.Item label="Vertical align">
+        <Controller
+          name="valign"
+          control={control}
+          as={
+            <Select options={[
+              { value: VerticalAlign.Top },
+              { value: VerticalAlign.Middle },
+              { value: VerticalAlign.Bottom },
+            ]} />
+          }
+        />
+      </Form.Item>
+
+      <Form.Item label="Text align">
+        <Controller
+          name="textAlign"
+          control={control}
+          as={
+            <Select options={[
+              { value: TextAlign.Left },
+              { value: TextAlign.Center },
+              { value: TextAlign.Right },
+            ]} />
+          }
+        />
+      </Form.Item>
 
       <Button htmlType="submit">Submit</Button>
     </Form>

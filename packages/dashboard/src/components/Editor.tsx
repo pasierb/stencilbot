@@ -11,7 +11,7 @@ import { LayerIcon } from './LayerIcon';
 
 import style from './Editor.module.css';
 
-const width = 400;
+const width = 800;
 const height = 400;
 
 const PanelHeader: FunctionComponent<{ layer: Layer }> = ({ layer }) => (
@@ -34,6 +34,8 @@ export const Editor = () => {
       updateEditorLayers(newLayers);
     }
   }
+
+  
 
   return (
     <Layout className={style.Editor}>

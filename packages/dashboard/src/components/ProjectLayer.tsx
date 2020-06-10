@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, FunctionComponent } from 'react';
+import React, { Fragment, useRef, useEffect, FunctionComponent } from 'react';
 import { Layer } from '@stencilbot/renderer';
 import { BrowserRenderer } from '../BrowserRenderer';
 
