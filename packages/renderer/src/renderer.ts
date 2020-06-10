@@ -1,27 +1,18 @@
 import { contain, cover, IntrinsicScale } from 'intrinsic-scale';
-import { Layer, ImageFit } from './layer';
+import { Layer, ImageFit, TextAlign, VerticalAlign } from './layer';
 
 export abstract class Renderer {
   abstract loadImage(uri: string): Promise<CanvasImageSource>
 
-  async render(canvas: HTMLCanvasElement, layer: Layer) {
-    this.setupCanvas(canvas, async (ctx) => {
-
-      if (layer.bg) {
-        await this.withCleanContext(ctx, c => this.renderBackground(c, layer))
-      }
-
-      if (layer.imageUri) {
-        await this.withCleanContext(ctx, c => this.renderImage(c, layer))
-      }
-
-      if (layer.text) {
-        await this.withCleanContext(ctx, c => this.renderText(c, layer))
-      }
-    })
+  render(canvas: HTMLCanvasElement, layer: Layer) {
+    return this.setupCanvas(canvas, async (ctx) => {
+      await this.withCleanContext(ctx, c => this.renderBackground(c, layer))
+      await this.withCleanContext(ctx, c => this.renderImage(c, layer))
+      await this.withCleanContext(ctx, c => this.renderText(c, layer))
+    });
   }
 
-  protected setupCanvas(canvas: HTMLCanvasElement, callback: (ctx: CanvasRenderingContext2D) => void) {
+  protected async setupCanvas(canvas: HTMLCanvasElement, callback: (ctx: CanvasRenderingContext2D) => void) {
     const ctx = canvas.getContext("2d");
 
     if (!ctx) throw new Error("2D Context not available");
@@ -29,7 +20,7 @@ export abstract class Renderer {
     ctx.save();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    callback(ctx);
+    await callback(ctx);
 
     ctx.restore();
   }
@@ -43,7 +34,13 @@ export abstract class Renderer {
   }
 
   protected renderBackground(ctx: CanvasRenderingContext2D, layer: Layer) {
-    let { width, height, x, y, bg } = layer;
+    let {
+      width = ctx.canvas.width,
+      height = ctx.canvas.height,
+      x = 0,
+      y = 0,
+      bg
+    } = layer;
 
     if (width === 0) {
       width = ctx.canvas.width;
@@ -53,32 +50,95 @@ export abstract class Renderer {
       height = ctx.canvas.height;
     }
 
-    ctx.fillStyle = `${bg}`;
-    ctx.fillRect(x, y, width, height);
+    if (bg) {
+      ctx.fillStyle = `${bg}`;
+      ctx.fillRect(x, y, width, height);
+    }
   }
 
   protected renderText(ctx: CanvasRenderingContext2D, layer: Layer) {
-    ctx.fillStyle = layer.color;
-    ctx.font = `${layer.fontSize}px ${layer.fontFamily}`;
+    if (!layer.text) {
+      return;
+    }
 
-    const lines = layer.text.split(/\n/);
+    let {
+      x = 0,
+      y = 0,
+      width = ctx.canvas.width,
+      height = ctx.canvas.height,
+      lineHeight = 1,
+      textAlign = TextAlign.Start,
+      valign,
+      text,
+      color,
+      fontSize,
+      fontFamily
+    } = layer;
 
-    // const textMeasure = ctx.measureText(layer.text);
-    const h = +layer.fontSize * +layer.lineHeight;
-    const offset = (h - +layer.fontSize) / 2;
+    if (color) {
+      ctx.fillStyle = color;
+    }
+
+    ctx.font = `${fontSize}px ${fontFamily}`;
+    ctx.textAlign = textAlign as CanvasTextAlign;
+
+    if (textAlign === TextAlign.Center) {
+      x += width / 2;
+    }
+
+    const lines = text.split(/\n/)
+      .map(line =>this.fitText(ctx, line, width))
+      .reduce<string[]>((acc, it) => [...acc, ...it], []);
+
+    const h = +fontSize * +lineHeight;
+    const offset = (h - +fontSize) / 2;
+    const textHeight = (lines.length * h);
+
+    switch(valign) {
+      case VerticalAlign.Middle: {
+        y += ((height - y) / 2) - (textHeight / 2);
+
+        break;
+      }
+      case VerticalAlign.Bottom: {
+        y += height - textHeight;
+      }
+    }
 
     lines.forEach((line, i) => {
-      const y = +layer.y + ((i + 1) * h) - offset;
+      const yi = +y + ((i + 1) * h) - offset;
 
-      ctx.fillText(line, +layer.x, y);
+      ctx.fillText(line, +x, yi);
     });
   }
 
   protected async renderImage(ctx: CanvasRenderingContext2D, layer: Layer) {
-    const { x, y, imageUri } = layer;
+    let {
+      x = 0,
+      y = 0,
+      imageUri,
+      valign
+    } = layer;
+
+    if (!imageUri) {
+      return;
+    }
 
     const image = await this.loadImage(imageUri!);
     const scale = this.getScale(ctx.canvas, image, layer);
+
+    switch(valign) {
+      case VerticalAlign.Middle: {
+        const offset = (ctx.canvas.height - scale.height) / 2;
+        y += offset;
+        break;
+      }
+      case VerticalAlign.Bottom: {
+        const offset = (ctx.canvas.height - scale.height);
+        y += offset;
+        break;
+      }
+    }
 
     ctx.drawImage(image, +x + scale.x, +y + scale.y, scale.width, scale.height);
   }
@@ -100,5 +160,36 @@ export abstract class Renderer {
         }
       }
     }
+  }
+
+  protected fitText(ctx: CanvasRenderingContext2D, text: string, width: number = ctx.canvas.width): string[] {
+    if (!text) {
+      return [];
+    }
+
+    if (ctx.measureText(text).width <= width) {
+      return [text];
+    }
+
+    const words = text.split(' ');
+    const result: string[] = [];
+    let curr: string[] = [];
+
+    while(words.length) {
+      const word = words.shift()!;
+
+      if (ctx.measureText([...curr, word].join(' ')).width <= width) {
+        curr.push(word);
+      } else {
+        result.push(curr.join(' '));
+        curr = [word];
+      }
+    }
+
+    if (curr.length) {
+      result.push(curr.join(' '));
+    }
+
+    return result;
   }
 }

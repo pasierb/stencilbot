@@ -12,6 +12,8 @@ export type LayerInit = {
   fontSize?: number
   fontFamily?: string
   lineHeight?: number
+  textAlign?: string | TextAlign
+  valign?: string | VerticalAlign
   color?: string
   bg?: string
 }
@@ -22,6 +24,20 @@ export enum ImageFit {
   None = 'none'
 }
 
+export enum VerticalAlign {
+  Top = 'top',
+  Middle = 'middle',
+  Bottom = 'bottom'
+}
+
+export enum TextAlign {
+  Start = 'start',
+  End = 'end',
+  Center = 'center',
+  Left = 'left',
+  Right = 'right'
+}
+
 export enum LayerType {
   Empty,
   Text,
@@ -29,41 +45,72 @@ export enum LayerType {
   ImageAndText
 }
 
+type LayerAttributeName = keyof LayerInit;
+
+const layerParamRegExp = /^l\[(?<order>\d+)\](?<attr>\w+)$/;
+
+const serializeableAttributes: LayerAttributeName[] = [
+  'x',
+  'y',
+  'width',
+  'height',
+  'bg',
+  'imageFit',
+  'imageUri',
+  'text',
+  'color',
+  'fontUri',
+  'fontSize',
+  'fontFamily',
+  'lineHeight',
+  'textAlign',
+  'valign'
+];
+
 export class Layer {
   id: string
-  order: number
-  x: number
-  y: number
-  width: number
-  height: number
-  bg: string
+  order?: number
+  x?: number
+  y?: number
+  width?: number
+  height?: number
+  bg?: string
 
-  text: string
-  color: string
-  fontUri: string
+  text?: string
+  color?: string
+  fontUri?: string
   fontSize: number
   fontFamily: string
-  lineHeight: number
+  lineHeight?: number
+  textAlign?: TextAlign | string
+  valign?: VerticalAlign | string
 
-  imageUri: string
-  imageFit: string
+  imageUri?: string
+  imageFit?: string
 
   constructor(init: LayerInit = {}) {
     this.id = init.id || Layer.generateId();
-    this.order = init.order || -1;
-    this.x = init.x || 0;
-    this.y = init.y || 0;
-    this.text = init.text || '';
-    this.color = init.color || '#000';
-    this.fontFamily = init.fontFamily || 'Roboto';
-    this.fontSize = init.fontSize || 14;
-    this.lineHeight = init.lineHeight || 1;
-    this.imageUri = init.imageUri || '';
-    this.imageFit = init.imageFit || ImageFit.None;
-    this.width = init.width || 0;
-    this.height = init.height || 0;
-    this.fontUri = init.fontUri || '';
-    this.bg = init.bg || '';
+    this.fontFamily = 'Roboto';
+    this.fontSize = 14;
+
+    Object.assign(this, init);
+  }
+
+  setAttribue(key: keyof LayerInit, value: any) {
+    switch(key) {
+      case 'x':
+      case 'y':
+      case 'width':
+      case 'height':
+      case 'fontSize':
+      case 'lineHeight':
+      case 'order':
+        this[key] = parseInt(value);
+        break;
+      default:
+        this[key] = value.toString();
+        break;
+    }
   }
 
   get type(): LayerType {
@@ -82,30 +129,38 @@ export class Layer {
     return LayerType.Empty;
   }
 
-  set attributes(init: LayerInit) {
-    Object.assign(this, init);
-  }
+  toSearchString() {
+    const { order } = this;
+    const items: string[] = [];
 
-  get attributes(): LayerInit {
-    return {
-      id: this.id,
-      order: this.order,
-      x: this.x,
-      y: this.y,
-      width: this.width,
-      height: this.height,
-      bg: this.bg,
-      text: this.text,
-      color: this.color,
-      fontFamily: this.fontFamily,
-      fontSize: this.fontSize,
-      fontUri: this.fontUri,
-      imageFit: this.imageFit,
-      imageUri: this.imageUri
-    };
+    serializeableAttributes.forEach(attr => {
+      if (this[attr] !== undefined) {
+        items.push(`l[${order}]${attr}=${this[attr]!.toString()}`)
+      }
+    });
+
+    return items.join('&');
   }
 
   static generateId() {
     return '_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  static fromSearchParams(input: {[key: string]: string}): Layer[] {
+    return Object.entries(input).reduce<Layer[]>((acc, [k, v]) => {
+      const match = k.match(layerParamRegExp);
+
+      if (match) {
+        const order = +match.groups!.order
+        const layer = acc[order] || new Layer({ order });
+        const attr = match.groups!.attr as keyof LayerInit;
+
+        layer.setAttribue(attr, v);
+
+        acc[order] = layer;
+      }
+
+      return acc;
+    }, []);
   }
 }
