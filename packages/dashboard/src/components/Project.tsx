@@ -6,12 +6,13 @@ import { ProjectLayerOutline } from './ProjectLayerOutline';
 import style from './Project.module.css';
 
 interface ProjectProps {
-  width: number,
-  height: number,
+  width: number
+  height: number
   layers: Layer[]
+  showOutline?: boolean
 }
 
-export const Project: FunctionComponent<ProjectProps> = ({ width, height, layers }) => {
+export const Project: FunctionComponent<ProjectProps> = ({ width, height, layers, showOutline }) => {
   return (
     <div className={style.Project} style={{ width: `${width}px`, height: `${height}px` }}>
       {layers.map((layer, i) =>
@@ -22,12 +23,14 @@ export const Project: FunctionComponent<ProjectProps> = ({ width, height, layers
             width={width}
             height={height}
           />
-          <ProjectLayerOutline
-            key={i-1000}
-            layer={layer}
-            width={width}
-            height={height}
-          />
+          {showOutline && (
+            <ProjectLayerOutline
+              key={i-1000}
+              layer={layer}
+              width={width}
+              height={height}
+            />
+          )}
         </Fragment>
       )}
     </div>
