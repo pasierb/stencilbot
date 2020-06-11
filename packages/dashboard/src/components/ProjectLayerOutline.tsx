@@ -13,7 +13,7 @@ const ProjectLayerOutline: FunctionComponent<ProjectLayerOutlineProps> = ({ widt
   useEffect(() => {
     const ctx = canvasRef.current!.getContext('2d');
 
-    ctx?.clearRect(0, 0, width, height);
+    ctx?.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx?.strokeRect(
       layer.x || 0,
       layer.y || 0,

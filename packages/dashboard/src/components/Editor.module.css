@@ -1,1 +1,7 @@
-.Editor {}
+.Editor {
+    height: 100vh;
+}
+
+.Editor main {
+    background-color: #fff;
+}

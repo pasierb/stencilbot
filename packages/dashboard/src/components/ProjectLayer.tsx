@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, FunctionComponent } from 'react';
 import { Layer } from '@stencilbot/renderer';
 import { BrowserRenderer } from '../BrowserRenderer';
+import { fontLoader } from '../fontLoader';
+// import webfontloader from 'webfontloader';
 
 interface ProjectLayerProps {
   layer: Layer
@@ -14,7 +16,15 @@ const ProjectLayer: FunctionComponent<ProjectLayerProps> = ({ layer, width, heig
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    renderer.render(canvasRef.current!, layer);
+    const trigger = fontLoader.on(layer.fontFamily, () => {
+      if (canvasRef.current) {
+        renderer.render(canvasRef.current, layer);
+      }
+    })
+
+    fontLoader.load(layer.fontFamily)
+
+    return trigger;
   });
 
   return (

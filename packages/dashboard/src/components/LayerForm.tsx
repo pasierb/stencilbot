@@ -1,43 +1,67 @@
 import React, { FunctionComponent, Fragment } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Layer, LayerInit, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, Row, Col } from 'antd';
+import { debounce } from 'lodash';
 
 interface LayerFormProps {
   layer: Layer
   onSubmit: (layer: Layer) => void
+  onRemove: (layer: Layer) => void
 }
 
-export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit }) => {
+export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, onRemove }) => {
   const { handleSubmit, control } = useForm<LayerInit>({ defaultValues: layer });
 
-  const submit = handleSubmit(data => {
+  const submit = debounce(handleSubmit(data => {
     const newLayer = new Layer({ ...data, id: layer.id, order: layer.order });
 
     onSubmit(newLayer);
-  });
+  }), 100);
+
+  function handleRemove() {
+    onRemove(layer);
+  }
 
   return (
-    <Form onChange={submit} size="small">
-      <Form.Item label="X">
-        <Controller as={Input} name="x" type="number" control={control} />
-      </Form.Item>
-      <Form.Item label="Y">
-        <Controller as={Input} name="y" type="number" control={control} />
-      </Form.Item>
-      <Form.Item label="Width">
-        <Controller as={Input} name="width" type="number" control={control} />
-      </Form.Item>
-      <Form.Item label="Height">
-        <Controller as={Input} name="height" type="number" control={control} />
-      </Form.Item>
+    <Form onChange={() => submit()} size="small" layout="horizontal">
+      <Row>
+        <Col span={12}>
+          <Form.Item label="x">
+            <Controller as={Input} name="x" type="number" control={control} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label="y">
+            <Controller as={Input} name="y" type="number" control={control} />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <Form.Item label="w">
+            <Controller as={Input} name="width" type="number" control={control} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label="h">
+            <Controller as={Input} name="height" type="number" control={control} />
+          </Form.Item>
+        </Col>
+      </Row>
       <Form.Item label="Text">
         <Controller as={Input.TextArea} name="text" control={control} />
       </Form.Item>
 
       {layer.text && (<Fragment>
+        <Form.Item label="Font family">
+          <Controller as={Input} name="fontFamily" control={control} />
+        </Form.Item>
         <Form.Item label="Font size">
           <Controller as={Input} name="fontSize" type="number" control={control} />
+        </Form.Item>
+        <Form.Item label="Font weight">
+          <Controller as={Input} name="fontWeight" control={control} />
         </Form.Item>
         <Form.Item label="Line height">
           <Controller as={Input} name="lineHeight" type="number" control={control} />
@@ -95,6 +119,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit }
       </Form.Item>
 
       <Button htmlType="submit">Submit</Button>
+      <Button onClick={handleRemove}>Remove</Button>
     </Form>
   );
 }
