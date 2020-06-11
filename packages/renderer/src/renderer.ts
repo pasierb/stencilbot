@@ -72,14 +72,15 @@ export abstract class Renderer {
       text,
       color,
       fontSize,
-      fontFamily
+      fontFamily,
+      fontWeight = 'normal'
     } = layer;
 
     if (color) {
       ctx.fillStyle = color;
     }
 
-    ctx.font = `${fontSize}px ${fontFamily}`;
+    ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
     ctx.textAlign = textAlign as CanvasTextAlign;
 
     if (textAlign === TextAlign.Center) {

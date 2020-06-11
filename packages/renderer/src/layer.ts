@@ -11,6 +11,7 @@ export type LayerInit = {
   fontUri?: string
   fontSize?: number
   fontFamily?: string
+  fontWeight?: string
   lineHeight?: number
   textAlign?: string | TextAlign
   valign?: string | VerticalAlign
@@ -47,7 +48,7 @@ export enum LayerType {
 
 type LayerAttributeName = keyof LayerInit;
 
-const layerParamRegExp = /^l\[(?<order>\d+)\](?<attr>\w+)$/;
+const layerParamRegExp = /^(?<order>\d+)\.(?<attr>\w+)$/;
 
 const serializeableAttributes: LayerAttributeName[] = [
   'x',
@@ -62,6 +63,7 @@ const serializeableAttributes: LayerAttributeName[] = [
   'fontUri',
   'fontSize',
   'fontFamily',
+  'fontWeight',
   'lineHeight',
   'textAlign',
   'valign'
@@ -81,6 +83,7 @@ export class Layer {
   fontUri?: string
   fontSize: number
   fontFamily: string
+  fontWeight?: string
   lineHeight?: number
   textAlign?: TextAlign | string
   valign?: VerticalAlign | string
@@ -135,7 +138,7 @@ export class Layer {
 
     serializeableAttributes.forEach(attr => {
       if (this[attr] !== undefined) {
-        items.push(`l[${order}]${attr}=${this[attr]!.toString()}`)
+        items.push(`${order}.${attr}=${this[attr]!.toString()}`)
       }
     });
 
