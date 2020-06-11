@@ -164,6 +164,6 @@ export class Layer {
       }
 
       return acc;
-    }, []);
+    }, []).filter(l => l);
   }
 }
