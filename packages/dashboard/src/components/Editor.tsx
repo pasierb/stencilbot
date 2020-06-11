@@ -1,11 +1,8 @@
 import React, { Fragment, FunctionComponent, useState } from 'react';
 import { Layout, Collapse, Button } from 'antd';
-import { useRecoilState } from 'recoil';
-import { Layer } from '@stencilbot/renderer';
+import { Layer, Project } from '@stencilbot/renderer';
 
-import { editorLayers, editorProject } from '../atoms';
-
-import { Project } from './Project';
+import { ProjectPreview } from './ProjectPreview';
 import { LayerForm } from './LayerForm';
 import { LayerIcon } from './LayerIcon';
 
@@ -18,51 +15,51 @@ const PanelHeader: FunctionComponent<{ layer: Layer }> = ({ layer }) => (
   </Fragment>
 );
 
-export const Editor = () => {
-  const [layers, setLayers] = useRecoilState(editorLayers);
-  const [project, setProject] = useRecoilState(editorProject);
+interface EditorProps {
+  project: Project
+}
+
+export const Editor: FunctionComponent<EditorProps> = (props) => {
+  const [project, setProject] = useState<Project>(props.project);
   const [selectedLayerId, setSelectedLayerId] = useState<string>();
 
   const handleSubmit = (layer: Layer) => {
-    const i = layers.findIndex(({ id }) => id === layer.id);
+    const i = project.layers.findIndex(({ id }) => id === layer.id);
 
     if (i !== -1) {
-      const newLayers = [...layers];
+      const newLayers = [...project.layers];
       newLayers[i] = layer;
 
-      setLayers(newLayers);
+      setProject(new Project(project.width, project.height, newLayers));
     }
   }
 
   const handleRemove = (layer: Layer) => {
-    const i = layers.findIndex(({ id }) => id === layer.id);
+    const i = project.layers.findIndex(({ id }) => id === layer.id);
 
-    setLayers([...layers.slice(0, i), ...layers.slice(i+1)]);
+    const newLayers = [...project.layers.slice(0, i), ...project.layers.slice(i+1)];
+    setProject(new Project(project.width, project.height, newLayers));
   }
 
   const handleGetLink = () => {
-    const query = [
-      `w=${project.width}`,
-      `h=${project.height}`,
-      ...layers.map(l => l.toSearchString())
-    ].join('&');
+    const query = project.toSearchString();
 
     window.location.search = query;
-    console.log(query);
   }
 
   const handleAddLayer = () => {
-    const order = Math.max(-1, ...layers.map(l => l.order || 0)) + 1
+    const order = Math.max(-1, ...project.layers.map(l => l.order || 0)) + 1
     const newLayer = new Layer({ order });
+    const newLayers = [...project.layers, newLayer];
 
-    setLayers([...layers, newLayer]);
+    setProject(new Project(project.width, project.height, newLayers));
   }
 
   return (
     <Layout className={style.Editor}>
       <Layout.Content>
-        <Project
-          layers={layers}
+        <ProjectPreview
+          layers={project.layers}
           width={project.width}
           height={project.height}
           selectedLayerId={selectedLayerId}
@@ -73,7 +70,7 @@ export const Editor = () => {
         <Button onClick={handleGetLink}>Link</Button>
 
         <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>
-          {layers.map((layer, i) => (
+          {project.layers.map((layer, i) => (
             <Collapse.Panel key={layer.id} header={<PanelHeader layer={layer} />}>
               <LayerForm
                 key={layer.id + '-form'}

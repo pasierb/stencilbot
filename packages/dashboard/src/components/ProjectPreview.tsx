@@ -12,7 +12,7 @@ interface ProjectProps {
   selectedLayerId?: string
 }
 
-export const Project: FunctionComponent<ProjectProps> = ({ width, height, layers, selectedLayerId }) => {
+export const ProjectPreview: FunctionComponent<ProjectProps> = ({ width, height, layers, selectedLayerId }) => {
   const selectedLayer = layers.find(l => l.id === selectedLayerId);
 
   return (
