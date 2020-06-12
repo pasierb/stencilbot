@@ -1,8 +1,8 @@
-import React, { FunctionComponent, Fragment } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import React, { FunctionComponent, Fragment, useState } from 'react';
 import { Layer, LayerInit, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
 import { Form, Input, Button, Select, Row, Col } from 'antd';
 import { debounce } from 'lodash';
+import { GoogleFontSelect } from './GoogleFontSelect';
 
 interface LayerFormProps {
   layer: Layer
@@ -11,110 +11,114 @@ interface LayerFormProps {
 }
 
 export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, onRemove }) => {
-  const { handleSubmit, control } = useForm<LayerInit>({ defaultValues: layer });
+  const [edit, updateEdit] = useState<Layer>(layer);
 
-  const submit = debounce(handleSubmit(data => {
-    const newLayer = new Layer({ ...data, id: layer.id, order: layer.order });
+  const submit = debounce(() => {
+    onSubmit(edit);
+  }, 200);
 
-    onSubmit(newLayer);
-  }), 100);
+  const handleChange = (key: keyof LayerInit, value) => {
+    edit.setAttribue(key, value);
+    const newLayer = new Layer({ ...edit, id: layer.id, order: layer.order });
+    updateEdit(newLayer);
+
+    submit();
+  }
 
   function handleRemove() {
     onRemove(layer);
   }
 
   return (
-    <Form onChange={() => submit()} size="small" layout="horizontal">
+    <Form onFinish={() => submit()} size="small" layout="horizontal">
       <Row>
         <Col span={12}>
           <Form.Item label="x">
-            <Controller as={Input} name="x" type="number" control={control} />
+            <Input type="number" onChange={(e) => handleChange('x', e.target.value)} defaultValue={layer.x} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item label="y">
-            <Controller as={Input} name="y" type="number" control={control} />
+            <Input type="number" onChange={(e) => handleChange('y', e.target.value)} defaultValue={layer.y} />
           </Form.Item>
         </Col>
       </Row>
       <Row>
         <Col span={12}>
           <Form.Item label="w">
-            <Controller as={Input} name="width" type="number" control={control} />
+            <Input type="number" onChange={(e) => handleChange('width', e.target.value)} defaultValue={layer.width} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item label="h">
-            <Controller as={Input} name="height" type="number" control={control} />
+            <Input type="number" onChange={(e) => handleChange('height', e.target.value)} defaultValue={layer.height} />
           </Form.Item>
         </Col>
       </Row>
       <Form.Item label="Text">
-        <Controller as={Input.TextArea} name="text" control={control} />
+        <Input.TextArea onChange={(e) => handleChange('text', e.target.value)} defaultValue={layer.text} />
       </Form.Item>
 
       {layer.text && (<Fragment>
         <Form.Item label="Font family">
-          <Controller as={Input} name="fontFamily" control={control} />
+          <GoogleFontSelect
+            onChange={(v) => handleChange('fontFamily', v.value)}
+            defaultValue={layer.fontFamily}
+          />
         </Form.Item>
         <Form.Item label="Font size">
-          <Controller as={Input} name="fontSize" type="number" control={control} />
+          <Input type="number" onChange={(e) => handleChange('fontSize', e.target.value)} defaultValue={layer.fontSize} />
         </Form.Item>
         <Form.Item label="Font weight">
-          <Controller as={Input} name="fontWeight" control={control} />
+          <Input onChange={(e) => handleChange('fontWeight', e.target.value)} defaultValue={layer.fontWeight} />
         </Form.Item>
         <Form.Item label="Line height">
-          <Controller as={Input} name="lineHeight" type="number" control={control} />
+          <Input type="number" onChange={(e) => handleChange('lineHeight', e.target.value)} defaultValue={layer.lineHeight} />
         </Form.Item>
         <Form.Item label="Color">
-          <Controller as={Input} name="color" type="color" control={control} />
+          <Input type="color" onChange={(e) => handleChange('color', e.target.value)} defaultValue={layer.color} />
         </Form.Item>
       </Fragment>)}
       <Form.Item label="Image">
-        <Controller as={Input} name="imageUri" control={control} />
+        <Input onChange={(e) => handleChange('imageUri', e.target.value)} defaultValue={layer.imageUri} />
       </Form.Item>
 
       {layer.imageUri && (<Fragment>
         <Form.Item label="Image fit">
-          <Controller
-            name="imageFit"
-            control={control}
-            as={
-              <Select options={[
-                { value: ImageFit.None },
-                { value: ImageFit.Contain },
-                { value: ImageFit.Cover }
-              ]} />
-            }
+          <Select
+            defaultValue={layer.imageFit}
+            onChange={(val) => handleChange('imageFit', val.toString())}
+            options={[
+              { value: ImageFit.None },
+              { value: ImageFit.Contain },
+              { value: ImageFit.Cover }
+            ]}
           />
         </Form.Item>
       </Fragment>)}
 
       <Form.Item label="Vertical align">
-        <Controller
-          name="valign"
-          control={control}
-          as={
-            <Select options={[
-              { value: VerticalAlign.Top },
-              { value: VerticalAlign.Middle },
-              { value: VerticalAlign.Bottom },
-            ]} />
-          }
+        <Select
+          defaultValue={layer.valign}
+          options={[
+            { value: '', label: '---' },
+            { value: VerticalAlign.Top },
+            { value: VerticalAlign.Middle },
+            { value: VerticalAlign.Bottom },
+          ]}
+          onChange={(e) => handleChange('valign', e.toString())}
         />
       </Form.Item>
 
       <Form.Item label="Text align">
-        <Controller
-          name="textAlign"
-          control={control}
-          as={
-            <Select options={[
-              { value: TextAlign.Left },
-              { value: TextAlign.Center },
-              { value: TextAlign.Right },
-            ]} />
-          }
+        <Select 
+          defaultValue={layer.textAlign}
+          options={[
+            { value: TextAlign.Left },
+            { value: TextAlign.Center },
+            { value: TextAlign.Right },
+          ]}
+          onChange={(e) => handleChange('textAlign', e.toString())}
         />
       </Form.Item>
 

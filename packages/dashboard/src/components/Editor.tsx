@@ -41,18 +41,19 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
     setProject(new Project(project.width, project.height, newLayers));
   }
 
-  const handleGetLink = () => {
-    const query = project.toSearchString();
-
-    window.location.search = query;
-  }
-
   const handleAddLayer = () => {
     const order = Math.max(-1, ...project.layers.map(l => l.order || 0)) + 1
     const newLayer = new Layer({ order });
     const newLayers = [...project.layers, newLayer];
 
     setProject(new Project(project.width, project.height, newLayers));
+  }
+
+  const handlePreview = () => {
+    window.open(
+      `https://cdn.stencilbot.io/v1/project?${project.toSearchString()}`,
+      '_stencilbot_preview'
+    );
   }
 
   return (
@@ -67,7 +68,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
       </Layout.Content>
 
       <Layout.Sider>
-        <Button onClick={handleGetLink}>Link</Button>
+        <Button onClick={handlePreview}>Preview</Button>
 
         <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>
           {project.layers.map((layer, i) => (

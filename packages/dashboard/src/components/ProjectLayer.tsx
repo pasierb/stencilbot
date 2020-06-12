@@ -18,6 +18,9 @@ const ProjectLayer: FunctionComponent<ProjectLayerProps> = ({ layer, width, heig
   useEffect(() => {
     const trigger = fontLoader.on(layer.fontFamily, () => {
       if (canvasRef.current) {
+        const ctx = canvasRef.current.getContext('2d')!;
+
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         renderer.render(canvasRef.current, layer);
       }
     })

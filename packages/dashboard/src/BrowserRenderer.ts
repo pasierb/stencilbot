@@ -1,7 +1,7 @@
 import { Renderer } from '@stencilbot/renderer';
 
 export class BrowserRenderer extends Renderer {
-  imageCache: Map<string, HTMLImageElement>
+  imageCache: Map<string, Promise<HTMLImageElement>>
 
   constructor() {
     super();
@@ -13,19 +13,22 @@ export class BrowserRenderer extends Renderer {
     const cached = this.imageCache.get(uri);
 
     if (cached) {
-      return Promise.resolve(cached);
+      return cached;
     }
 
-    return new Promise((resolve, reject) => {
+    const promise = new Promise<HTMLImageElement>((resolve, reject) => {
       const image = new Image();
 
       image.onload = () => {
-        this.imageCache.set(uri, image);
         resolve(image);
       }
-      image.onerror = reject;
 
+      image.onerror = reject;
       image.src = uri;
     });
+
+    this.imageCache.set(uri, promise);
+
+    return promise;
   }
 }
