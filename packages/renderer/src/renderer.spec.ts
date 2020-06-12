@@ -1,5 +1,5 @@
 import { Renderer } from './renderer';
-import { Layer, VerticalAlign, TextAlign } from './layer';
+import { Layer, VerticalAlign, TextAlign, ImageFit } from './layer';
 
 class TestRenderer extends Renderer {
   async loadImage(uri: string) {
@@ -20,6 +20,19 @@ describe('renderer', () => {
     ctx = canvas.getContext('2d')!;
     renderer = new TestRenderer();
   })
+
+  it('should downsize image to contain', async () => {
+    const drawImage = ctx.drawImage as jest.Mock
+    const layer = new Layer({ imageUri: 'abc', width: 150, imageFit: ImageFit.Contain });
+
+    await renderer.render(canvas, layer);
+    const [img, x, y, w, h] = drawImage.mock.calls[0];
+
+    expect(w).toBe(150);
+    expect(h).toBe(50);
+    expect(x).toBe(0);
+    expect(y).toBe(175);
+  });
 
   it('should draw text with lineHeight offset', async () => {
     const fillText = ctx.fillText as jest.Mock
@@ -46,6 +59,16 @@ describe('renderer', () => {
   it('should render image valign middle', async () => {
     const drawImage = ctx.drawImage as jest.Mock
     const layer = new Layer({ valign: VerticalAlign.Middle, imageUri: 'abc' });
+
+    await renderer.render(canvas, layer);
+    const [img, x, y, w, h] = drawImage.mock.calls[0];
+
+    expect(y).toBe(150);
+  });
+
+  it('should containt fit and render image valign middle', async () => {
+    const drawImage = ctx.drawImage as jest.Mock
+    const layer = new Layer({ valign: VerticalAlign.Middle, imageUri: 'abc', width: 150, imageFit: ImageFit.Contain });
 
     await renderer.render(canvas, layer);
     const [img, x, y, w, h] = drawImage.mock.calls[0];

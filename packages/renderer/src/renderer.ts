@@ -80,7 +80,7 @@ export abstract class Renderer {
       ctx.fillStyle = color;
     }
 
-    ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+    ctx.font = `${fontWeight} ${fontSize}px ${fontFamily.split(':')[0]}`;
     ctx.textAlign = textAlign as CanvasTextAlign;
 
     if (textAlign === TextAlign.Center) {
