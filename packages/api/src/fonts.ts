@@ -8,6 +8,7 @@ const s3 = new S3();
 const fontsBasePath = '/tmp';
 const googleFontsAPIKey = process.env.GOOGLE_FONTS_API_KEY;
 const fontsBucket = process.env.BUCKET;
+const fontVariantRegExp = /^(?<weight>\d{3})?(?<style>\w+)?$/
 
 interface GoogleWebFontFamily {
   family: string
@@ -28,30 +29,40 @@ interface GoogleWebFontsAPIResponse {
 let googleFontsDataPromise: Promise<GoogleWebFontsAPIResponse>;
 
 class LocalFont {
+  data: GoogleWebFontsAPIResponse
   family: string
   variant: string
-  data: GoogleWebFontsAPIResponse
+  weight?: string
+  style?: string
 
-  constructor(name: string, data: GoogleWebFontsAPIResponse) {
+  constructor(opts: { name: string, data: GoogleWebFontsAPIResponse, fontWeight: string, fontStyle: string }) {
+    const { name, fontWeight, fontStyle, data } = opts;
     const [family, variant] = name.split(':');
+    const { weight, style } = LocalFont.parseVariant(variant);
 
     this.family = family;
     this.variant = variant;
     this.data = data;
+    this.weight = fontWeight;
+    this.style = fontStyle;
+  }
+
+  get googleFontFamily() {
+    return this.data.items.find(item => item.family === this.family);
   }
 
   get remotePath() {
-    const font = this.data.items.find(item => item.family === this.family);
-
-    return font.files[this.variant];
+    return this.googleFontFamily.files[this.variant];
   }
 
   get key() {
-    return [this.family, this.variant].join('-').replace(/\s+/g, '_');
+    return this.s3Key.replace(/\//g, '-');
   }
 
   get s3Key() {
-    return ['fonts', this.key].join('/')
+    const url = new URL(this.remotePath);
+
+    return `fonts${url.pathname}`;
   }
 
   get path() {
@@ -98,6 +109,15 @@ class LocalFont {
       this.saveToFileSystem(body);
     }
   }
+
+  static parseVariant(variant: string): { weight: string | undefined, style: string | undefined } {
+    const match = variant.match(fontVariantRegExp);
+
+    return {
+      weight: match ? match.groups.weight : undefined,
+      style: match ? match.groups.style : undefined
+    };
+  }
 }
 
 function fetchData() {
@@ -114,13 +134,17 @@ export function registerDefaultFonts() {
   registerFont(path.join(__dirname, 'fonts/Roboto-Regular.ttf'), { family: 'Roboto' });
 }
 
-export async function registerGoogleFont(name: string) {
+export async function registerGoogleFont(name: string, fontWeight?: string, fontStyle?: string) {
   const data = await fetchData();
-  const localFont = new LocalFont(name, data);
+  const localFont = new LocalFont({ name, data, fontStyle, fontWeight });
 
   if (!localFont.exists()) {
     await localFont.fetch();
   }
 
-  return registerFont(localFont.path, { family: localFont.family });
+  return registerFont(localFont.path, {
+    family: localFont.family,
+    weight: localFont.weight,
+    style: localFont.style
+  });
 }

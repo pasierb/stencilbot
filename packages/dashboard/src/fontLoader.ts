@@ -12,6 +12,8 @@ class FontLoader {
   }
 
   on(fontFamily, callback) {
+    if (!fontFamily) return;
+
     const arr = this.eventListeneres.get(fontFamily) || new Set();
 
     arr.add(callback);
@@ -36,6 +38,8 @@ class FontLoader {
   }
 
   load(fontFamily: string) {
+    if (!fontFamily) return;
+
     if (this.loaded.has(fontFamily) || this.loading.get(fontFamily)){
       this.trigger(fontFamily);
       return;

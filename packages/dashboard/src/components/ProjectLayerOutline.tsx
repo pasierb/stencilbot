@@ -17,8 +17,8 @@ const ProjectLayerOutline: FunctionComponent<ProjectLayerOutlineProps> = ({ widt
     ctx?.strokeRect(
       layer.x || 0,
       layer.y || 0,
-      layer.width || width,
-      layer.height || height,
+      layer.w || width,
+      layer.h || height,
     );
   });
 

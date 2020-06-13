@@ -35,63 +35,63 @@ export abstract class Renderer {
 
   protected renderBackground(ctx: CanvasRenderingContext2D, layer: Layer) {
     let {
-      width = ctx.canvas.width,
-      height = ctx.canvas.height,
+      w = ctx.canvas.width,
+      h = ctx.canvas.height,
       x = 0,
       y = 0,
       bg
     } = layer;
 
-    if (width === 0) {
-      width = ctx.canvas.width;
-    }
-
-    if (height === 0) {
-      height = ctx.canvas.height;
-    }
-
     if (bg) {
       ctx.fillStyle = `${bg}`;
-      ctx.fillRect(x, y, width, height);
+      ctx.fillRect(x, y, w, h);
     }
   }
 
   protected renderText(ctx: CanvasRenderingContext2D, layer: Layer) {
-    if (!layer.text) {
-      return;
-    }
-
     let {
       x = 0,
       y = 0,
-      width = ctx.canvas.width,
-      height = ctx.canvas.height,
-      lineHeight = 1,
-      textAlign = TextAlign.Start,
+      w: width = ctx.canvas.width,
+      h: height = ctx.canvas.height,
+      lineH = 1,
+      txtAlign = TextAlign.Start,
       valign,
-      text,
+      txt,
       color,
-      fontSize,
+      fontSize = 14,
       fontFamily,
-      fontWeight = 'normal'
+      fontWeight = '',
+      fontStyle = ''
     } = layer;
+
+    if (!txt || !fontFamily) {
+      return;
+    }
 
     if (color) {
       ctx.fillStyle = color;
     }
 
-    ctx.font = `${fontWeight} ${fontSize}px ${fontFamily.split(':')[0]}`;
-    ctx.textAlign = textAlign as CanvasTextAlign;
+    const fontDeclaration = [
+      fontStyle,
+      fontWeight,
+      `${fontSize}px`,
+      `"${fontFamily}"`
+    ].filter(it => !!it).join(' ');
 
-    if (textAlign === TextAlign.Center) {
+    ctx.font = fontDeclaration;
+    ctx.textAlign = txtAlign as CanvasTextAlign;
+
+    if (txtAlign === TextAlign.Center) {
       x += width / 2;
     }
 
-    const lines = text.split(/\n/)
+    const lines = txt.split(/\n/)
       .map(line =>this.fitText(ctx, line, width))
       .reduce<string[]>((acc, it) => [...acc, ...it], []);
 
-    const h = +fontSize * +lineHeight;
+    const h = +fontSize * +lineH;
     const offset = (h - +fontSize) / 2;
     const textHeight = (lines.length * h);
 
@@ -117,15 +117,15 @@ export abstract class Renderer {
     let {
       x = 0,
       y = 0,
-      imageUri,
+      img,
       valign
     } = layer;
 
-    if (!imageUri) {
+    if (!img) {
       return;
     }
 
-    const image = await this.loadImage(imageUri!);
+    const image = await this.loadImage(img);
     const scale = this.getScale(ctx.canvas, image, layer);
 
     switch(valign) {
@@ -145,17 +145,17 @@ export abstract class Renderer {
   }
 
   protected getScale(canvas: HTMLCanvasElement, img: CanvasImageSource, layer: Layer): IntrinsicScale {
-    switch (layer.imageFit) {
+    switch (layer.imgFit) {
       case ImageFit.Contain: {
-        return contain(+(layer.width || canvas.width), +(layer.height || canvas.height), +img.width, +img.height);
+        return contain(+(layer.w || canvas.width), +(layer.h || canvas.height), +img.width, +img.height);
       }
       case ImageFit.Cover: {
-        return cover(+(layer.width || canvas.width), +(layer.height || canvas.height), +img.width, +img.height);
+        return cover(+(layer.w || canvas.width), +(layer.h || canvas.height), +img.width, +img.height);
       }
       default: {
         return {
-          width: +(layer.width || img.width),
-          height: +(layer.height || img.height),
+          width: +(layer.w || img.width),
+          height: +(layer.h || img.height),
           x: 0,
           y: 0
         }

@@ -3,17 +3,15 @@ export type LayerInit = {
   order?: number
   x?: number
   y?: number
-  width?: number
-  height?: number
-  text?: string
-  imageUri?: string
-  imageFit?: string
-  fontUri?: string
+  w?: number
+  h?: number
+  txt?: string
+  img?: string
+  imgFit?: string
   fontSize?: number
-  fontFamily?: string
-  fontWeight?: string
-  lineHeight?: number
-  textAlign?: string | TextAlign
+  font?: string
+  lineH?: number
+  txtAlign?: string | TextAlign
   valign?: string | VerticalAlign
   color?: string
   bg?: string
@@ -49,23 +47,22 @@ export enum LayerType {
 type LayerAttributeName = keyof LayerInit;
 
 const layerParamRegExp = /^(?<order>\d+)\.(?<attr>\w+)$/;
+const fontVariantRegExp = /^(?<weight>\d{3})?(?<style>\w+)?$/
 
 const serializeableAttributes: LayerAttributeName[] = [
   'x',
   'y',
-  'width',
-  'height',
+  'w',
+  'h',
   'bg',
-  'imageFit',
-  'imageUri',
-  'text',
+  'imgFit',
+  'img',
+  'txt',
   'color',
-  'fontUri',
   'fontSize',
-  'fontFamily',
-  'fontWeight',
-  'lineHeight',
-  'textAlign',
+  'font',
+  'lineH',
+  'txtAlign',
   'valign'
 ];
 
@@ -74,27 +71,23 @@ export class Layer {
   order?: number
   x?: number
   y?: number
-  width?: number
-  height?: number
+  w?: number
+  h?: number
   bg?: string
 
-  text?: string
+  txt?: string
   color?: string
-  fontUri?: string
-  fontSize: number
-  fontFamily: string
-  fontWeight?: string
-  lineHeight?: number
-  textAlign?: TextAlign | string
+  fontSize?: number
+  font?: string
+  lineH?: number
+  txtAlign?: TextAlign | string
   valign?: VerticalAlign | string
 
-  imageUri?: string
-  imageFit?: string
+  img?: string
+  imgFit?: string
 
   constructor(init: LayerInit = {}) {
     this.id = init.id || Layer.generateId();
-    this.fontFamily = 'Roboto';
-    this.fontSize = 14;
 
     Object.assign(this, init);
   }
@@ -103,33 +96,53 @@ export class Layer {
     switch(key) {
       case 'x':
       case 'y':
-      case 'width':
-      case 'height':
+      case 'w':
+      case 'h':
       case 'fontSize':
-      case 'lineHeight':
       case 'order':
         this[key] = parseInt(value);
         break;
+      case 'lineH':
+        this[key] = parseFloat(value);
+        break;
       default:
-        this[key] = value.toString();
+        this[key] = value;
         break;
     }
   }
 
   get type(): LayerType {
-    if (this.text && this.imageUri) {
+    if (this.txt && this.img) {
       return LayerType.ImageAndText;
     }
 
-    if (this.text) {
+    if (this.txt) {
       return LayerType.Text;
     }
 
-    if (this.imageUri) {
+    if (this.img) {
       return LayerType.Image;
     }
 
     return LayerType.Empty;
+  }
+
+  get fontVariant() {
+    return this.font?.split(':')[1]
+  }
+
+  get fontFamily() {
+    return this.font?.split(':')[0]
+  }
+
+  get fontStyle() {
+    const style = this.fontVariant?.match(fontVariantRegExp)?.groups?.style;
+
+    return style === 'regular' ? undefined : style;
+  }
+
+  get fontWeight() {
+    return this.fontVariant?.match(fontVariantRegExp)?.groups?.weight;
   }
 
   toSearchString() {
@@ -138,7 +151,7 @@ export class Layer {
 
     serializeableAttributes.forEach(attr => {
       if (this[attr] !== undefined) {
-        items.push(`${order}.${attr}=${this[attr]!.toString()}`)
+        items.push(`${order}.${attr}=${encodeURIComponent(this[attr]!.toString())}`)
       }
     });
 

@@ -1,12 +1,19 @@
 #!/usr/bin/env node
 
 const cdk = require('@aws-cdk/core');
-const { StencilbotProductStack } = require('../lib/stack.js')
+const { StencilbotProductStack, StencilbotDomainStack } = require('../lib/stack.js')
 
 const app = new cdk.App();
 
-new StencilbotProductStack(app, 'stencilbotProductStack', {
+new StencilbotDomainStack(app, 'stencilbotDomainStack', {
   env: {
-    region: 'eu-west-1'
+    account: 112135394201,
+    region: 'us-east-1'
   }
-});
+})
+
+// new StencilbotProductStack(app, 'stencilbotProductStack', {
+//   env: {
+//     region: 'eu-west-1'
+//   }
+// });

@@ -46,48 +46,45 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
       <Row>
         <Col span={12}>
           <Form.Item label="w">
-            <Input type="number" onChange={(e) => handleChange('width', e.target.value)} defaultValue={layer.width} />
+            <Input type="number" onChange={(e) => handleChange('w', e.target.value)} defaultValue={layer.w} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item label="h">
-            <Input type="number" onChange={(e) => handleChange('height', e.target.value)} defaultValue={layer.height} />
+            <Input type="number" onChange={(e) => handleChange('h', e.target.value)} defaultValue={layer.h} />
           </Form.Item>
         </Col>
       </Row>
       <Form.Item label="Text">
-        <Input.TextArea onChange={(e) => handleChange('text', e.target.value)} defaultValue={layer.text} />
+        <Input.TextArea onChange={(e) => handleChange('txt', e.target.value)} defaultValue={layer.txt} />
       </Form.Item>
 
-      {layer.text && (<Fragment>
+      {layer.txt && (<Fragment>
         <Form.Item label="Font family">
           <GoogleFontSelect
-            onChange={(v) => handleChange('fontFamily', v.value)}
+            onChange={(v) => handleChange('font', v.value)}
             defaultValue={layer.fontFamily}
           />
         </Form.Item>
         <Form.Item label="Font size">
           <Input type="number" onChange={(e) => handleChange('fontSize', e.target.value)} defaultValue={layer.fontSize} />
         </Form.Item>
-        <Form.Item label="Font weight">
-          <Input onChange={(e) => handleChange('fontWeight', e.target.value)} defaultValue={layer.fontWeight} />
-        </Form.Item>
         <Form.Item label="Line height">
-          <Input type="number" onChange={(e) => handleChange('lineHeight', e.target.value)} defaultValue={layer.lineHeight} />
+          <Input type="number" onChange={(e) => handleChange('lineH', e.target.value)} defaultValue={layer.lineH} />
         </Form.Item>
         <Form.Item label="Color">
           <Input type="color" onChange={(e) => handleChange('color', e.target.value)} defaultValue={layer.color} />
         </Form.Item>
       </Fragment>)}
       <Form.Item label="Image">
-        <Input onChange={(e) => handleChange('imageUri', e.target.value)} defaultValue={layer.imageUri} />
+        <Input onChange={(e) => handleChange('img', e.target.value)} defaultValue={layer.img} />
       </Form.Item>
 
-      {layer.imageUri && (<Fragment>
+      {layer.img && (<Fragment>
         <Form.Item label="Image fit">
           <Select
-            defaultValue={layer.imageFit}
-            onChange={(val) => handleChange('imageFit', val.toString())}
+            defaultValue={layer.imgFit}
+            onChange={(val) => handleChange('imgFit', val.toString())}
             options={[
               { value: ImageFit.None },
               { value: ImageFit.Contain },
@@ -112,13 +109,13 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
 
       <Form.Item label="Text align">
         <Select 
-          defaultValue={layer.textAlign}
+          defaultValue={layer.txtAlign}
           options={[
             { value: TextAlign.Left },
             { value: TextAlign.Center },
             { value: TextAlign.Right },
           ]}
-          onChange={(e) => handleChange('textAlign', e.toString())}
+          onChange={(e) => handleChange('txtAlign', e.toString())}
         />
       </Form.Item>
 

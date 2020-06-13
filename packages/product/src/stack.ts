@@ -1,47 +1,67 @@
 import { Stack } from '@aws-cdk/core';
 import { Bucket } from '@aws-cdk/aws-s3';
+import { HostedZone, IHostedZone } from '@aws-cdk/aws-route53';
 import { Project, BuildSpec, Source, Artifacts, LinuxBuildImage } from '@aws-cdk/aws-codebuild';
 import { CloudFrontWebDistribution, OriginAccessIdentity, CloudFrontAllowedMethods, ViewerCertificate } from '@aws-cdk/aws-cloudfront';
+import { Certificate } from '@aws-cdk/aws-certificatemanager';
 
-export class StencilbotProductStack extends Stack {
+export class StencilbotDomainStack extends Stack {
+  zone: IHostedZone
+  certificate: Certificate
+
   constructor(scope, id, props) {
     super(scope, id, props);
 
-    const sourceBucket = new Bucket(this, 'stancilbot-product-source-bucket');
+    this.zone = HostedZone.fromHostedZoneId(this, 'stencilbot-hosted-zone', 'Z0491224R4WWDOQAX7J0');
 
-    const build = new Project(this, 'stencilbot-product-build', {
-      buildSpec: BuildSpec.fromSourceFilename('buildspec.yml'),
-      source: Source.gitHub({
-        owner: 'pasierb',
-        repo: 'stencilbot'
-      }),
-      environment: {
-        buildImage: LinuxBuildImage.STANDARD_3_0,
-      },
-      artifacts: Artifacts.s3({
-        bucket: sourceBucket,
-        packageZip: false,
-        encryption: false,
-        includeBuildId: false,
-        name: '.',
-      })
-    });
-
-    const webDistribution = new CloudFrontWebDistribution(this, 'stencilbot-product-distribution', {
-      originConfigs: [
-        {
-          behaviors: [
-            {
-              isDefaultBehavior: true,
-              allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
-            }
-          ],
-          s3OriginSource: {
-            s3BucketSource: sourceBucket,
-            originAccessIdentity: new OriginAccessIdentity(this, 'stencilbot-product-access-identity')
-          }
-        }
+    this.certificate = new Certificate(this, 'stencilbot-certificate', {
+      domainName: 'stencilbot.io',
+      subjectAlternativeNames: [
+        '*.stencilbot.io'
       ]
     });
   }
 }
+
+// export class StencilbotProductStack extends Stack {
+//   constructor(scope, id, props) {
+//     super(scope, id, props);
+
+//     const sourceBucket = new Bucket(this, 'stancilbot-product-source-bucket');
+
+//     const build = new Project(this, 'stencilbot-product-build', {
+//       buildSpec: BuildSpec.fromSourceFilename('buildspec.yml'),
+//       source: Source.gitHub({
+//         owner: 'pasierb',
+//         repo: 'stencilbot'
+//       }),
+//       environment: {
+//         buildImage: LinuxBuildImage.STANDARD_3_0,
+//       },
+//       artifacts: Artifacts.s3({
+//         bucket: sourceBucket,
+//         packageZip: false,
+//         encryption: false,
+//         includeBuildId: false,
+//         name: '.',
+//       })
+//     });
+
+//     const webDistribution = new CloudFrontWebDistribution(this, 'stencilbot-product-distribution', {
+//       originConfigs: [
+//         {
+//           behaviors: [
+//             {
+//               isDefaultBehavior: true,
+//               allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
+//             }
+//           ],
+//           s3OriginSource: {
+//             s3BucketSource: sourceBucket,
+//             originAccessIdentity: new OriginAccessIdentity(this, 'stencilbot-product-access-identity')
+//           }
+//         }
+//       ]
+//     });
+//   }
+// }

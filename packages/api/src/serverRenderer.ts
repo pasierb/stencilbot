@@ -1,4 +1,4 @@
-import { Renderer, Project } from '@stencilbot/renderer';
+import { Renderer, Project, Layer } from '@stencilbot/renderer';
 import { createCanvas, loadImage, Canvas } from 'canvas';
 import fetch from 'node-fetch';
 import { registerGoogleFont } from './fonts';
@@ -11,9 +11,9 @@ export class ServerRenderer extends Renderer {
   }
 
   preloadImages(project: Project) {
-    project.layers.forEach(({ imageUri }) => {
-      if (imageUri) {
-        fetchImage(imageUri);
+    project.layers.forEach(({ img }) => {
+      if (img ) {
+        fetchImage(img);
       }
     });
   }
@@ -21,14 +21,15 @@ export class ServerRenderer extends Renderer {
   registerProjectFonts(project: Project) {
     const fontFamilies = new Set<string>();
 
-    project.layers.forEach(({ fontFamily }) => {
-      if (fontFamily && fontFamily.indexOf(':') > 0) {
-        fontFamilies.add(fontFamily)
+    project.layers.forEach(({ font }) => {
+      if (font) {
+        fontFamilies.add(font)
       }
     });
 
-    return Promise.all([...fontFamilies].map(fontFamily => {
-      return registerGoogleFont(fontFamily);
+    return Promise.all([...fontFamilies].map(font => {
+      const l = new Layer({ font })
+      return registerGoogleFont(font, l.fontWeight, l.fontStyle);
     }));
   }
 

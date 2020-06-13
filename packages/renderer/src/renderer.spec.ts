@@ -23,7 +23,7 @@ describe('renderer', () => {
 
   it('should downsize image to contain', async () => {
     const drawImage = ctx.drawImage as jest.Mock
-    const layer = new Layer({ imageUri: 'abc', width: 150, imageFit: ImageFit.Contain });
+    const layer = new Layer({ img: 'abc', w: 150, imgFit: ImageFit.Contain });
 
     await renderer.render(canvas, layer);
     const [img, x, y, w, h] = drawImage.mock.calls[0];
@@ -36,7 +36,7 @@ describe('renderer', () => {
 
   it('should draw text with lineHeight offset', async () => {
     const fillText = ctx.fillText as jest.Mock
-    const layer = new Layer({ text: 'as', fontSize: 14, lineHeight: 1.5 });
+    const layer = new Layer({ txt: 'as', font: 'Roboto', fontSize: 14, lineH: 1.5 });
 
     await renderer.render(canvas, layer);
     
@@ -47,7 +47,7 @@ describe('renderer', () => {
 
   it('should render on y axis', async () => {
     const fillText = ctx.fillText as jest.Mock
-    const layer = new Layer({ text: 'as', y: 1, fontSize: 14, lineHeight: 1.5 });
+    const layer = new Layer({ txt: 'as', font: 'Roboto', y: 1, fontSize: 14, lineH: 1.5 });
 
     await renderer.render(canvas, layer);
     
@@ -58,7 +58,7 @@ describe('renderer', () => {
 
   it('should render image valign middle', async () => {
     const drawImage = ctx.drawImage as jest.Mock
-    const layer = new Layer({ valign: VerticalAlign.Middle, imageUri: 'abc' });
+    const layer = new Layer({ valign: VerticalAlign.Middle, img: 'abc' });
 
     await renderer.render(canvas, layer);
     const [img, x, y, w, h] = drawImage.mock.calls[0];
@@ -68,7 +68,7 @@ describe('renderer', () => {
 
   it('should containt fit and render image valign middle', async () => {
     const drawImage = ctx.drawImage as jest.Mock
-    const layer = new Layer({ valign: VerticalAlign.Middle, imageUri: 'abc', width: 150, imageFit: ImageFit.Contain });
+    const layer = new Layer({ valign: VerticalAlign.Middle, img: 'abc', w: 150, imgFit: ImageFit.Contain });
 
     await renderer.render(canvas, layer);
     const [img, x, y, w, h] = drawImage.mock.calls[0];
@@ -78,7 +78,7 @@ describe('renderer', () => {
 
   it('should render image valign bottom', async () => {
     const drawImage = ctx.drawImage as jest.Mock
-    const layer = new Layer({ valign: VerticalAlign.Bottom, imageUri: 'abc' });
+    const layer = new Layer({ valign: VerticalAlign.Bottom, img: 'abc' });
 
     await renderer.render(canvas, layer);
     const [img, x, y, w, h] = drawImage.mock.calls[0];
@@ -88,7 +88,7 @@ describe('renderer', () => {
 
   it('should render text valign middle', async () => {
     const fillText = ctx.fillText as jest.Mock
-    const layer = new Layer({ valign: VerticalAlign.Middle, text: 'abc', fontSize: 10 });
+    const layer = new Layer({ valign: VerticalAlign.Middle, font: 'Roboto', txt: 'abc', fontSize: 10 });
 
     await renderer.render(canvas, layer);
     const [txt, x, y] = fillText.mock.calls[0];
@@ -98,7 +98,7 @@ describe('renderer', () => {
 
   it('should render text valign bottom', async () => {
     const fillText = ctx.fillText as jest.Mock
-    const layer = new Layer({ valign: VerticalAlign.Bottom, text: 'abc', fontSize: 10 });
+    const layer = new Layer({ valign: VerticalAlign.Bottom, font: 'Roboto', txt: 'abc', fontSize: 10 });
 
     await renderer.render(canvas, layer);
     const [txt, x, y] = fillText.mock.calls[0];
@@ -108,7 +108,7 @@ describe('renderer', () => {
 
   it('should render text center', async () => {
     const fillText = ctx.fillText as jest.Mock
-    const layer = new Layer({ text: 'abcd', textAlign: TextAlign.Center });
+    const layer = new Layer({ txt: 'abcd', txtAlign: TextAlign.Center, font: 'Roboto' });
 
     await renderer.render(canvas, layer);
     const [txt, x, y] = fillText.mock.calls[0];
@@ -118,7 +118,7 @@ describe('renderer', () => {
 
   it('should render text center', async () => {
     const fillText = ctx.fillText as jest.Mock
-    const layer = new Layer({ text: 'abcd', x: 100, textAlign: TextAlign.Center });
+    const layer = new Layer({ txt: 'abcd', x: 100, txtAlign: TextAlign.Center, font: 'Roboto' });
 
     await renderer.render(canvas, layer);
     const [txt, x, y] = fillText.mock.calls[0];
@@ -128,7 +128,7 @@ describe('renderer', () => {
 
   it('should render text center', async () => {
     const fillText = ctx.fillText as jest.Mock
-    const layer = new Layer({ text: 'abcd', x: 100, width: 200, textAlign: TextAlign.Center });
+    const layer = new Layer({ txt: 'abcd', x: 100, w: 200, txtAlign: TextAlign.Center, font: 'Roboto' });
 
     await renderer.render(canvas, layer);
     const [txt, x, y] = fillText.mock.calls[0];
@@ -138,7 +138,7 @@ describe('renderer', () => {
 
   it('should split text in lines if does not fit', async () => {
     const fillText = ctx.fillText as jest.Mock
-    const layer = new Layer({ text: 'ab cd efg', width: 3, fontSize: 10 });
+    const layer = new Layer({ txt: 'ab cd efg', w: 3, fontSize: 10, font: 'Roboto' });
 
     await renderer.render(canvas, layer);
 
@@ -150,7 +150,7 @@ describe('renderer', () => {
 
   it('should split text in lines if does not fit', async () => {
     const fillText = ctx.fillText as jest.Mock
-    const layer = new Layer({ text: 'ab cdef efg', width: 3, fontSize: 10 });
+    const layer = new Layer({ txt: 'ab cdef efg', w: 3, fontSize: 10, font: 'Roboto' });
 
     await renderer.render(canvas, layer);
 

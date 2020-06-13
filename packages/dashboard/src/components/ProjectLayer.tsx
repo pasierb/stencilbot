@@ -16,17 +16,20 @@ const ProjectLayer: FunctionComponent<ProjectLayerProps> = ({ layer, width, heig
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    const ctx = canvasRef.current!.getContext('2d')!;
+
     const trigger = fontLoader.on(layer.fontFamily, () => {
       if (canvasRef.current) {
-        const ctx = canvasRef.current.getContext('2d')!;
-
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         renderer.render(canvasRef.current, layer);
       }
     })
 
-    fontLoader.load(layer.fontFamily)
+    if (layer.fontFamily) {
+      fontLoader.load(layer.fontFamily)
+    }
 
+    renderer.render(canvasRef.current!, layer);
     return trigger;
   });
 

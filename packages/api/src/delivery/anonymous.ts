@@ -8,8 +8,12 @@ const renderer = new ServerRenderer();
 registerDefaultFonts();
 
 export const handler: APIGatewayProxyHandler = async (event) => {
+  console.log(event.queryStringParameters);
+
   const project = Project.fromSearchParams(event.queryStringParameters);
   const base = await renderer.renderProject(project);
+
+  console.log({ project });
 
   return {
     statusCode: 200,
