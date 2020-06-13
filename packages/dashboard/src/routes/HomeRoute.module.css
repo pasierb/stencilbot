@@ -1,0 +1,23 @@
+ul.footerLinks {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+ul.footerLinks li {
+    display: inline;
+    padding: 0 .6em;
+    border-left: 1px solid;
+}
+
+ul.footerLinks li:first-child {
+    border-left: none;
+}
+
+.HomeRoute {
+    background: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path d="M1 2V0h1v1H0v1z" fill-opacity=".025"/></svg>');
+    background-size: 25px;
+    min-height: 100vh;
+}
