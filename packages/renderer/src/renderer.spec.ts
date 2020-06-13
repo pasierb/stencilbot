@@ -66,6 +66,16 @@ describe('renderer', () => {
     expect(y).toBe(150);
   });
 
+  it('should render text aligned right', async () => {
+    const fillText = ctx.fillText as jest.Mock
+    const layer = new Layer({ x: 10, w: 125, txtAlign: TextAlign.Right, txt: 'abc', font: 'Mono' });
+
+    await renderer.render(canvas, layer);
+    const [txt, x, y] = fillText.mock.calls[0];
+
+    expect(x).toBe(135);
+  });
+
   it('should containt fit and render image valign middle', async () => {
     const drawImage = ctx.drawImage as jest.Mock
     const layer = new Layer({ valign: VerticalAlign.Middle, img: 'abc', w: 150, imgFit: ImageFit.Contain });
