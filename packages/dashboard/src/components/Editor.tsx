@@ -1,6 +1,6 @@
 import React, { Fragment, FunctionComponent, useState } from 'react';
-import { Layout, Collapse, Button } from 'antd';
-import { Layer, Project } from '@stencilbot/renderer';
+import { Layout, Collapse, Button, Row, Col } from 'antd';
+import { Layer, LayerType, Project } from '@stencilbot/renderer';
 
 import { ProjectPreview } from './ProjectPreview';
 import { LayerForm } from './LayerForm';
@@ -9,10 +9,14 @@ import { LayerIcon } from './LayerIcon';
 import style from './Editor.module.css';
 
 const PanelHeader: FunctionComponent<{ layer: Layer }> = ({ layer }) => (
-  <Fragment>
-    <LayerIcon layer={layer} />
-    <span>{layer.id}</span>
-  </Fragment>
+  <div>
+    {layer.type === LayerType.Text && (
+      <span>{layer.txt}</span>
+    )}
+    {layer.type === LayerType.Image && (
+      <img src={layer.img} height="40" />
+    )}
+  </div>
 );
 
 interface EditorProps {
@@ -67,7 +71,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
         />
       </Layout.Content>
 
-      <Layout.Sider>
+      <Layout.Sider width="300">
         <Button onClick={handlePreview}>Preview</Button>
 
         <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>

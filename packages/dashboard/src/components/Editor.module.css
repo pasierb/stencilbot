@@ -4,4 +4,8 @@
 
 .Editor main {
     background-color: #fff;
+    display: flex;    
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }

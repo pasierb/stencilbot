@@ -1,8 +1,9 @@
 import React, { FunctionComponent, Fragment, useState } from 'react';
 import { Layer, LayerInit, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
-import { Form, Input, Button, Select, Row, Col } from 'antd';
+import { Form, Input, Button, Select, Row, Col, Radio } from 'antd';
 import { debounce } from 'lodash';
 import { GoogleFontSelect } from './GoogleFontSelect';
+import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, VerticalAlignTopOutlined, VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 
 interface LayerFormProps {
   layer: Layer
@@ -70,7 +71,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
           <Input type="number" onChange={(e) => handleChange('fontSize', e.target.value)} defaultValue={layer.fontSize} />
         </Form.Item>
         <Form.Item label="Line height">
-          <Input type="number" onChange={(e) => handleChange('lineH', e.target.value)} defaultValue={layer.lineH} />
+          <Input type="number" step={0.1} onChange={(e) => handleChange('lineH', e.target.value)} defaultValue={layer.lineH} />
         </Form.Item>
         <Form.Item label="Color">
           <Input type="color" onChange={(e) => handleChange('color', e.target.value)} defaultValue={layer.color} />
@@ -82,41 +83,40 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
 
       {layer.img && (<Fragment>
         <Form.Item label="Image fit">
-          <Select
-            defaultValue={layer.imgFit}
-            onChange={(val) => handleChange('imgFit', val.toString())}
-            options={[
-              { value: ImageFit.None },
-              { value: ImageFit.Contain },
-              { value: ImageFit.Cover }
-            ]}
-          />
+          <Radio.Group defaultValue={layer.imgFit} onChange={e => handleChange('imgFit', e.target.value)}>
+            <Radio.Button value={undefined}>none</Radio.Button>
+            <Radio.Button value={ImageFit.Contain}>contain</Radio.Button>
+            <Radio.Button value={ImageFit.Cover}>cover</Radio.Button>
+          </Radio.Group>
         </Form.Item>
       </Fragment>)}
 
       <Form.Item label="Vertical align">
-        <Select
-          defaultValue={layer.valign}
-          options={[
-            { value: '', label: '---' },
-            { value: VerticalAlign.Top },
-            { value: VerticalAlign.Middle },
-            { value: VerticalAlign.Bottom },
-          ]}
-          onChange={(e) => handleChange('valign', e.toString())}
-        />
+        <Radio.Group onChange={e => handleChange('valign', e.target.value)} defaultValue={layer.valign || VerticalAlign.Top}>
+          <Radio.Button value={VerticalAlign.Top}>
+            <VerticalAlignTopOutlined />
+          </Radio.Button>
+          <Radio.Button value={VerticalAlign.Middle}>
+            <VerticalAlignMiddleOutlined />
+          </Radio.Button>
+          <Radio.Button value={VerticalAlign.Bottom}>
+            <VerticalAlignBottomOutlined />
+          </Radio.Button>
+        </Radio.Group>
       </Form.Item>
 
       <Form.Item label="Text align">
-        <Select 
-          defaultValue={layer.txtAlign}
-          options={[
-            { value: TextAlign.Left },
-            { value: TextAlign.Center },
-            { value: TextAlign.Right },
-          ]}
-          onChange={(e) => handleChange('txtAlign', e.toString())}
-        />
+        <Radio.Group defaultValue={layer.txtAlign || TextAlign.Left} onChange={e => handleChange('txtAlign', e.target.value)}>
+          <Radio.Button value={TextAlign.Left}>
+            <AlignLeftOutlined />
+          </Radio.Button>
+          <Radio.Button value={TextAlign.Center}>
+            <AlignCenterOutlined />
+          </Radio.Button>
+          <Radio.Button value={TextAlign.Right}>
+            <AlignRightOutlined />
+          </Radio.Button>
+        </Radio.Group>
       </Form.Item>
 
       <Button htmlType="submit">Submit</Button>
