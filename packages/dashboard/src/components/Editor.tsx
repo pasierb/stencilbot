@@ -1,10 +1,11 @@
 import React, { FunctionComponent, useState } from 'react';
-import { Layout, Collapse, Button  } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Layout, Collapse, Button, Card } from 'antd';
+import { ArrowLeftOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons';
 import { Layer, LayerType, Project } from '@stencilbot/renderer';
 import { navigate } from '@reach/router';
 import { ProjectPreview } from './ProjectPreview';
 import { LayerForm } from './LayerForm';
+import { ProjectForm } from './ProjectForm';
 
 import style from './Editor.module.css';
 
@@ -27,7 +28,11 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
   const [project, setProject] = useState<Project>(props.project);
   const [selectedLayerId, setSelectedLayerId] = useState<string>();
 
-  const handleSubmit = (layer: Layer) => {
+  const handleProjectChange = (project: Project) => {
+    setProject(project);
+  }
+
+  const handleChangeLayer = (layer: Layer) => {
     const i = project.layers.findIndex(({ id }) => id === layer.id);
 
     if (i !== -1) {
@@ -38,7 +43,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
     }
   }
 
-  const handleRemove = (layer: Layer) => {
+  const handleRemoveLayer = (layer: Layer) => {
     const i = project.layers.findIndex(({ id }) => id === layer.id);
 
     const newLayers = [...project.layers.slice(0, i), ...project.layers.slice(i+1)];
@@ -80,21 +85,35 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
       </Layout.Content>
 
       <Layout.Sider width="300" theme="dark">
-        <Button onClick={handlePreview}>Preview</Button>
+        <Card title="Project" size="small">
+          <ProjectForm project={project} onSubmit={handleProjectChange} />
 
-        <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>
-          {project.layers.map((layer, i) => (
-            <Collapse.Panel key={layer.id} header={<PanelHeader layer={layer} />}>
-              <LayerForm
-                key={layer.id + '-form'}
-                layer={layer}
-                onSubmit={handleSubmit}
-                onRemove={handleRemove}
-              />
-            </Collapse.Panel>
-          ))}
-        </Collapse>
-        <Button onClick={handleAddLayer}>Add</Button>
+          <Button onClick={handlePreview} title="See preview" icon={<EyeOutlined />}>
+            Preview 
+          </Button>
+        </Card>
+        <Card
+          title="Layers"
+          size="small"
+          extra={
+            <Button onClick={handleAddLayer} title="Add layer">
+              <PlusOutlined />
+            </Button>
+          }
+        >
+          <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>
+            {project.layers.map((layer, i) => (
+              <Collapse.Panel key={layer.id} header={<PanelHeader layer={layer} />}>
+                <LayerForm
+                  key={layer.id + '-form'}
+                  layer={layer}
+                  onSubmit={handleChangeLayer}
+                  onRemove={handleRemoveLayer}
+                />
+              </Collapse.Panel>
+            ))}
+          </Collapse>
+        </Card>
       </Layout.Sider>
     </Layout>
   )

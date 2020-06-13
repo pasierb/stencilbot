@@ -3,7 +3,7 @@ import { Layer, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer'
 import { Form, Input, Button, Row, Col, Radio } from 'antd';
 import { debounce } from 'lodash';
 import { GoogleFontSelect } from './GoogleFontSelect';
-import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, VerticalAlignTopOutlined, VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
+import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, VerticalAlignTopOutlined, VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
 interface LayerFormProps {
@@ -125,8 +125,9 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
         </Radio.Group>
       </Form.Item>
 
-      <Button htmlType="submit">Submit</Button>
-      <Button onClick={handleRemove}>Remove</Button>
+      <Button onClick={handleRemove} danger>
+        <DeleteOutlined />
+      </Button>
     </Form>
   );
 }
