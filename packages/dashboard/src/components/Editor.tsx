@@ -1,10 +1,9 @@
-import React, { Fragment, FunctionComponent, useState } from 'react';
-import { Layout, Collapse, Button, Row, Col } from 'antd';
+import React, { FunctionComponent, useState } from 'react';
+import { Layout, Collapse, Button  } from 'antd';
 import { Layer, LayerType, Project } from '@stencilbot/renderer';
 
 import { ProjectPreview } from './ProjectPreview';
 import { LayerForm } from './LayerForm';
-import { LayerIcon } from './LayerIcon';
 
 import style from './Editor.module.css';
 
@@ -14,7 +13,7 @@ const PanelHeader: FunctionComponent<{ layer: Layer }> = ({ layer }) => (
       <span>{layer.txt}</span>
     )}
     {layer.type === LayerType.Image && (
-      <img src={layer.img} height="40" />
+      <img src={layer.img} height="40" alt="preview" />
     )}
   </div>
 );

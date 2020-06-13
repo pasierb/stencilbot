@@ -1,6 +1,6 @@
 import React, { FunctionComponent, Fragment, useState } from 'react';
 import { Layer, LayerInit, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
-import { Form, Input, Button, Select, Row, Col, Radio } from 'antd';
+import { Form, Input, Button, Row, Col, Radio } from 'antd';
 import { debounce } from 'lodash';
 import { GoogleFontSelect } from './GoogleFontSelect';
 import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, VerticalAlignTopOutlined, VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
