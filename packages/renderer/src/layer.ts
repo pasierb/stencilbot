@@ -89,7 +89,9 @@ export class Layer {
   constructor(init: LayerInit = {}) {
     this.id = init.id || Layer.generateId();
 
-    Object.assign(this, init);
+    Object.entries(init).forEach(([ key, value]) => {
+      this.setAttribue(key as keyof LayerInit, value)
+    });
   }
 
   setAttribue(key: keyof LayerInit, value: any) {
@@ -100,10 +102,10 @@ export class Layer {
       case 'h':
       case 'fontSize':
       case 'order':
-        this[key] = parseInt(value);
+        this[key] = value !== undefined ? parseInt(value) : undefined;
         break;
       case 'lineH':
-        this[key] = parseFloat(value);
+        this[key] = value !== undefined ? parseFloat(value) : undefined;
         break;
       default:
         this[key] = value;
