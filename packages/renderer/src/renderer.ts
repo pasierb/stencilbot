@@ -83,8 +83,15 @@ export abstract class Renderer {
     ctx.font = fontDeclaration;
     ctx.textAlign = txtAlign as CanvasTextAlign;
 
-    if (txtAlign === TextAlign.Center) {
-      x += width / 2;
+    switch(txtAlign) {
+      case TextAlign.Center: {
+        x += width / 2;
+        break;
+      }
+      case TextAlign.Right: {
+        x += width;
+        break;
+      }
     }
 
     const lines = txt.split(/\n/)
