@@ -71,7 +71,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
           <Input type="number" onChange={(e) => handleChange('fontSize', e.target.value)} defaultValue={layer.fontSize} />
         </Form.Item>
         <Form.Item label="Line height">
-          <Input type="number" step={0.1} onChange={(e) => handleChange('lineH', e.target.value)} defaultValue={layer.lineH} />
+          <Input type="number" step={0.1} onChange={(e) => handleChange('lineH', e.target.value)} defaultValue={layer.lineH || 1} />
         </Form.Item>
         <Form.Item label="Color">
           <Input type="color" onChange={(e) => handleChange('color', e.target.value)} defaultValue={layer.color} />
