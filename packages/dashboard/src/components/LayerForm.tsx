@@ -31,7 +31,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
   }
 
   return (
-    <Form onFinish={() => submit()} size="small" layout="horizontal">
+    <Form onFinish={() => submit()} size="small" wrapperCol={{ span: 16 }} labelCol={{ span: 8 }}>
       <Row>
         <Col span={12}>
           <Form.Item label="x">
