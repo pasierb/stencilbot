@@ -18,20 +18,12 @@ function editPath(uri: string) {
 }
 
 export const HomeRoute: FunctionComponent<RouteComponentProps> = () => {
-  const [form] = Form.useForm();
-
   const goToEdit = (uri: string) => {
     try {
       navigate(editPath(uri));
     } catch(e) {
       console.log(e);
     }
-  }
-
-  const handleEdit = (values: Store) => {
-    const urlString = values['url'] as string
-
-    goToEdit(urlString);
   }
 
   const handleNew = () => {
@@ -44,24 +36,26 @@ export const HomeRoute: FunctionComponent<RouteComponentProps> = () => {
         <Row justify="center">
           <Col>
             <Typography.Title>Stencilbot</Typography.Title>
+            <Typography.Text>Some slogan</Typography.Text>
           </Col>
         </Row>
 
         <Row justify="center" gutter={10}>
           <Col lg={6}>
             <Card>
-              <Button onClick={handleNew}>Create new</Button>
+              <Button onClick={handleNew}>Start new project</Button>
             </Card>
           </Col>
 
           <Col lg={6}>
             <Card>
-              <Form form={form} size="large" onFinish={handleEdit}>
+              <Form size="large">
                 <Form.Item name="url">
-                  <Input placeholder="Edit" />
-                </Form.Item>
-                <Form.Item>
-                  <Button htmlType="submit">Submit</Button>
+                  <Input.Search
+                    placeholder="Edit"
+                    enterButton={<EditOutlined />}
+                    onSearch={(val) => goToEdit(val)}
+                  />
                 </Form.Item>
               </Form>
             </Card>
