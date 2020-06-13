@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Layout, Collapse, Button  } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Layer, LayerType, Project } from '@stencilbot/renderer';
-
+import { navigate } from '@reach/router';
 import { ProjectPreview } from './ProjectPreview';
 import { LayerForm } from './LayerForm';
 
@@ -59,6 +60,10 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
     );
   }
 
+  const handleBack = () => {
+    navigate('/');
+  }
+
   return (
     <Layout className={style.Editor}>
       <Layout.Content>
@@ -68,9 +73,13 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
           height={project.height}
           selectedLayerId={selectedLayerId}
         />
+
+        <Button size="large" className={style.backButton} onClick={handleBack}>
+          <ArrowLeftOutlined />
+        </Button>
       </Layout.Content>
 
-      <Layout.Sider width="300">
+      <Layout.Sider width="300" theme="dark">
         <Button onClick={handlePreview}>Preview</Button>
 
         <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>
