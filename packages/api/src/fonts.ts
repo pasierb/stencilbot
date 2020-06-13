@@ -1,4 +1,3 @@
-import path from 'path';
 import fs from 'fs-extra';
 import fetch from 'node-fetch';
 import { registerFont } from 'canvas';
@@ -128,10 +127,6 @@ function fetchData() {
   googleFontsDataPromise = fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${googleFontsAPIKey}`).then(r => r.json())
 
   return googleFontsDataPromise;
-}
-
-export function registerDefaultFonts() {
-  registerFont(path.join(__dirname, 'fonts/Roboto-Regular.ttf'), { family: 'Roboto' });
 }
 
 export async function registerGoogleFont(name: string, fontWeight?: string, fontStyle?: string) {
