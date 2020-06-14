@@ -19,6 +19,10 @@
     overflow: auto;
 }
 
+.Editor :global(.ant-layout-sider-collapsed) {
+  overflow-x: hidden;
+}
+
 .backButton {
     position: fixed;
     left: 1rem;

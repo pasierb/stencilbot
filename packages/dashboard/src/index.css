@@ -19,3 +19,8 @@ code {
 .ant-layout {
   background: none;
 }
+
+.ant-layout-sider-trigger {
+  background: rgba(0,0,0,.5);
+}
+

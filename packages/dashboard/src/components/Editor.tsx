@@ -143,7 +143,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
               </div>
             </Layout.Content>
 
-            <Layout.Sider width="300" theme="dark">
+            <Layout.Sider width="300" collapsible>
               <Card title="Project" size="small">
                 <ProjectForm project={project} onSubmit={handleProjectChange} />
 
