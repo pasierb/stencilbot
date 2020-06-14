@@ -41,14 +41,10 @@ export const HomeRoute: FunctionComponent<RouteComponentProps> = () => {
         </Row>
 
         <Row justify="center" gutter={10}>
-          <Col lg={6}>
+          <Col lg={12}>
             <Card>
               <Button onClick={handleNew}>Start new project</Button>
-            </Card>
-          </Col>
 
-          <Col lg={6}>
-            <Card>
               <Form size="large">
                 <Form.Item name="url">
                   <Input.Search

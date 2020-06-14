@@ -16,7 +16,7 @@ export const ProjectForm: FunctionComponent<ProjectFormProps> = ({ project, onSu
 
   return (
     <Form form={form} onFinish={handleSubmit} layout="vertical">
-      <Form.Item label="Dimensions">
+      <Form.Item label="Dimensions (px)">
         <Input.Group compact style={{ display: 'flex' }}>
           <Input
             type="number"

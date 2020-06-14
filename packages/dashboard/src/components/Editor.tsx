@@ -93,7 +93,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
           </Button>
         </Card>
         <Card
-          title="Layers"
+          title={`Layers (${project.layers.length})`}
           size="small"
           extra={
             <Button onClick={handleAddLayer} title="Add layer">
