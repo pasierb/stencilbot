@@ -1,0 +1,17 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "target": "ES2017",
+        "outDir": "./lib",
+        "lib": [
+            "es6",
+            "DOM"
+        ]
+    },
+    "include": [
+        "src/stack.ts"
+    ],
+    "exclude": [
+        "node_modules/**/*"
+    ]
+}
