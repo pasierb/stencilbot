@@ -1,11 +1,13 @@
 import React, { FunctionComponent, useState } from 'react';
-import { Layout, Collapse, Button, Card } from 'antd';
-import { ArrowLeftOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons';
-import { Layer, LayerType, Project } from '@stencilbot/renderer';
 import { navigate } from '@reach/router';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { Layout, Collapse, Button, Card, Input, Form } from 'antd';
+import { ArrowLeftOutlined, PlusOutlined, EyeOutlined, MinusOutlined, UndoOutlined } from '@ant-design/icons';
+import { Layer, LayerType, Project } from '@stencilbot/renderer';
 import { ProjectPreview } from './ProjectPreview';
 import { LayerForm } from './LayerForm';
 import { ProjectForm } from './ProjectForm';
+
 
 import style from './Editor.module.css';
 
@@ -71,50 +73,101 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
 
   return (
     <Layout className={style.Editor}>
-      <Layout.Content>
-        <ProjectPreview
-          layers={project.layers}
-          width={project.width}
-          height={project.height}
-          selectedLayerId={selectedLayerId}
-        />
+      <TransformWrapper
+        defaultScale={1}
+        options={{
+          minScale: 0,
+          centerContent: true,
+          limitToBounds: false
+        }}
+      >
+        {({ resetTransform, zoomIn, zoomOut, scale }) => (
+          <React.Fragment>
+            <Layout.Content>
+              <TransformComponent>
+                <div className={style.workbench}>
+                  <ProjectPreview
+                    layers={project.layers}
+                    width={project.width}
+                    height={project.height}
+                    selectedLayerId={selectedLayerId}
+                  />
+                </div>
+              </TransformComponent>
 
-        <Button size="large" className={style.backButton} onClick={handleBack}>
-          <ArrowLeftOutlined />
-        </Button>
-      </Layout.Content>
+              <Button size="large" className={style.backButton} onClick={handleBack}>
+                <ArrowLeftOutlined />
+              </Button>
 
-      <Layout.Sider width="300" theme="dark">
-        <Card title="Project" size="small">
-          <ProjectForm project={project} onSubmit={handleProjectChange} />
+              <div className={style.zoomControl}>
+                <Form layout="inline">
+                  <Form.Item>
+                    <Input.Group style={{ display: 'flex' }}>
+                      <Button
+                        icon={<MinusOutlined />}
+                        size="large"
+                        onClick={zoomOut}
+                      />
+                      <Input
+                        disabled
+                        style={{ width: '7em' }}
+                        type="number"
+                        value={(scale * 100).toFixed(1)}
+                        suffix="%"
+                        size="large"
+                      />
+                      <Button
+                        icon={<PlusOutlined />}
+                        size="large"
+                        onClick={zoomIn}
+                      />
+                    </Input.Group>
+                  </Form.Item>
+                  <Form.Item>
+                    <Button
+                      onClick={resetTransform}
+                      size="large"
+                      icon={<UndoOutlined />}
+                    />
+                  </Form.Item>
+                </Form>
+              </div>
+            </Layout.Content>
 
-          <Button onClick={handlePreview} title="See preview" icon={<EyeOutlined />}>
-            Preview 
-          </Button>
-        </Card>
-        <Card
-          title={`Layers (${project.layers.length})`}
-          size="small"
-          extra={
-            <Button onClick={handleAddLayer} title="Add layer">
-              <PlusOutlined />
-            </Button>
-          }
-        >
-          <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>
-            {project.layers.map((layer, i) => (
-              <Collapse.Panel key={layer.id} header={<PanelHeader layer={layer} />}>
-                <LayerForm
-                  key={layer.id + '-form'}
-                  layer={layer}
-                  onSubmit={handleChangeLayer}
-                  onRemove={handleRemoveLayer}
-                />
-              </Collapse.Panel>
-            ))}
-          </Collapse>
-        </Card>
-      </Layout.Sider>
+            <Layout.Sider width="300" theme="dark">
+              <Card title="Project" size="small">
+                <ProjectForm project={project} onSubmit={handleProjectChange} />
+
+                <Button onClick={handlePreview} title="See preview" icon={<EyeOutlined />}>
+                  Preview 
+                </Button>
+              </Card>
+              <Card
+                title={`Layers (${project.layers.length})`}
+                size="small"
+                extra={
+                  <Button onClick={handleAddLayer} title="Add layer">
+                    <PlusOutlined />
+                  </Button>
+                }
+              >
+                <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>
+                  {project.layers.map((layer, i) => (
+                    <Collapse.Panel key={layer.id} header={<PanelHeader layer={layer} />}>
+                      <LayerForm
+                        key={layer.id + '-form'}
+                        layer={layer}
+                        onSubmit={handleChangeLayer}
+                        onRemove={handleRemoveLayer}
+                      />
+                    </Collapse.Panel>
+                  ))}
+                </Collapse>
+              </Card>
+            </Layout.Sider>
+          </React.Fragment>
+        )}
+      </TransformWrapper>
     </Layout>
   )
 }

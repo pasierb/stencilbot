@@ -4,11 +4,13 @@
     background-size: 25px;
 }
 
+.Editor :global(.react-transform-component) {
+    width: 100%;
+}
+
 .Editor main {
-    display: flex;    
-    flex-direction: row;
+    display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 .Editor aside {
@@ -20,4 +22,17 @@
     position: fixed;
     left: 1rem;
     top: 1rem;
+}
+
+.zoomControl {
+    position: fixed;
+    bottom: 1rem;
+}
+
+.workbench {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
