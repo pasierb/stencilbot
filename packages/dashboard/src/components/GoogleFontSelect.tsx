@@ -37,7 +37,7 @@ function fetchData() {
     return dataPromise;
   }
 
-  dataPromise = fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.REACT_APP_GOOGLE_FONTS_API_KEY}`)
+  dataPromise = fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.NEXT_PUBLIC_GOOGLE_FONTS_API_KEY}`)
     .then(r => r.json()) as Promise<GoogleWebFontsAPIResponse>;
 
   return dataPromise;

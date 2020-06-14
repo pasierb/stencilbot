@@ -2,7 +2,6 @@ import React, { useRef, useEffect, FunctionComponent } from 'react';
 import { Layer } from '@stencilbot/renderer';
 import { BrowserRenderer } from '../BrowserRenderer';
 import { fontLoader } from '../fontLoader';
-// import webfontloader from 'webfontloader';
 
 interface ProjectLayerProps {
   layer: Layer
