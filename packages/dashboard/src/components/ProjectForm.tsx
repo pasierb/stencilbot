@@ -16,12 +16,13 @@ export const ProjectForm: FunctionComponent<ProjectFormProps> = ({ project, onSu
 
   return (
     <Form form={form} onFinish={handleSubmit} layout="vertical">
-      <Form.Item label="Dimensions (px)">
+      <Form.Item label="Dimensions">
         <Input.Group compact style={{ display: 'flex' }}>
           <Input
             type="number"
             placeholder="width"
             defaultValue={project.width}
+            suffix="px"
             onChange={e => {
               project.width = +e.target.value;
               form.submit();
@@ -32,6 +33,7 @@ export const ProjectForm: FunctionComponent<ProjectFormProps> = ({ project, onSu
             type="number"
             placeholder="heigt"
             defaultValue={project.height}
+            suffix="px"
             onChange={e => {
               project.height = +e.target.value;
               form.submit();
