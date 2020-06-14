@@ -32,6 +32,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
   const router = useRouter();
 
   const handleProjectChange = (project: Project) => {
+    router.push(`/projects/edit?${project.toSearchString()}`);
     setProject(project);
   }
 
@@ -41,8 +42,10 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
     if (i !== -1) {
       const newLayers = [...project.layers];
       newLayers[i] = layer;
+      const newProject = new Project(project.width, project.height, newLayers)
 
-      setProject(new Project(project.width, project.height, newLayers));
+      router.push(`/projects/edit?${newProject.toSearchString()}`);
+      setProject(newProject);
     }
   }
 
@@ -50,15 +53,20 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
     const i = project.layers.findIndex(({ id }) => id === layer.id);
 
     const newLayers = [...project.layers.slice(0, i), ...project.layers.slice(i+1)];
-    setProject(new Project(project.width, project.height, newLayers));
+    const newProject = new Project(project.width, project.height, newLayers)
+
+    router.push(`/projects/edit?${newProject.toSearchString()}`);
+    setProject(newProject);
   }
 
   const handleAddLayer = () => {
     const order = Math.max(-1, ...project.layers.map(l => l.order || 0)) + 1
     const newLayer = new Layer({ order });
     const newLayers = [...project.layers, newLayer];
+    const newProject = new Project(project.width, project.height, newLayers)
 
-    setProject(new Project(project.width, project.height, newLayers));
+    router.push(`/projects/edit?${newProject.toSearchString()}`);
+    setProject(newProject);
   }
 
   const handlePreview = () => {

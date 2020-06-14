@@ -19,7 +19,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
     const newLayer = new Layer({ ...layer, ...values })
 
     onSubmit(newLayer);
-  }, 300);
+  }, 150);
 
   function handleRemove() {
     onRemove(layer);
