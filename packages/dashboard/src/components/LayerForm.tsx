@@ -37,25 +37,25 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
     >
       <Row>
         <Col span={12}>
-          <Form.Item label="x" name="x">
-            <Input type="number" />
+          <Form.Item label="x" name="x" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+            <Input type="number" suffix="px" />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="y" name="y">
-            <Input type="number" />
+          <Form.Item label="y" name="y" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+            <Input type="number" suffix="px" />
           </Form.Item>
         </Col>
       </Row>
       <Row>
         <Col span={12}>
-          <Form.Item label="w" name="w">
-            <Input type="number" />
+          <Form.Item label="w" name="w" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+            <Input type="number" suffix="px" />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="h" name="h">
-            <Input type="number" />
+          <Form.Item label="h" name="h" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+            <Input type="number" suffix="px" />
           </Form.Item>
         </Col>
       </Row>
@@ -74,7 +74,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
           />
         </Form.Item>
         <Form.Item label="Font size" name="fontSize">
-          <Input type="number" />
+          <Input type="number" suffix="px" />
         </Form.Item>
         <Form.Item label="Line height" name="lineH">
           <Input type="number" step={0.1} />
