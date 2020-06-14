@@ -1,4 +1,4 @@
-import webfontloader from 'webfontloader';
+// import webfontloader from 'webfontloader';
 
 class FontLoader {
   loaded: Set<string>
@@ -46,7 +46,7 @@ class FontLoader {
     }
 
     this.loading.set(fontFamily, true);
-    webfontloader.load({
+    global.WebFont.load({
       google: {
         families: [fontFamily]
       },

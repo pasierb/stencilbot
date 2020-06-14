@@ -1,15 +1,11 @@
 import React, { FunctionComponent } from 'react';
-import { RouteComponentProps, Link, navigate } from '@reach/router';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Form, Input, Layout, Button, Row, Col, Card, Typography } from 'antd';
-import { Store } from 'antd/lib/form/interface';
 import { GithubOutlined, EditOutlined } from '@ant-design/icons';
 import samples from '../samples.json';
 
-import style from './HomeRoute.module.css';
-
-interface HomeFormStore extends Store {
-  url: string
-}
+import style from './index.module.css';
 
 function editPath(uri: string) {
   const url = new URL(uri);
@@ -17,17 +13,19 @@ function editPath(uri: string) {
   return `/projects/edit${url.search}`;
 }
 
-export const HomeRoute: FunctionComponent<RouteComponentProps> = () => {
+const HomeRoute: FunctionComponent = () => {
+  const router = useRouter();
+
   const goToEdit = (uri: string) => {
     try {
-      navigate(editPath(uri));
+      router.push(editPath(uri))
     } catch(e) {
       console.log(e);
     }
   }
 
   const handleNew = () => {
-    navigate(`/projects/edit?w=800&h=400`);
+    router.push(`/projects/edit?w=800&h=400`);
   }
 
   return (
@@ -66,7 +64,7 @@ export const HomeRoute: FunctionComponent<RouteComponentProps> = () => {
                 hoverable
                 cover={<img src={sample.url} alt={sample.title} />}
                 actions={[
-                  <Link to={editPath(sample.url)}><EditOutlined /></Link>
+                  <Link href={editPath(sample.url)}><EditOutlined /></Link>
                 ]}
               >
                 <Card.Meta
@@ -95,3 +93,5 @@ export const HomeRoute: FunctionComponent<RouteComponentProps> = () => {
     </Layout>
   );
 }
+
+export default HomeRoute;

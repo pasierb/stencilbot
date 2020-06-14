@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { navigate } from '@reach/router';
+import { useRouter } from 'next/router'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Layout, Collapse, Button, Card, Input, Form } from 'antd';
 import { ArrowLeftOutlined, PlusOutlined, EyeOutlined, MinusOutlined, UndoOutlined } from '@ant-design/icons';
@@ -29,6 +29,7 @@ interface EditorProps {
 export const Editor: FunctionComponent<EditorProps> = (props) => {
   const [project, setProject] = useState<Project>(props.project);
   const [selectedLayerId, setSelectedLayerId] = useState<string>();
+  const router = useRouter();
 
   const handleProjectChange = (project: Project) => {
     setProject(project);
@@ -68,7 +69,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
   }
 
   const handleBack = () => {
-    navigate('/');
+    router.push('/');
   }
 
   return (
