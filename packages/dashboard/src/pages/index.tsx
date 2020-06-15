@@ -10,7 +10,7 @@ import style from './index.module.css';
 function editPath(uri: string) {
   const url = new URL(uri);
 
-  return `/projects/edit${url.search}`;
+  return `/projects/edit/${url.search}`;
 }
 
 const HomeRoute: FunctionComponent = () => {
@@ -25,7 +25,7 @@ const HomeRoute: FunctionComponent = () => {
   }
 
   const handleNew = () => {
-    router.push(`/projects/edit?w=800&h=400`);
+    router.push(`/projects/edit/?w=800&h=400`);
   }
 
   return (

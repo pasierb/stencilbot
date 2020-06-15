@@ -8,9 +8,9 @@ export class StencilbotDashboardStack extends Stack {
     super(scope, id, props);
 
     const bucket = new Bucket(this, 'stencilbot-dashboard-static', {
-      publicReadAccess: true,
       websiteIndexDocument: 'index.html',
-      websiteErrorDocument: '404.html'
+      websiteErrorDocument: '404.html',
+      publicReadAccess: true
     });
 
     new BucketDeployment(this, 'stencilbot-dashboard-static-deployment', {
@@ -18,6 +18,6 @@ export class StencilbotDashboardStack extends Stack {
       sources: [
         Source.asset(path.join(__dirname, '../out'))
       ]
-    })
+    });
   }
 }
