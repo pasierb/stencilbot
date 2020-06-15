@@ -8,8 +8,9 @@ import { ProjectPreview } from './ProjectPreview';
 import { LayerForm } from './LayerForm';
 import { ProjectForm } from './ProjectForm';
 
-
 import style from './Editor.module.css';
+
+const siderWidth = 300; //px
 
 const PanelHeader: FunctionComponent<{ layer: Layer }> = ({ layer }) => (
   <div>
@@ -143,8 +144,8 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
               </div>
             </Layout.Content>
 
-            <Layout.Sider width="300" collapsible>
-              <Card title="Project" size="small">
+            <Layout.Sider width={siderWidth} collapsible>
+              <Card title="Project" size="small" style={{ minWidth: siderWidth * .8 }}>
                 <ProjectForm project={project} onSubmit={handleProjectChange} />
 
                 <Button onClick={handlePreview} title="See preview" icon={<EyeOutlined />}>
@@ -154,6 +155,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
               <Card
                 title={`Layers (${project.layers.length})`}
                 size="small"
+                style={{ minWidth: siderWidth * .8 }}
                 extra={
                   <Button onClick={handleAddLayer} title="Add layer">
                     <PlusOutlined />
