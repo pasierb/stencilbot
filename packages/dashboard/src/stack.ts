@@ -7,7 +7,11 @@ export class StencilbotDashboardStack extends Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
 
-    const bucket = new Bucket(this, 'stencilbot-dashboard-static');
+    const bucket = new Bucket(this, 'stencilbot-dashboard-static', {
+      publicReadAccess: true,
+      websiteIndexDocument: 'index.html',
+      websiteErrorDocument: '404.html'
+    });
 
     new BucketDeployment(this, 'stencilbot-dashboard-static-deployment', {
       destinationBucket: bucket,
