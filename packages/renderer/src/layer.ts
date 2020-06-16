@@ -46,8 +46,8 @@ export enum LayerType {
 
 type LayerAttributeName = keyof LayerInit;
 
-const layerParamRegExp = /^(?<order>\d+)\.(?<attr>\w+)$/;
-const fontVariantRegExp = /^(?<weight>\d{3})?(?<style>\w+)?$/
+const layerParamRegExp = /^(\d+)\.(\w+)$/;
+const fontVariantRegExp = /^(\d{3})?(\w+)?$/
 
 const serializeableAttributes: LayerAttributeName[] = [
   'x',
@@ -169,9 +169,9 @@ export class Layer {
       const match = k.match(layerParamRegExp);
 
       if (match) {
-        const order = +match.groups!.order
+        const order = +match[1]
         const layer = acc[order] || new Layer({ order });
-        const attr = match.groups!.attr as keyof LayerInit;
+        const attr = match[2] as keyof LayerInit;
 
         layer.setAttribue(attr, v);
 

@@ -24,7 +24,7 @@ describe('Layer', () => {
       const layer = new Layer({ order: 1, font: 'Roboto Slab:300' });
       const out = layer.toSearchString();
 
-      expect(out).toBe(`1.font=${encodeURIComponent("Roboto Slab:300")}');
+      expect(out).toBe(`1.font=${encodeURIComponent("Roboto Slab:300")}`);
     });
   });
 });
