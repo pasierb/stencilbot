@@ -72,7 +72,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
 
   const handlePreview = () => {
     window.open(
-      `https://cdn.stencilbot.io/v1/project?${project.toSearchString()}`,
+      `https://cdn.stencilbot.io/project?${project.toSearchString()}`,
       '_stencilbot_preview'
     );
   }

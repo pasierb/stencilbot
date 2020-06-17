@@ -5,7 +5,7 @@ import { ServerRenderer } from '../serverRenderer';
 const renderer = new ServerRenderer();
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  console.log(event.queryStringParameters);
+  console.log(JSON.stringify(event));
 
   const project = Project.fromSearchParams(event.queryStringParameters);
   const base = await renderer.renderProject(project);

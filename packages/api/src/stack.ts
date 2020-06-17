@@ -5,6 +5,7 @@ import { Runtime, Code, Function, LayerVersion } from '@aws-cdk/aws-lambda';
 import { LambdaIntegration, RestApi, EndpointType, DomainName } from '@aws-cdk/aws-apigateway';
 import { Bucket } from '@aws-cdk/aws-s3';
 import { PolicyStatement } from '@aws-cdk/aws-iam';
+import { CloudFrontAllowedMethods, CloudFrontWebDistribution } from '@aws-cdk/aws-cloudfront';
 
 interface StencilbotApiStackProps extends StackProps {
   googleFontsApiKey: string
@@ -44,19 +45,9 @@ export class StencilbotApiStack extends Stack {
 
     const anonymousDeliveryIntegration = new LambdaIntegration(anounymousDeliveryFunction);
 
-    const domainName = new DomainName(this, 'stencilbot-delivery-api-domain', {
-      domainName: 'cdn.stencilbot.io',
-      certificate,
-      endpointType: EndpointType.EDGE
-    });
-
     const deliveryApi = new RestApi(this, 'stencilbot-delivery-api', {
       binaryMediaTypes: ['image/png', '*/*']
     });
-
-    domainName.addBasePathMapping(deliveryApi, {
-      basePath: 'v1'
-    })
 
     const projectResource = deliveryApi.root.addResource('project');
 
