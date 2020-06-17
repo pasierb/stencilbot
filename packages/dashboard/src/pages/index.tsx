@@ -34,7 +34,6 @@ const HomeRoute: FunctionComponent = () => {
         <Row justify="center">
           <Col>
             <Typography.Title>Stencilbot</Typography.Title>
-            <Typography.Text>Some slogan</Typography.Text>
           </Col>
         </Row>
 
