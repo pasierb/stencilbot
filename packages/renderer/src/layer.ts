@@ -138,13 +138,15 @@ export class Layer {
   }
 
   get fontStyle() {
-    const style = this.fontVariant?.match(fontVariantRegExp)?.groups?.style;
+    const match = this.fontVariant?.match(fontVariantRegExp);
 
-    return style === 'regular' ? undefined : style;
+    return match && match[2];
   }
 
   get fontWeight() {
-    return this.fontVariant?.match(fontVariantRegExp)?.groups?.weight;
+    const match = this.fontVariant?.match(fontVariantRegExp);
+
+    return match && match[1];
   }
 
   toSearchString() {
