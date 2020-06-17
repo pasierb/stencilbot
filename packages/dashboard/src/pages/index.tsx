@@ -33,7 +33,7 @@ const HomeRoute: FunctionComponent = () => {
       <Layout.Content>
         <Row justify="center">
           <Col>
-            <Typography.Title>Stencilbot</Typography.Title>
+            <Typography.Title className="logo">Stencilbot</Typography.Title>
           </Col>
         </Row>
 

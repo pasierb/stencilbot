@@ -26,6 +26,15 @@ code {
   background: rgba(0,0,0,.5);
 }
 
+.logo {
+  font-family: 'Saira Stencil One', cursive;
+  color: #fff !important;
+  background: rgba(0,0,0,.8);
+  padding: .2em;
+  border-radius: 10px;
+  margin: 1em;
+}
+
 body:after{
   content: "beta";
   position: fixed;
