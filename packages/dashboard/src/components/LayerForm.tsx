@@ -1,10 +1,11 @@
-import React, { FunctionComponent, Fragment } from 'react';
+import React, { FunctionComponent, Fragment, useState } from 'react';
 import { Layer, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
-import { Form, Input, Button, Row, Col, Radio } from 'antd';
+import { Form, Input, Button, Row, Col, Radio, Checkbox } from 'antd';
 import { debounce } from 'lodash';
 import { GoogleFontSelect } from './GoogleFontSelect';
 import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, VerticalAlignTopOutlined, VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
+import { useForm } from 'antd/lib/form/util';
 
 interface LayerFormProps {
   layer: Layer
@@ -14,9 +15,18 @@ interface LayerFormProps {
 
 export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, onRemove }) => {
   const [form] = Form.useForm();
+  const [hasBg, setHasBg] = useState<boolean>(!!layer.bg);
 
   const handleSubmit = debounce((values: Store) => {
     const newLayer = new Layer({ ...layer, ...values })
+
+    if (!hasBg) {
+      newLayer.bg = undefined;
+    }
+
+    if (!newLayer.txt) {
+      newLayer.txt = undefined;
+    }
 
     onSubmit(newLayer);
   }, 150);
@@ -61,6 +71,21 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
       </Row>
       <Form.Item label="Text" name="txt">
         <Input.TextArea />
+      </Form.Item>
+      <Form.Item label="Background" name="bg">
+        <Input
+          type="color"
+          allowClear={true}
+          disabled={!hasBg}
+          addonBefore={
+            <Checkbox
+              onChange={e => {
+                setHasBg(e.target.checked);
+                form.submit();
+              }}
+            />
+          }
+        />
       </Form.Item>
 
       {layer.txt && (<Fragment>
