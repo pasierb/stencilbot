@@ -5,13 +5,8 @@
     "url": "https://cdn.stencilbot.io/project?w=800&h=400&0.img=https%3A%2F%2Fmpasierbski.com%2Fimages%2Fblog-aws-header-bg.png&1.x=50&1.w=300&1.imgFit=contain&1.img=https%3A%2F%2Fmpasierbski.com%2Fimages%2Faws-cdk-text-logo.png&2.x=360&2.w=370&2.txt=How%20to%20build%20continuous%20delivery%20pipeline%20for%20static%20sites%20on%20AWS&2.color=%233e3838&2.fontSize=40&2.font=Ubuntu%3A700&2.txtAlign=center&2.valign=middle"
   },
   {
-    "title": "Blog post",
-    "description": "Twitter card ",
-    "url": "https://cdn.stencilbot.io/project?w=800&h=400&0.img=https%3A%2F%2Fmpasierbski.com%2Fimages%2Fblog-aws-header-bg.png&1.x=50&1.w=300&1.imgFit=contain&1.img=https%3A%2F%2Fmpasierbski.com%2Fimages%2Faws-cdk-text-logo.png&2.x=360&2.w=370&2.txt=How%20to%20build%20continuous%20delivery%20pipeline%20for%20static%20sites%20on%20AWS&2.color=%233e3838&2.fontSize=40&2.font=Ubuntu%3A700&2.txtAlign=center&2.valign=middle"
-  },
-  {
-    "title": "Blog post",
-    "description": "Twitter card ",
-    "url": "https://cdn.stencilbot.io/project?w=800&h=400&0.img=https%3A%2F%2Fmpasierbski.com%2Fimages%2Fblog-aws-header-bg.png&1.x=50&1.w=300&1.imgFit=contain&1.img=https%3A%2F%2Fmpasierbski.com%2Fimages%2Faws-cdk-text-logo.png&2.x=360&2.w=370&2.txt=How%20to%20build%20continuous%20delivery%20pipeline%20for%20static%20sites%20on%20AWS&2.color=%233e3838&2.fontSize=40&2.font=Ubuntu%3A700&2.txtAlign=center&2.valign=middle"
+    "title": "Meme",
+    "description": "Batman slapping Robin",
+    "url": "https://cdn.stencilbot.io/project?w=400&h=387&0.img=https%3A%2F%2Fimgflip.com%2Fs%2Fmeme%2FBatman-Slapping-Robin.jpg&1.x=10&1.y=5&1.w=180&1.h=71&1.txt=this%20%20meme%20is%20overused!!!&1.fontSize=20&1.font=Comic%20Neue%3A700&1.txtAlign=center&1.valign=middle&2.x=220&2.y=5&2.w=171&2.h=77&2.txt=NEVER!&2.fontSize=20&2.font=Comic%20Neue%3A700&2.txtAlign=center&2.valign=middle"
   }
 ]
