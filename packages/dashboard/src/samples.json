@@ -1,8 +1,13 @@
 [
   {
-    "title": "Blog post",
+    "title": "Blog post #1",
     "description": "Twitter card ",
     "url": "https://cdn.stencilbot.io/project?w=800&h=400&0.img=https%3A%2F%2Fmpasierbski.com%2Fimages%2Fblog-aws-header-bg.png&1.x=50&1.w=300&1.imgFit=contain&1.img=https%3A%2F%2Fmpasierbski.com%2Fimages%2Faws-cdk-text-logo.png&2.x=360&2.w=370&2.txt=How%20to%20build%20continuous%20delivery%20pipeline%20for%20static%20sites%20on%20AWS&2.color=%233e3838&2.fontSize=40&2.font=Ubuntu%3A700&2.txtAlign=center&2.valign=middle"
+  },
+  {
+    "title": "Blog post #2",
+    "description": "Twitter card",
+    "url": "https://cdn.stencilbot.io/project?w=640&h=315&0.x=0&0.y=0&0.w=640&0.h=315&0.bg=%23c41d48&0.color=%23ffffff&0.fontSize=42&0.font=Noto%20Serif%3A700&0.txtAlign=center&0.valign=middle&1.x=30&1.w=580&1.txt=Rails%20multiple%20databases%20support%20in%20Rails%20Event%20Store&1.color=%23ffffff&1.fontSize=42&1.font=Noto%20Serif%3A700&1.lineH=1.1&1.txtAlign=center&1.valign=middle"
   },
   {
     "title": "Meme",
