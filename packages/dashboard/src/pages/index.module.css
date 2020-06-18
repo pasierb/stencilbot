@@ -19,3 +19,7 @@ ul.footerLinks li:first-child {
 .HomeRoute {
     min-height: 100vh;
 }
+
+.HomeRoute main > :global(.ant-row) {
+    margin-top: 2rem 
+}
