@@ -1,0 +1,28 @@
+[
+  {
+    "label": "Default (800x400)",
+    "value": "800x400",
+    "default": true
+  },
+  {
+    "label": "Social media preview (1300x600)",
+    "value": "1300x650"
+  },
+  {
+    "label": "Social media preview",
+    "children": [
+      {
+        "label": "Facebook (1200x630)",
+        "value": "1200x630"
+      },
+      {
+        "label": "Twitter (800x400)",
+        "value": "800x400"
+      },
+      {
+        "label": "LinkedIn (1200x627)",
+        "value": "1200x627"
+      }
+    ]
+  }
+]

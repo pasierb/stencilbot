@@ -1,11 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Form, Input, Layout, Button, Row, Col, Card, Typography } from 'antd';
+import { Form, Input, Layout, Button, Row, Col, Card, Typography, Divider } from 'antd';
 import { GithubOutlined, EditOutlined } from '@ant-design/icons';
-import samples from '../samples.json';
+import { PresetSelect, defaultValue } from '../components/PresetSelect';
 
+import samples from '../samples.json';
 import style from './index.module.css';
+import { Store } from 'antd/lib/form/interface';
 
 function editPath(uri: string) {
   const url = new URL(uri);
@@ -24,8 +26,11 @@ const HomeRoute: FunctionComponent = () => {
     }
   }
 
-  const handleNew = () => {
-    router.push(`/projects/edit/?w=800&h=400`);
+  const handleNew = (store: Store) => {
+    const preset = store['preset'] || defaultValue;
+    const [width, height] = preset.split('x');
+
+    router.push(`/projects/edit/?w=${width}&h=${height}`);
   }
 
   return (
@@ -40,12 +45,29 @@ const HomeRoute: FunctionComponent = () => {
         <Row justify="center" gutter={10}>
           <Col lg={12}>
             <Card>
-              <Button onClick={handleNew}>Start new project</Button>
+              <p>
+                Start new project
+              </p>
+
+              <Form size="large" layout="inline" onFinish={handleNew}>
+                <Form.Item name="preset" style={{ flexGrow: 1 }}>
+                  <PresetSelect />
+                </Form.Item>
+                <Form.Item>
+                  <Button htmlType="submit">Create and edit</Button>
+                </Form.Item>
+              </Form>
+
+              <Divider>or</Divider>
+
+              <p>
+                Paste <code>cdn.stencilbot.io/projects?...</code> url to edit
+              </p>
 
               <Form size="large">
                 <Form.Item name="url">
                   <Input.Search
-                    placeholder="Edit"
+                    placeholder="project URL"
                     enterButton={<EditOutlined />}
                     onSearch={(val) => goToEdit(val)}
                   />
