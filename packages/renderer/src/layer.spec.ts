@@ -36,6 +36,12 @@ describe('Layer', () => {
     });
 
     it('should parse font weight', () => {
+      const layer = new Layer({ font: 'Comic Neue:regular' });
+
+      expect(layer.fontWeight).toBe(undefined);
+    });
+
+    it('should parse font weight', () => {
       const layer = new Layer({ font: 'Ubuntu:500italic' });
 
       expect(layer.fontWeight).toBe('500');
@@ -51,6 +57,12 @@ describe('Layer', () => {
   describe('fontStyle', () => {
     it('should parse font weight', () => {
       const layer = new Layer({ font: 'Ubuntu:700' });
+
+      expect(layer.fontStyle).toBe(undefined);
+    });
+
+    it('should parse font style Comic Neue:regular', () => {
+      const layer = new Layer({ font: 'Comic Neue:regular' });
 
       expect(layer.fontStyle).toBe(undefined);
     });

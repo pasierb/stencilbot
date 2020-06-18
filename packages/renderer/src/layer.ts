@@ -139,8 +139,13 @@ export class Layer {
 
   get fontStyle() {
     const match = this.fontVariant?.match(fontVariantRegExp);
+    let style = match && match[2];
 
-    return match && match[2];
+    if (style === 'regular') {
+      style = undefined;
+    }
+
+    return style;
   }
 
   get fontWeight() {
