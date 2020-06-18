@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
+    "@sentry/browser": "^5.17.0",
     "@stencilbot/renderer": "^0.0.1",
     "antd": "^4.3.0",
     "lodash": "^4.17.15",
