@@ -142,17 +142,26 @@ export abstract class Renderer {
     switch(valign) {
       case VerticalAlign.Middle: {
         const offset = (ctx.canvas.height - scale.height) / 2;
-        y += offset;
+        y = offset;
         break;
       }
       case VerticalAlign.Bottom: {
         const offset = (ctx.canvas.height - scale.height);
-        y += offset;
+        y = offset;
         break;
+      }
+      case VerticalAlign.Top: {
+        x += scale.x;
+        y = 0
+        break;
+      }
+      default: {
+        x += scale.x;
+        y += scale.y;
       }
     }
 
-    ctx.drawImage(image, +x + scale.x, +y + scale.y, scale.width, scale.height);
+    ctx.drawImage(image, +x, +y, scale.width, scale.height);
   }
 
   protected getScale(canvas: HTMLCanvasElement, img: CanvasImageSource, layer: Layer): IntrinsicScale {

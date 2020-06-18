@@ -83,7 +83,7 @@ describe('renderer', () => {
     await renderer.render(canvas, layer);
     const [img, x, y, w, h] = drawImage.mock.calls[0];
 
-    expect(y).toBe(150);
+    expect(y).toBe(175);
   });
 
   it('should render image valign bottom', async () => {

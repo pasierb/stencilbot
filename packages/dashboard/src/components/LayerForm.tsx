@@ -78,6 +78,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
           disabled={!hasBg}
           addonBefore={
             <Checkbox
+              defaultChecked={hasBg}
               onChange={e => {
                 setHasBg(e.target.checked);
                 form.submit();
@@ -123,7 +124,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
 
       <Form.Item label="Vertical align" name="valign">
         <Radio.Group>
-          <Radio.Button value={undefined}>
+          <Radio.Button value={VerticalAlign.Top}>
             <VerticalAlignTopOutlined />
           </Radio.Button>
           <Radio.Button value={VerticalAlign.Middle}>
