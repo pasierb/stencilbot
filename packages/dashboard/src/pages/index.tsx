@@ -77,9 +77,15 @@ const HomeRoute: FunctionComponent = () => {
           </Col>
         </Row>
 
+        <Row justify="center">
+          <Col>
+            <p>...or check out sample projects</p>
+          </Col>
+        </Row>
+
         <Row justify="center" gutter={20}>
           {samples.map((sample, i) => (
-            <Col lg={3} sm={5} xs={12} key={i}>
+            <Col lg={4} sm={5} xs={12} key={i}>
               <Card
                 onClick={() => goToEdit(sample.url)}
                 hoverable
