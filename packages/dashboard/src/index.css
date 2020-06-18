@@ -29,6 +29,7 @@ code {
 .logo {
   font-family: 'Saira Stencil One', cursive;
   font-size: 50px !important;
+  font-weight: 500 !important;
   color: #fff !important;
   background: rgba(0,0,0,.8);
   padding: .2em;
