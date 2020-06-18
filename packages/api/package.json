@@ -18,8 +18,8 @@
   },
   "scripts": {
     "deploy": "cdk deploy",
-    "predeploy": "npm run build && . bin/buildLayers.sh",
-    "build": "tsc && rollup -c && node bin/copyFonts"
+    "deploy:ci": "npm run deploy -- --require-approval never",
+    "build": "tsc && rollup -c && node bin/copyFonts && . bin/buildLayers.sh"
   },
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"

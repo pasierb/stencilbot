@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "lerna run deploy"
+    "deploy": "lerna run deploy:ci",
+    "predeploy": "npm run build",
+    "build": "lerna run build",
+    "test": "lerna run test"
   },
   "author": "",
   "license": "ISC",

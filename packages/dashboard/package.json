@@ -17,9 +17,9 @@
   "scripts": {
     "start": "next start",
     "dev": "next",
-    "build": "next build && next export",
+    "build": "next build && next export && tsc -p tsconfig.cdk.json",
     "deploy": "cdk deploy",
-    "predeploy": "tsc -p tsconfig.cdk.json && npm run build"
+    "deploy:ci": "npm run deploy -- --require-approval never"
   },
   "eslintConfig": {
     "extends": "react-app"
