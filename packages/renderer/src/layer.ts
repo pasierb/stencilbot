@@ -15,6 +15,7 @@ export type LayerInit = {
   valign?: string | VerticalAlign
   color?: string
   bg?: string
+  alpha?: number
 }
 
 export enum ImageFit {
@@ -63,7 +64,8 @@ const serializeableAttributes: LayerAttributeName[] = [
   'font',
   'lineH',
   'txtAlign',
-  'valign'
+  'valign',
+  'alpha'
 ];
 
 export class Layer {
@@ -74,6 +76,7 @@ export class Layer {
   w?: number
   h?: number
   bg?: string
+  alpha?: number
 
   txt?: string
   color?: string
@@ -105,6 +108,7 @@ export class Layer {
         this[key] = value !== undefined ? parseInt(value) : undefined;
         break;
       case 'lineH':
+      case 'alpha':
         this[key] = value !== undefined ? parseFloat(value) : undefined;
         break;
       default:

@@ -1,11 +1,10 @@
 import React, { FunctionComponent, Fragment, useState } from 'react';
 import { Layer, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
-import { Form, Input, Button, Row, Col, Radio, Checkbox } from 'antd';
+import { Form, Input, Button, Row, Col, Radio, Checkbox, Slider } from 'antd';
 import { debounce } from 'lodash';
 import { GoogleFontSelect } from './GoogleFontSelect';
 import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, VerticalAlignTopOutlined, VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
-import { useForm } from 'antd/lib/form/util';
 
 interface LayerFormProps {
   layer: Layer
@@ -148,6 +147,10 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
             <AlignRightOutlined />
           </Radio.Button>
         </Radio.Group>
+      </Form.Item>
+
+      <Form.Item name="alpha" label="Transparency">
+        <Slider min={0} max={1} step={.01} onChange={() => form.submit()} defaultValue={1} />
       </Form.Item>
 
       <Button onClick={handleRemove} danger>

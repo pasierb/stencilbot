@@ -6,6 +6,10 @@ export abstract class Renderer {
 
   render(canvas: HTMLCanvasElement, layer: Layer) {
     return this.setupCanvas(canvas, async (ctx) => {
+      if (layer.alpha !== undefined) {
+        ctx.globalAlpha = layer.alpha;
+      }
+
       await this.withCleanContext(ctx, c => this.renderBackground(c, layer))
       await this.withCleanContext(ctx, c => this.renderImage(c, layer))
       await this.withCleanContext(ctx, c => this.renderText(c, layer))
