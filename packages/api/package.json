@@ -50,10 +50,12 @@
     "aws-cdk": "^1.45.0",
     "aws-sdk": "^2.631.0",
     "canvas": "^2.6.1",
+    "dotenv": "^8.2.0",
     "rollup": "^2.11.2",
     "typescript": "^3.9.3"
   },
   "dependencies": {
+    "@sentry/node": "^5.17.0",
     "@stencilbot/renderer": "^0.0.1",
     "fs-extra": "^9.0.0",
     "node-fetch": "^2.6.0"

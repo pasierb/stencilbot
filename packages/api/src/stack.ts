@@ -9,6 +9,7 @@ import { CloudFrontAllowedMethods, CloudFrontWebDistribution } from '@aws-cdk/aw
 
 interface StencilbotApiStackProps extends StackProps {
   googleFontsApiKey: string
+  sentryDSN: string
 }
 export class StencilbotApiStack extends Stack {
   constructor(scope: App, id: string, props: StencilbotApiStackProps) {
@@ -28,6 +29,7 @@ export class StencilbotApiStack extends Stack {
       handler: 'delivery/anonymous.handler',
       environment: {
         GOOGLE_FONTS_API_KEY: props.googleFontsApiKey,
+        SENTRY_DSN: props.sentryDSN,
         BUCKET: bucket.bucketName
       },
       runtime: Runtime.NODEJS_12_X,

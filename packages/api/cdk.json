@@ -1,5 +1,5 @@
 {
-  "app": "node bin/stack.js",
+  "app": "node -r dotenv/config bin/stack.js",
   "context": {
     "@aws-cdk/core:enableStackNameDuplicates": "true",
     "aws-cdk:enableDiffNoFail": "true"

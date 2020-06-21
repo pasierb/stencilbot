@@ -9,5 +9,6 @@ new StencilbotApiStack(app, 'stencilbotApiStack', {
   env: {
     region: 'eu-west-1'
   },
-  googleFontsApiKey: process.env.GOOGLE_FONTS_API_KEY
+  googleFontsApiKey: process.env.GOOGLE_FONTS_API_KEY,
+  sentryDSN: process.env.SENTRY_DSN
 });
