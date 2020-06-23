@@ -70,6 +70,38 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
     setProject(newProject);
   }
 
+  const handlePromoteLayer = (layer: Layer) => {
+    const { layers } = project;
+
+    const i = layers.findIndex(l => l.id === layer.id);
+    if (i === layers.length -  1) {
+      return;
+    }
+
+    [layers[i+1], layers[i]] = [layers[i], layers[i+1]];
+    layers.forEach((l, i) => {
+      l.order = i;
+    });
+
+    setProject(new Project(project.width, project.height, layers));
+  }
+
+  const handleDemoteLayer = (layer: Layer) => {
+    const { layers } = project;
+
+    const i = layers.findIndex(l => l.id === layer.id);
+    if (i === 0) {
+      return;
+    }
+
+    [layers[i-1], layers[i]] = [layers[i], layers[i-1]];
+    layers.forEach((l, i) => {
+      l.order = i;
+    });
+
+    setProject(new Project(project.width, project.height, layers));
+  }
+
   const handlePreview = () => {
     window.open(
       `https://cdn.stencilbot.io/project?${project.toSearchString()}`,
@@ -163,13 +195,15 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
                 }
               >
                 <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>
-                  {project.layers.map((layer, i) => (
+                  {[...project.layers].reverse().map((layer) => (
                     <Collapse.Panel key={layer.id} header={<PanelHeader layer={layer} />}>
                       <LayerForm
                         key={layer.id + '-form'}
                         layer={layer}
                         onSubmit={handleChangeLayer}
                         onRemove={handleRemoveLayer}
+                        onPromote={handlePromoteLayer}
+                        onDemote={handleDemoteLayer}
                       />
                     </Collapse.Panel>
                   ))}
