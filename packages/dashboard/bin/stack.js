@@ -8,5 +8,6 @@ const app = new cdk.App();
 new StencilbotDashboardStack(app, 'stancilbot-dashboard-stack', {
   env: {
     region: 'eu-west-1'
-  }
+  },
+  refererHeader: process.env.REFERER_HEADER
 });
