@@ -1,18 +1,22 @@
 import React, { FunctionComponent, Fragment, useState } from 'react';
 import { Layer, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
 import { Form, Input, Button, Row, Col, Radio, Checkbox, Slider } from 'antd';
-import { debounce } from 'lodash';
+import { debounce, size } from 'lodash';
 import { GoogleFontSelect } from './GoogleFontSelect';
-import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, VerticalAlignTopOutlined, VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined, DeleteOutlined } from '@ant-design/icons';
+import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, VerticalAlignTopOutlined, VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined, DeleteOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
+
+import style from './LayerForm.module.css';
 
 interface LayerFormProps {
   layer: Layer
   onSubmit: (layer: Layer) => void
   onRemove: (layer: Layer) => void
+  onPromote: (layer: Layer) => void
+  onDemote: (layer: Layer) => void
 }
 
-export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, onRemove }) => {
+export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, onRemove, onDemote, onPromote }) => {
   const [form] = Form.useForm();
   const [hasBg, setHasBg] = useState<boolean>(!!layer.bg);
 
@@ -154,9 +158,27 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
         <Slider min={0} max={1} step={.01} onChange={() => form.submit()} defaultValue={1} />
       </Form.Item>
 
-      <Button onClick={handleRemove} danger>
-        <DeleteOutlined />
-      </Button>
+      <div className={style.controls}>
+        <Button
+          onClick={() => onPromote(layer)}
+          icon={<ArrowUpOutlined />}
+          size="middle"
+          title="Promote layer"
+        />
+        <Button
+          onClick={() => onDemote(layer)}
+          icon={<ArrowDownOutlined />}
+          size="middle"
+          title="Demote layer"
+        />
+        <Button
+          onClick={handleRemove}
+          danger
+          icon={<DeleteOutlined />}
+          size="middle"
+          title="Remove layer"
+        />
+      </div>
     </Form>
   );
 }

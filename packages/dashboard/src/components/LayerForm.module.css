@@ -1,0 +1,9 @@
+.controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.controls > * {
+    margin: .2em;
+}

@@ -23,6 +23,10 @@
   overflow-x: hidden;
 }
 
+.Editor :global(.ant-layout-sider-children) :global(.ant-card:last-child) {
+    margin-bottom: 5em;
+}
+
 .backButton {
     position: fixed;
     left: 1rem;
