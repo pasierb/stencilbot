@@ -17,7 +17,9 @@ const EditorRoute: FunctionComponent = () => {
 
   useEffect(() => {
     const url = new URL(window.location.toString());
-    setProject(Project.fromSearchParams(getSearchParams(url)));
+    const params = { w: '800', h: '400', ...getSearchParams(url) };
+
+    setProject(Project.fromSearchParams(params));
   }, []);
 
   return (<Fragment>
