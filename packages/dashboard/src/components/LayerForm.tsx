@@ -1,9 +1,29 @@
 import React, { FunctionComponent, Fragment, useState } from 'react';
 import { Layer, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
 import { Form, Input, Button, Row, Col, Radio, Checkbox, Slider } from 'antd';
-import { debounce, size } from 'lodash';
+import { debounce } from 'lodash';
 import { GoogleFontSelect } from './GoogleFontSelect';
-import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, VerticalAlignTopOutlined, VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined, DeleteOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import {
+  AlignLeftOutlined,
+  AlignCenterOutlined,
+  AlignRightOutlined,
+  VerticalAlignTopOutlined,
+  VerticalAlignMiddleOutlined,
+  VerticalAlignBottomOutlined,
+  DeleteOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  ColumnWidthOutlined,
+  ColumnHeightOutlined,
+  LineHeightOutlined,
+  FontSizeOutlined,
+  BgColorsOutlined,
+  HighlightOutlined,
+  PictureOutlined,
+  FontColorsOutlined,
+  BoldOutlined,
+  EyeOutlined
+} from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
 import style from './LayerForm.module.css';
@@ -44,8 +64,8 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
       onChange={(e) => form.submit()}
       form={form}
       size="small"
-      wrapperCol={{ span: 16 }}
-      labelCol={{ span: 8 }}
+      wrapperCol={{ span: 20 }}
+      labelCol={{ span: 4 }}
       initialValues={layer}
     >
       <Row>
@@ -62,12 +82,12 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
       </Row>
       <Row>
         <Col span={12}>
-          <Form.Item label="w" name="w" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+          <Form.Item label={<ColumnWidthOutlined title="Width" />} name="w" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }} colon={false}>
             <Input type="number" suffix="px" />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="h" name="h" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+          <Form.Item label={<ColumnHeightOutlined title="Height" />} name="h" labelCol={{ span: 4 }} wrapperCol={{ span: 18 }} colon={false}>
             <Input type="number" suffix="px" />
           </Form.Item>
         </Col>
@@ -75,7 +95,41 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
       <Form.Item label="Text" name="txt">
         <Input.TextArea />
       </Form.Item>
-      <Form.Item label="Background" name="bg">
+
+      <Row>
+        <Col span={12}>
+          <Form.Item name="valign">
+            <Radio.Group>
+              <Radio.Button value={VerticalAlign.Top}>
+                <VerticalAlignTopOutlined />
+              </Radio.Button>
+              <Radio.Button value={VerticalAlign.Middle}>
+                <VerticalAlignMiddleOutlined />
+              </Radio.Button>
+              <Radio.Button value={VerticalAlign.Bottom}>
+                <VerticalAlignBottomOutlined />
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item name="txtAlign">
+            <Radio.Group>
+              <Radio.Button value={undefined}>
+                <AlignLeftOutlined />
+              </Radio.Button>
+              <Radio.Button value={TextAlign.Center}>
+                <AlignCenterOutlined />
+              </Radio.Button>
+              <Radio.Button value={TextAlign.Right}>
+                <AlignRightOutlined />
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Form.Item label={<BgColorsOutlined title="Background color" />} name="bg" colon={false}>
         <Input
           type="color"
           allowClear={true}
@@ -93,7 +147,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
       </Form.Item>
 
       {layer.txt && (<Fragment>
-        <Form.Item label="Font family" name="font">
+        <Form.Item label={<BoldOutlined title="Font family" />} name="font" colon={false}>
           <GoogleFontSelect
             onChange={v => {
               form.setFieldsValue({ font: v.value });
@@ -102,22 +156,22 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
             defaultValue={layer.fontFamily}
           />
         </Form.Item>
-        <Form.Item label="Font size" name="fontSize">
+        <Form.Item label={<FontSizeOutlined title="Font size" />} name="fontSize" colon={false}>
           <Input type="number" suffix="px" />
         </Form.Item>
-        <Form.Item label="Line height" name="lineH">
+        <Form.Item label={<LineHeightOutlined title="Line height" />} name="lineH" colon={false} >
           <Input type="number" step={0.1} />
         </Form.Item>
-        <Form.Item label="Color" name="color">
+        <Form.Item label={<FontColorsOutlined title="Text color" />} name="color" colon={false}>
           <Input type="color" />
         </Form.Item>
       </Fragment>)}
-      <Form.Item label="Image" name="img">
+      <Form.Item label={<PictureOutlined title="Image URL" />} name="img" colon={false}>
         <Input />
       </Form.Item>
 
       {layer.img && (<Fragment>
-        <Form.Item label="Image fit" name="imgFit">
+        <Form.Item label="Fit" name="imgFit">
           <Radio.Group>
             <Radio.Button value={undefined}>none</Radio.Button>
             <Radio.Button value={ImageFit.Contain}>contain</Radio.Button>
@@ -126,35 +180,9 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
         </Form.Item>
       </Fragment>)}
 
-      <Form.Item label="Vertical align" name="valign">
-        <Radio.Group>
-          <Radio.Button value={VerticalAlign.Top}>
-            <VerticalAlignTopOutlined />
-          </Radio.Button>
-          <Radio.Button value={VerticalAlign.Middle}>
-            <VerticalAlignMiddleOutlined />
-          </Radio.Button>
-          <Radio.Button value={VerticalAlign.Bottom}>
-            <VerticalAlignBottomOutlined />
-          </Radio.Button>
-        </Radio.Group>
-      </Form.Item>
 
-      <Form.Item label="Text align" name="txtAlign">
-        <Radio.Group>
-          <Radio.Button value={undefined}>
-            <AlignLeftOutlined />
-          </Radio.Button>
-          <Radio.Button value={TextAlign.Center}>
-            <AlignCenterOutlined />
-          </Radio.Button>
-          <Radio.Button value={TextAlign.Right}>
-            <AlignRightOutlined />
-          </Radio.Button>
-        </Radio.Group>
-      </Form.Item>
 
-      <Form.Item name="alpha" label="Transparency">
+      <Form.Item name="alpha" label={<EyeOutlined title="Transparency" />} colon={false}>
         <Slider min={0} max={1} step={.01} onChange={() => form.submit()} defaultValue={1} />
       </Form.Item>
 

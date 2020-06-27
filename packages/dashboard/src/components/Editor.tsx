@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { useRouter } from 'next/router'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Layout, Collapse, Button, Card, Input, Form } from 'antd';
-import { ArrowLeftOutlined, PlusOutlined, EyeOutlined, MinusOutlined, UndoOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, PlusOutlined, EyeOutlined, ZoomInOutlined, UndoOutlined, ZoomOutOutlined } from '@ant-design/icons';
 import { Layer, LayerType, Project } from '@stencilbot/renderer';
 import { ProjectPreview } from './ProjectPreview';
 import { LayerForm } from './LayerForm';
@@ -146,7 +146,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
                   <Form.Item>
                     <Input.Group style={{ display: 'flex' }}>
                       <Button
-                        icon={<MinusOutlined />}
+                        icon={<ZoomOutOutlined />}
                         size="large"
                         onClick={zoomOut}
                       />
@@ -159,7 +159,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
                         size="large"
                       />
                       <Button
-                        icon={<PlusOutlined />}
+                        icon={<ZoomInOutlined />}
                         size="large"
                         onClick={zoomIn}
                       />
