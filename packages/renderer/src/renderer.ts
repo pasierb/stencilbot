@@ -1,5 +1,10 @@
 import { contain, cover, IntrinsicScale } from 'intrinsic-scale';
-import { Layer, ImageFit, TextAlign, VerticalAlign } from './layer';
+import { Layer, ImageFit, TextAlign, VerticalAlign, RepeatPattern } from './layer';
+
+type RepeatSlot = {
+  x: number
+  y: number
+}
 
 export abstract class Renderer {
   abstract loadImage(uri: string): Promise<CanvasImageSource>
@@ -117,19 +122,32 @@ export abstract class Renderer {
       }
     }
 
-    lines.forEach((line, i) => {
-      const yi = +y + ((i + 1) * h) - offset;
+    const slots = this.getRepeatSlots(ctx, layer.rp, {
+      x: +x,
+      y: +y,
+      width: +width,
+      height: +height
+    });
 
-      ctx.fillText(line, +x, yi);
+    slots.forEach(({ x, y }) => {
+      lines.forEach((line, i) => {
+        const yi = +y + ((i + 1) * h) - offset;
+
+        ctx.fillText(line, +x, yi);
+      });
     });
   }
 
   protected async renderImage(ctx: CanvasRenderingContext2D, layer: Layer) {
     let {
-      x = 0,
-      y = 0,
+      x: lx = 0,
+      y: ly = 0,
       img,
-      valign
+      valign,
+      rp,
+      w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      imgFit
     } = layer;
 
     if (!img) {
@@ -138,39 +156,54 @@ export abstract class Renderer {
 
     const image = await this.loadImage(img);
     const scale = this.getScale(ctx.canvas, image, layer);
+    const slots: RepeatSlot[] = this.getRepeatSlots(ctx, rp, {
+      x: +lx,
+      y: +ly,
+      width: +(layer.w || scale.width),
+      height: +(layer.h || scale.height)
+    });
 
-    switch(valign) {
-      case VerticalAlign.Middle: {
-        const offset = (ctx.canvas.height - scale.height) / 2;
-        y = offset;
-        break;
-      }
-      case VerticalAlign.Bottom: {
-        const offset = (ctx.canvas.height - scale.height);
-        y = offset;
-        break;
-      }
-      case VerticalAlign.Top: {
-        x += scale.x;
-        y = 0
-        break;
-      }
-      default: {
-        x += scale.x;
-        y += scale.y;
-      }
-    }
+    slots.forEach(slot => {
+      let {x, y} = slot;
 
-    ctx.drawImage(image, +x, +y, scale.width, scale.height);
+      switch(valign) {
+        case VerticalAlign.Middle: {
+          const offset = (+h - scale.height) / 2;
+          y = offset;
+          break;
+        }
+        case VerticalAlign.Bottom: {
+          const offset = (+h - scale.height);
+          y = offset;
+          break;
+        }
+        case VerticalAlign.Top: {
+          x += scale.x;
+          y = 0
+          break;
+        }
+        default: {
+          x += scale.x;
+          y += scale.y;
+        }
+      }
+
+      ctx.drawImage(image, +x, +y, scale.width, scale.height);
+    });
   }
 
   protected getScale(canvas: HTMLCanvasElement, img: CanvasImageSource, layer: Layer): IntrinsicScale {
+    const {
+      w = canvas.width,
+      h = canvas.height
+    } = layer;
+
     switch (layer.imgFit) {
       case ImageFit.Contain: {
-        return contain(+(layer.w || canvas.width), +(layer.h || canvas.height), +img.width, +img.height);
+        return contain(+w, +h, +img.width, +img.height);
       }
       case ImageFit.Cover: {
-        return cover(+(layer.w || canvas.width), +(layer.h || canvas.height), +img.width, +img.height);
+        return cover(+w, +h, +img.width, +img.height);
       }
       default: {
         return {
@@ -209,6 +242,33 @@ export abstract class Renderer {
 
     if (curr.length) {
       result.push(curr.join(' '));
+    }
+
+    return result;
+  }
+
+  protected getRepeatSlots(
+    ctx: CanvasRenderingContext2D,
+    pattern: RepeatPattern | string | undefined,
+    config: { x: number, y: number, width: number, height: number }
+  ): RepeatSlot[] {
+    const { x, y, width, height } = config;
+
+    if (!pattern) {
+      return [{x, y}];
+    }
+
+    const rx = pattern === RepeatPattern.X || pattern === RepeatPattern.XY ? ctx.canvas.width / width : 1;
+    const ry = pattern === RepeatPattern.Y || pattern === RepeatPattern.XY ? ctx.canvas.height / height : 1;
+    const result: RepeatSlot[] = [];
+
+    for(let ix=0; ix<rx; ix++) {
+      for(let iy=0; iy<ry; iy++) {
+        result.push({
+          x: x + (ix * width),
+          y: y + (iy * height)
+        });
+      }
     }
 
     return result;

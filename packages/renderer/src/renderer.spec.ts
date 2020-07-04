@@ -1,5 +1,5 @@
 import { Renderer } from './renderer';
-import { Layer, VerticalAlign, TextAlign, ImageFit } from './layer';
+import { Layer, VerticalAlign, TextAlign, ImageFit, RepeatPattern } from './layer';
 
 class TestRenderer extends Renderer {
   async loadImage(uri: string) {
@@ -168,5 +168,37 @@ describe('renderer', () => {
     expect(fillText.mock.calls[0][0]).toBe('ab');
     expect(fillText.mock.calls[1][0]).toBe('cdef');
     expect(fillText.mock.calls[2][0]).toBe('efg');
+  });
+
+  it('should repeat image in x-axis', async () => {
+    const drawImage = ctx.drawImage as jest.Mock
+    const layer = new Layer({ img: 'abc', rp: RepeatPattern.X });
+
+    await renderer.render(canvas, layer);
+
+    expect(drawImage.mock.calls.length).toBe(3);
+    expect(drawImage.mock.calls[0][1]).toBe(0); // 1st x
+    expect(drawImage.mock.calls[0][2]).toBe(0); // 1st y
+    expect(drawImage.mock.calls[1][1]).toBe(300); // 2nd x
+    expect(drawImage.mock.calls[1][2]).toBe(0); // 2nd y
+    expect(drawImage.mock.calls[2][1]).toBe(600); // 3rd x
+    expect(drawImage.mock.calls[2][2]).toBe(0); // 3rd y
+  });
+
+  it('should repeat image in y-axis', async () => {
+    const drawImage = ctx.drawImage as jest.Mock
+    const layer = new Layer({ img: 'abc', rp: RepeatPattern.Y });
+
+    await renderer.render(canvas, layer);
+
+    expect(drawImage.mock.calls.length).toBe(4);
+    expect(drawImage.mock.calls[0][1]).toBe(0); // 1st x
+    expect(drawImage.mock.calls[0][2]).toBe(0); // 1st y
+    expect(drawImage.mock.calls[1][1]).toBe(0); // 2nd x
+    expect(drawImage.mock.calls[1][2]).toBe(100); // 2nd y
+    expect(drawImage.mock.calls[2][1]).toBe(0); // 3rd x
+    expect(drawImage.mock.calls[2][2]).toBe(200); // 3rd y
+    expect(drawImage.mock.calls[3][1]).toBe(0); // 4th x
+    expect(drawImage.mock.calls[3][2]).toBe(300); // 4th y
   });
 });
