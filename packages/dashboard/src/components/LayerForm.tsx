@@ -1,6 +1,6 @@
 import React, { FunctionComponent, Fragment, useState } from 'react';
-import { Layer, ImageFit, VerticalAlign, TextAlign } from '@stencilbot/renderer';
-import { Form, Input, Button, Row, Col, Radio, Checkbox, Slider } from 'antd';
+import { Layer, ImageFit, VerticalAlign, TextAlign, RepeatPattern } from '@stencilbot/renderer';
+import { Form, Input, Button, Row, Col, Radio, Checkbox, Slider, Select } from 'antd';
 import { debounce } from 'lodash';
 import { GoogleFontSelect } from './GoogleFontSelect';
 import {
@@ -22,7 +22,8 @@ import {
   PictureOutlined,
   FontColorsOutlined,
   BoldOutlined,
-  EyeOutlined
+  EyeOutlined,
+  BlockOutlined
 } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
@@ -180,7 +181,14 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
         </Form.Item>
       </Fragment>)}
 
-
+      <Form.Item name="rp" label={<BlockOutlined title="Repeat" />}>
+        <Select onChange={() => form.submit()}>
+          <Select.Option value="">none</Select.Option>
+          <Select.Option value={RepeatPattern.XY}>repeat</Select.Option>
+          <Select.Option value={RepeatPattern.X}>repeat-x</Select.Option>
+          <Select.Option value={RepeatPattern.Y}>repeat-y</Select.Option>
+        </Select>
+      </Form.Item>
 
       <Form.Item name="alpha" label={<EyeOutlined title="Transparency" />} colon={false}>
         <Slider min={0} max={1} step={.01} onChange={() => form.submit()} defaultValue={1} />

@@ -16,6 +16,7 @@ export type LayerInit = {
   color?: string
   bg?: string
   alpha?: number
+  rp?: string | RepeatPattern
 }
 
 export enum ImageFit {
@@ -36,6 +37,12 @@ export enum TextAlign {
   Center = 'center',
   Left = 'left',
   Right = 'right'
+}
+
+export enum RepeatPattern {
+  X = 'x',
+  Y = 'y',
+  XY = 'xy'
 }
 
 export enum LayerType {
@@ -65,7 +72,8 @@ const serializeableAttributes: LayerAttributeName[] = [
   'lineH',
   'txtAlign',
   'valign',
-  'alpha'
+  'alpha',
+  'rp'
 ];
 
 export class Layer {
@@ -88,6 +96,7 @@ export class Layer {
 
   img?: string
   imgFit?: string
+  rp?: string | RepeatPattern
 
   constructor(init: LayerInit = {}) {
     this.id = init.id || Layer.generateId();
@@ -115,6 +124,10 @@ export class Layer {
         this[key] = value;
         break;
     }
+  }
+
+  get isRepeat(): boolean {
+    return this.rp ? this.rp in RepeatPattern : false;
   }
 
   get type(): LayerType {
