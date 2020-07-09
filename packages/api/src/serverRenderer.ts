@@ -1,7 +1,6 @@
 import { Renderer, Project, Layer } from '@stencilbot/renderer';
 import { createCanvas, loadImage, Canvas } from 'canvas';
-import fetch from 'node-fetch';
-import { registerGoogleFont } from './fonts';
+import { registerGoogleFont, registerDefaultFonts } from './fonts';
 import { fetchImage } from './images';
 
 export class ServerRenderer extends Renderer {
@@ -36,6 +35,7 @@ export class ServerRenderer extends Renderer {
   async renderProject(project: Project): Promise<Canvas> {
     this.preloadImages(project);
     await this.registerProjectFonts(project);
+    registerDefaultFonts();
 
     const base = createCanvas(project.width, project.height);
     const ctx = base.getContext('2d');

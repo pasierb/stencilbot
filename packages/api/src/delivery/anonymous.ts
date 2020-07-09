@@ -4,10 +4,13 @@ import Sentry from '@sentry/node';
 import { ServerRenderer } from '../serverRenderer';
 
 const renderer = new ServerRenderer();
+const isProd = process.env.NODE_ENV === 'production'
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN
-});
+if (isProd) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN
+  });
+}
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   try {
@@ -24,12 +27,15 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       }
     };
   } catch(e) {
-    Sentry.captureException(e, {
-      extra: {
-        queryStringParameters: event.queryStringParameters
-      }
-    });
-    await Sentry.flush(2000);
+    if (isProd) {
+      Sentry.captureException(e, {
+        extra: {
+          queryStringParameters: event.queryStringParameters
+        }
+      });
+
+      await Sentry.flush(2000);
+    }
 
     throw e;
   }

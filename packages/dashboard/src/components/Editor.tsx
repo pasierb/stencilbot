@@ -104,7 +104,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
 
   const handlePreview = () => {
     window.open(
-      `https://cdn.stencilbot.io/project?${project.toSearchString()}`,
+      `${process.env.NEXT_PUBLIC_API_HOST}/project?${project.toSearchString()}`,
       '_stencilbot_preview'
     );
   }

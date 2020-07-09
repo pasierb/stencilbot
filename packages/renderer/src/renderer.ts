@@ -6,6 +6,8 @@ type RepeatSlot = {
   y: number
 }
 
+const fallbackFontFamilies = ['Noto Color Emoji']
+
 export abstract class Renderer {
   abstract loadImage(uri: string): Promise<CanvasImageSource>
 
@@ -86,7 +88,7 @@ export abstract class Renderer {
       fontStyle,
       fontWeight,
       `${fontSize}px`,
-      `"${fontFamily}"`
+      [fontFamily, ...fallbackFontFamilies].map(it => `"${it}"`).join(',')
     ].filter(it => !!it).join(' ');
 
     ctx.font = fontDeclaration;

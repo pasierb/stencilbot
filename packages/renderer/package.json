@@ -18,6 +18,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "dev": "tsc --watch",
     "test": "jest"
   },
   "bugs": {

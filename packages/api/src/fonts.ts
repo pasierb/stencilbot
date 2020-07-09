@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import path from 'path';
 import fetch from 'node-fetch';
 import { registerFont } from 'canvas';
 import { S3 } from 'aws-sdk';
@@ -8,6 +9,8 @@ const fontsBasePath = '/tmp';
 const googleFontsAPIKey = process.env.GOOGLE_FONTS_API_KEY;
 const fontsBucket = process.env.BUCKET;
 const fontVariantRegExp = /^(?<weight>\d{3})?(?<style>\w+)?$/
+
+const lolcalFontsDir = path.join(__dirname, '../fonts');
 
 interface GoogleWebFontFamily {
   family: string
@@ -142,4 +145,14 @@ export async function registerGoogleFont(name: string, fontWeight?: string, font
     weight: localFont.weight,
     style: localFont.style
   });
+}
+
+export function registerDefaultFonts() {
+  [
+    ['Noto Color Emoji', 'NotoColorEmoji.ttf']
+  ].forEach(([family, fileName]) => {
+    registerFont(path.join(lolcalFontsDir, fileName), {
+      family
+    });
+  })
 }

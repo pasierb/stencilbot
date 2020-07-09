@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "lerna run dev --stream --parallel",
     "deploy": "lerna run deploy:ci",
     "predeploy": "npm run build",
     "build": "lerna run build",

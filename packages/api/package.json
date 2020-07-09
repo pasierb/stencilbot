@@ -19,7 +19,9 @@
   "scripts": {
     "deploy": "cdk deploy",
     "deploy:ci": "npm run deploy -- --require-approval never",
-    "build": "tsc && rollup -c && node bin/copyFonts && . bin/buildLayers.sh"
+    "dev": "node -r dotenv/config bin/devServer.js",
+    "build:js": "tsc && rollup -c",
+    "build": "npm run build:js && node bin/copyFonts && . bin/buildLayers.sh"
   },
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"
@@ -51,6 +53,7 @@
     "aws-sdk": "^2.631.0",
     "canvas": "^2.6.1",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "rollup": "^2.11.2",
     "typescript": "^3.9.3"
   },

@@ -11,3 +11,13 @@ The same background, different text:
 The same background, different title and subtitle:
 
 ![traversy media MERN course](static/traversy-media-mern-course.png)
+
+## Development
+
+```bash
+npm run dev
+```
+
+```bash
+npm run test
+```
