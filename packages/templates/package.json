@@ -1,0 +1,29 @@
+{
+  "name": "@stencilbot/templates",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Michal Pasierbski <mpasierbski@gmail.com>",
+  "homepage": "https://github.com/pasierb/stencilbot#readme",
+  "license": "ISC",
+  "main": "lib/templates.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pasierb/stencilbot.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "bugs": {
+    "url": "https://github.com/pasierb/stencilbot/issues"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.6"
+  }
+}
