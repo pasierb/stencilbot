@@ -26,7 +26,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         'Cache-Control': 'max-age=31536000'
       }
     };
-  } catch(e) {
+  } catch (e) {
     if (isProd) {
       Sentry.captureException(e, {
         extra: {

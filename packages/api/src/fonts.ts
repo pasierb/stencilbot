@@ -18,7 +18,7 @@ interface GoogleWebFontFamily {
   subsets: string[]
   version: string
   lastModified: string
-  files: {[key: string]: string}
+  files: { [key: string]: string }
   category: string
   kind: string
 }
@@ -104,7 +104,7 @@ class LocalFont {
     try {
       const body = await this.getFromS3();
       this.saveToFileSystem(body);
-    } catch(e) {
+    } catch (e) {
       const body = await this.getFromOrigin();
 
       await this.putToS3(body);
