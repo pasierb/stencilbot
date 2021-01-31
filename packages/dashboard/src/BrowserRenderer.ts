@@ -1,13 +1,15 @@
 import { Renderer, Layer, Project } from '@stencilbot/renderer';
 import fontProviderSingleton, { FontProvider } from "./FontProvider";
+import imageProviderSingleton, { ImageProvider } from "./ImageProvider";
 
 export class BrowserRenderer extends Renderer {
-  imageCache: Map<string, Promise<HTMLImageElement>> = new Map();
-  private readonly fontProvider: FontProvider;
-
-  constructor(project: Project, private readonly container: HTMLElement, fontProvider?: FontProvider) {
+  constructor(
+    project: Project,
+    private readonly container: HTMLElement,
+    private readonly imageProvider: ImageProvider = imageProviderSingleton,
+    private readonly fontProvider: FontProvider = fontProviderSingleton
+  ) {
     super(project);
-    this.fontProvider = fontProvider || fontProviderSingleton;
   }
 
   getLayerCanvas(layer: Layer) {
@@ -23,25 +25,6 @@ export class BrowserRenderer extends Renderer {
   }
 
   loadImage(uri: string): Promise<HTMLImageElement> {
-    const cached = this.imageCache.get(uri);
-
-    if (cached) {
-      return cached;
-    }
-
-    const promise = new Promise<HTMLImageElement>((resolve, reject) => {
-      const image = new Image();
-
-      image.onload = () => {
-        resolve(image);
-      }
-
-      image.onerror = reject;
-      image.src = uri;
-    });
-
-    this.imageCache.set(uri, promise);
-
-    return promise;
+    return this.imageProvider.load(uri);
   }
 }
