@@ -1,4 +1,4 @@
-import { Layer } from './layer';
+import { Layer } from './Layer';
 
 describe('Layer', () => {
   describe('fromSearchParams', () => {
@@ -32,25 +32,25 @@ describe('Layer', () => {
     it('should parse font weight', () => {
       const layer = new Layer({ font: 'Ubuntu:700' });
 
-      expect(layer.fontWeight).toBe('700');
+      expect(layer.fontObject!.weight).toBe('700');
     });
 
     it('should parse font weight', () => {
       const layer = new Layer({ font: 'Comic Neue:regular' });
 
-      expect(layer.fontWeight).toBe(undefined);
+      expect(layer.fontObject!.weight).toBe("");
     });
 
     it('should parse font weight', () => {
       const layer = new Layer({ font: 'Ubuntu:500italic' });
 
-      expect(layer.fontWeight).toBe('500');
+      expect(layer.fontObject!.weight).toBe('500');
     });
 
     it('should parse font weight', () => {
       const layer = new Layer({ font: 'Ubuntu:italic' });
 
-      expect(layer.fontWeight).toBe(undefined);
+      expect(layer.fontObject!.weight).toBe("");
     });
   });
 
@@ -58,25 +58,25 @@ describe('Layer', () => {
     it('should parse font weight', () => {
       const layer = new Layer({ font: 'Ubuntu:700' });
 
-      expect(layer.fontStyle).toBe(undefined);
+      expect(layer.fontObject!.style).toBe("");
     });
 
     it('should parse font style Comic Neue:regular', () => {
       const layer = new Layer({ font: 'Comic Neue:regular' });
 
-      expect(layer.fontStyle).toBe(undefined);
+      expect(layer.fontObject!.style).toBe("");
     });
 
     it('should parse font weight', () => {
       const layer = new Layer({ font: 'Ubuntu:500italic' });
 
-      expect(layer.fontStyle).toBe('italic');
+      expect(layer.fontObject!.style).toBe('italic');
     });
 
     it('should parse font weight', () => {
       const layer = new Layer({ font: 'Ubuntu:italic' });
 
-      expect(layer.fontStyle).toBe('italic');
+      expect(layer.fontObject!.style).toBe('italic');
     });
   });
 });

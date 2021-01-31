@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/intrinsic-scale": "^3.0.0",
+    "canvas": "^2.6.1",
     "jest-canvas-mock": "^2.2.0",
     "rollup": "^2.11.2"
   },
