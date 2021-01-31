@@ -16,14 +16,19 @@ export abstract class Renderer {
   abstract getLayerCanvas(layer: Layer): HTMLCanvasElement
 
   async render() {
+    console.debug('Start rendering', JSON.stringify(this.project));
+
+    console.debug('Running onBeforeRender hook');
     await this.onBeforeRender();
 
     const layers = await Promise.all(this.project.layers.map(layer => {
       const canvas = this.getLayerCanvas(layer);
 
+      console.debug('Rendering layer', JSON.stringify(layer));
       return this.renderLayer(canvas, layer);
     }))
 
+    console.debug('Running onAfterRender hook');
     await this.onAfterRender(layers);
 
     return layers;

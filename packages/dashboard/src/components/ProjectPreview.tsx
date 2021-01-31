@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useRef, useEffect } from 'react';
+import React, { FC, useRef, useEffect } from 'react';
 import { Project } from '@stencilbot/renderer';
 import { BrowserRenderer } from "../BrowserRenderer";
 
@@ -8,7 +8,7 @@ interface ProjectProps {
   project: Project;
 }
 
-export const ProjectPreview: FunctionComponent<ProjectProps> = ({ project }) => {
+export const ProjectPreview: FC<ProjectProps> = ({ project }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

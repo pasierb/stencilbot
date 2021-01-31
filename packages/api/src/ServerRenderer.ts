@@ -18,7 +18,9 @@ export class ServerRenderer extends Renderer {
   loadImage(uri: string): Promise<CanvasImageSource> {
     return this.imageProvider
       .load(uri)
-      .then(buf => loadImage(buf) as unknown as Promise<CanvasImageSource>)
+      .then(buf =>
+        loadImage(buf) as unknown as Promise<CanvasImageSource>
+      );
   }
 
   onBeforeRender() {
@@ -42,39 +44,28 @@ export class ServerRenderer extends Renderer {
   }
 
   private registerFonts() {
-    return Promise.all(this.project.layers.map(({ fontObject: font }) =>
-      new Promise((resolve, reject) => {
-        if (font) {
-          return this.fontProvider
-            .getPath(font)
+    return Promise.all(
+      this.project.layers
+        .filter(({ fontObject }) => !!fontObject)
+        .map(({ fontObject: font }) =>
+          this.fontProvider
+            .getPath(font!)
             .then(fontPath => {
               registerFont(fontPath, {
-                family: font.family,
-                weight: font.weight,
-                style: font.style
+                family: font!.family,
+                weight: font!.weight,
+                style: font!.style
               });
             })
-            .then(resolve)
-            .catch(reject);
-        } else {
-          return Promise.resolve(null);
-        }
-      })
-    ));
+        )
+    );
   }
 
   private preloadImages() {
-    return Promise.all(this.project.layers.map(({ img }) => {
-      return new Promise((resolve, reject) => {
-        if (img) {
-          this.imageProvider
-            .load(img)
-            .then(resolve)
-            .catch(reject)
-        } else {
-          resolve(null);
-        }
-      });
-    }));
+    return Promise.all(
+      this.project.layers
+        .filter(({ img }) => !!img)
+        .map(({ img }) => this.imageProvider.load(img!))
+    );
   }
 }
