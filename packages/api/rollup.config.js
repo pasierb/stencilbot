@@ -4,7 +4,7 @@ import json from '@rollup/plugin-json';
  
 export default {
   input: [
-    'lib/delivery/anonymous.js'
+    'lib/lambda/index.js'
   ],
   external: [
     'canvas',

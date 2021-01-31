@@ -128,12 +128,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
             <Layout.Content>
               <TransformComponent>
                 <div className={style.workbench}>
-                  <ProjectPreview
-                    layers={project.layers}
-                    width={project.width}
-                    height={project.height}
-                    selectedLayerId={selectedLayerId}
-                  />
+                  <ProjectPreview project={project} />
                 </div>
               </TransformComponent>
 

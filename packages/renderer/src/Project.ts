@@ -1,15 +1,7 @@
-import { Layer } from './layer';
+import { Layer } from './Layer';
 
 export class Project {
-  width: number
-  height: number
-  layers: Layer[] 
-
-  constructor(width: number, height: number, layers?: Layer[]) {
-    this.width = +width;
-    this.height = +height;
-    this.layers = layers || [];
-  }
+  constructor(public width: number, public height: number, public layers: Layer[] = []) {}
 
   static fromSearchParams(input: {[key: string]: string}): Project {
     const width = input['w'];

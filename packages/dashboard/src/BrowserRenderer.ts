@@ -1,12 +1,14 @@
-import { Renderer } from '@stencilbot/renderer';
+import { Renderer, Layer, Project } from '@stencilbot/renderer';
 
 export class BrowserRenderer extends Renderer {
-  imageCache: Map<string, Promise<HTMLImageElement>>
+  imageCache: Map<string, Promise<HTMLImageElement>> = new Map();
 
-  constructor() {
-    super();
+  constructor(project: Project, private readonly container: HTMLElement) {
+    super(project);
+  }
 
-    this.imageCache = new Map();
+  getLayerCanvas(layer: Layer) {
+    return this.container.children[layer.order!] as HTMLCanvasElement
   }
 
   loadImage(uri: string): Promise<HTMLImageElement> {

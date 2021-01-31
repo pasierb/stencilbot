@@ -17,11 +17,13 @@
     "url": "git+https://github.com/pasierb/stencilbot.git"
   },
   "scripts": {
+    "clean": "rm -rf lib dist",
     "deploy": "cdk deploy",
     "deploy:ci": "npm run deploy -- --require-approval never",
-    "dev": "node -r dotenv/config bin/devServer.js",
+    "dev": "ts-node bin/server.ts",
     "build:js": "tsc && rollup -c",
-    "build": "npm run build:js && node bin/copyFonts && . bin/buildLayers.sh"
+    "build": "npm run build:js && node bin/copyFonts && . bin/buildLayers.sh",
+    "prebuild": "npm run clean"
   },
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"

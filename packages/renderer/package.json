@@ -17,6 +17,8 @@
     "url": "git+https://github.com/pasierb/stencilbot.git"
   },
   "scripts": {
+    "clean": "rm -rf lib",
+    "prebuild": "npm run clean",
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "jest"
