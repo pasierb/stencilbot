@@ -17,25 +17,21 @@
     "url": "git+https://github.com/pasierb/stencilbot.git"
   },
   "scripts": {
+    "clean": "rm -rf lib",
+    "prebuild": "npm run clean",
     "build": "tsc",
-    "dev": "tsc --watch",
-    "test": "jest"
+    "dev": "tsc --watch"
   },
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"
   },
   "devDependencies": {
-    "@aws-cdk/aws-cognito": "^1.42.1",
     "@types/intrinsic-scale": "^3.0.0",
-    "@types/jest": "^25.2.3",
-    "jest": "^26.0.1",
+    "canvas": "^2.6.1",
     "jest-canvas-mock": "^2.2.0",
-    "rollup": "^2.11.2",
-    "ts-jest": "^26.1.0",
-    "typescript": "^3.9.3"
+    "rollup": "^2.11.2"
   },
   "dependencies": {
-    "@aws-cdk/aws-cognito": "^1.42.1",
     "intrinsic-scale": "^3.0.4"
   }
 }

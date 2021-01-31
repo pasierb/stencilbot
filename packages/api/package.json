@@ -17,11 +17,13 @@
     "url": "git+https://github.com/pasierb/stencilbot.git"
   },
   "scripts": {
+    "clean": "rm -rf lib dist",
     "deploy": "cdk deploy",
     "deploy:ci": "npm run deploy -- --require-approval never",
-    "dev": "node -r dotenv/config bin/devServer.js",
+    "dev": "ts-node bin/server.ts",
     "build:js": "tsc && rollup -c",
-    "build": "npm run build:js && node bin/copyFonts && . bin/buildLayers.sh"
+    "build": "npm run build:js && node bin/copyFonts && . bin/buildLayers.sh",
+    "prebuild": "npm run clean"
   },
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"
@@ -47,20 +49,16 @@
     "@rollup/plugin-typescript": "^4.1.2",
     "@types/aws-lambda": "^8.10.51",
     "@types/fs-extra": "^9.0.1",
-    "@types/node": "^14.0.5",
     "@types/node-fetch": "^2.5.7",
     "aws-cdk": "^1.45.0",
     "aws-sdk": "^2.631.0",
     "canvas": "^2.6.1",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "rollup": "^2.11.2",
-    "typescript": "^3.9.3"
+    "rollup": "^2.11.2"
   },
   "dependencies": {
     "@sentry/node": "^5.17.0",
     "@stencilbot/renderer": "^0.0.1",
-    "@stencilbot/templates": "^0.0.0",
     "fs-extra": "^9.0.0",
     "node-fetch": "^2.6.0"
   }

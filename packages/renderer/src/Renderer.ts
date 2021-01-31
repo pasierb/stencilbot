@@ -1,5 +1,6 @@
 import { contain, cover, IntrinsicScale } from 'intrinsic-scale';
-import { Layer, ImageFit, TextAlign, VerticalAlign, RepeatPattern } from './layer';
+import { Layer, ImageFit, TextAlign, VerticalAlign, RepeatPattern } from './Layer';
+import { Project } from './Project';
 
 type RepeatSlot = {
   x: number
@@ -9,9 +10,34 @@ type RepeatSlot = {
 const fallbackFontFamilies = ['Noto Color Emoji']
 
 export abstract class Renderer {
-  abstract loadImage(uri: string): Promise<CanvasImageSource>
+  constructor(protected readonly project: Project) {}
 
-  render(canvas: HTMLCanvasElement, layer: Layer) {
+  abstract loadImage(uri: string): Promise<CanvasImageSource>
+  abstract getLayerCanvas(layer: Layer): HTMLCanvasElement
+
+  async render() {
+    console.debug('Start rendering', JSON.stringify(this.project));
+
+    console.debug('Running onBeforeRender hook');
+    await this.onBeforeRender();
+
+    const layers = await Promise.all(this.project.layers.map(layer => {
+      const canvas = this.getLayerCanvas(layer);
+
+      console.debug('Rendering layer', JSON.stringify(layer));
+      return this.renderLayer(canvas, layer);
+    }))
+
+    console.debug('Running onAfterRender hook');
+    await this.onAfterRender(layers);
+
+    return layers;
+  }
+
+  onBeforeRender() {}
+  onAfterRender(layers: HTMLCanvasElement[]) {}
+
+  renderLayer(canvas: HTMLCanvasElement, layer: Layer) {
     return this.setupCanvas(canvas, async (ctx) => {
       if (layer.alpha !== undefined) {
         ctx.globalAlpha = layer.alpha;
@@ -34,6 +60,7 @@ export abstract class Renderer {
     await callback(ctx);
 
     ctx.restore();
+    return canvas;
   }
 
   protected async withCleanContext(ctx: CanvasRenderingContext2D, callback: (ctx: CanvasRenderingContext2D) => void) {
@@ -71,12 +98,10 @@ export abstract class Renderer {
       txt,
       color,
       fontSize = 14,
-      fontFamily,
-      fontWeight = '',
-      fontStyle = ''
+      fontObject
     } = layer;
 
-    if (!txt || !fontFamily) {
+    if (!txt || !fontObject) {
       return;
     }
 
@@ -85,10 +110,10 @@ export abstract class Renderer {
     }
 
     const fontDeclaration = [
-      fontStyle,
-      fontWeight,
+      fontObject.style,
+      fontObject.weight,
       `${fontSize}px`,
-      [fontFamily, ...fallbackFontFamilies].map(it => `"${it}"`).join(',')
+      [fontObject.family, ...fallbackFontFamilies].map(it => `"${it}"`).join(',')
     ].filter(it => !!it).join(' ');
 
     ctx.font = fontDeclaration;

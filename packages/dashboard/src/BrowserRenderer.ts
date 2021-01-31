@@ -1,34 +1,45 @@
-import { Renderer } from '@stencilbot/renderer';
+import { Renderer, Layer, Project } from '@stencilbot/renderer';
+import fontProviderSingleton, { FontProvider } from "./FontProvider";
+import imageProviderSingleton, { ImageProvider } from "./ImageProvider";
 
 export class BrowserRenderer extends Renderer {
-  imageCache: Map<string, Promise<HTMLImageElement>>
+  constructor(
+    project: Project,
+    private readonly container: HTMLElement,
+    private readonly imageProvider: ImageProvider = imageProviderSingleton,
+    private readonly fontProvider: FontProvider = fontProviderSingleton
+  ) {
+    super(project);
+  }
 
-  constructor() {
-    super();
-
-    this.imageCache = new Map();
+  getLayerCanvas(layer: Layer) {
+    return this.container.children[layer.order!] as HTMLCanvasElement
   }
 
   loadImage(uri: string): Promise<HTMLImageElement> {
-    const cached = this.imageCache.get(uri);
+    return this.imageProvider.load(uri);
+  }
 
-    if (cached) {
-      return cached;
-    }
+  onBeforeRender() {
+    return Promise.all([
+      this.preloadFonts(),
+      this.preloadImages()
+    ])
+  }
 
-    const promise = new Promise<HTMLImageElement>((resolve, reject) => {
-      const image = new Image();
+  private preloadFonts() {
+    return Promise.all(
+      this.project.layers
+        .filter(({ fontObject }) => !!fontObject)
+        .map(({ fontObject }) => this.fontProvider.load(fontObject!.family))
+    );
+  }
 
-      image.onload = () => {
-        resolve(image);
-      }
-
-      image.onerror = reject;
-      image.src = uri;
-    });
-
-    this.imageCache.set(uri, promise);
-
-    return promise;
+  private preloadImages() {
+    return Promise.all(
+      this.project.layers
+        .filter(({ img }) => !!img)
+        .map(({ img }) => this.imageProvider.load(img!))
+    );
   }
 }

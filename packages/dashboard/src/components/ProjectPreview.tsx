@@ -1,38 +1,26 @@
-import React, { FunctionComponent } from 'react';
-import { Layer } from '@stencilbot/renderer';
-import { ProjectLayer } from './ProjectLayer';
-import { ProjectLayerOutline } from './ProjectLayerOutline';
+import React, { FC, useRef, useEffect } from 'react';
+import { Project } from '@stencilbot/renderer';
+import { BrowserRenderer } from "../BrowserRenderer";
 
 import style from './Project.module.css';
 
 interface ProjectProps {
-  width: number
-  height: number
-  layers: Layer[]
-  selectedLayerId?: string
+  project: Project;
 }
 
-export const ProjectPreview: FunctionComponent<ProjectProps> = ({ width, height, layers, selectedLayerId }) => {
-  const selectedLayer = layers.find(l => l.id === selectedLayerId);
+export const ProjectPreview: FC<ProjectProps> = ({ project }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const renderer = new BrowserRenderer(project, containerRef.current!);
+
+    renderer.render();
+  });
 
   return (
-    <div className={style.Project} style={{ width: `${width}px`, height: `${height}px` }}>
-      {layers.map((layer) =>
-        <ProjectLayer
-          key={layer.id + '-canvas'}
-          layer={layer}
-          width={width}
-          height={height}
-        />
-      )}
-
-      {selectedLayer && (
-        <ProjectLayerOutline
-          key={selectedLayer.id + '-outline'}
-          layer={selectedLayer}
-          width={width}
-          height={height}
-        />
+    <div ref={containerRef} className={style.Project} style={{ width: `${project.width}px`, height: `${project.height}px` }}>
+      {project.layers.map((layer) =>
+        <canvas key={layer.order!} width={project.width} height={project.height} />
       )}
     </div>
   )

@@ -1,3 +1,4 @@
-export * from './layer';
-export * from './project';
-export * from './renderer';
+export * from './Layer';
+export * from './Font';
+export * from './Project';
+export * from './Renderer';

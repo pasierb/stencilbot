@@ -1,15 +1,20 @@
-import { Renderer } from './renderer';
-import { Layer, VerticalAlign, TextAlign, ImageFit, RepeatPattern } from './layer';
+import { Renderer } from './Renderer';
+import { createCanvas } from "canvas";
+import { Layer, VerticalAlign, TextAlign, ImageFit, RepeatPattern } from './Layer';
+import { Project } from './Project';
 
 class TestRenderer extends Renderer {
   async loadImage(uri: string) {
     return new Image(300, 100);
   }
+
+  getLayerCanvas(layer: Layer) {
+    return createCanvas(this.project.width, this.project.height) as unknown as HTMLCanvasElement;
+  }
 }
 
 describe('renderer', () => {
   let canvas: HTMLCanvasElement;
-  let renderer: TestRenderer;
   let ctx: CanvasRenderingContext2D;
 
   beforeEach(() => {
@@ -18,14 +23,21 @@ describe('renderer', () => {
     canvas.height = 400;
 
     ctx = canvas.getContext('2d')!;
-    renderer = new TestRenderer();
   })
+
+  function getRendererForLayer(layer: Layer) {
+    const project = new Project(800, 400);
+    project.layers.push(layer);
+
+    return new TestRenderer(project);
+  }
 
   it('should downsize image to contain', async () => {
     const drawImage = ctx.drawImage as jest.Mock
     const layer = new Layer({ img: 'abc', w: 150, imgFit: ImageFit.Contain });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [img, x, y, w, h] = drawImage.mock.calls[0];
 
     expect(w).toBe(150);
@@ -37,8 +49,9 @@ describe('renderer', () => {
   it('should draw text with lineHeight offset', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ txt: 'as', font: 'Roboto', fontSize: 14, lineH: 1.5 });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     
     const [text, x, y] = fillText.mock.calls[0];
 
@@ -48,8 +61,9 @@ describe('renderer', () => {
   it('should render on y axis', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ txt: 'as', font: 'Roboto', y: 1, fontSize: 14, lineH: 1.5 });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     
     const [text, x, y] = fillText.mock.calls[0];
 
@@ -59,8 +73,9 @@ describe('renderer', () => {
   it('should render image valign middle', async () => {
     const drawImage = ctx.drawImage as jest.Mock
     const layer = new Layer({ valign: VerticalAlign.Middle, img: 'abc' });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [img, x, y, w, h] = drawImage.mock.calls[0];
 
     expect(y).toBe(150);
@@ -69,8 +84,9 @@ describe('renderer', () => {
   it('should render text aligned right', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ x: 10, w: 125, txtAlign: TextAlign.Right, txt: 'abc', font: 'Mono' });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [txt, x, y] = fillText.mock.calls[0];
 
     expect(x).toBe(135);
@@ -79,8 +95,9 @@ describe('renderer', () => {
   it('should containt fit and render image valign middle', async () => {
     const drawImage = ctx.drawImage as jest.Mock
     const layer = new Layer({ valign: VerticalAlign.Middle, img: 'abc', w: 150, imgFit: ImageFit.Contain });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [img, x, y, w, h] = drawImage.mock.calls[0];
 
     expect(y).toBe(175);
@@ -89,8 +106,9 @@ describe('renderer', () => {
   it('should render image valign bottom', async () => {
     const drawImage = ctx.drawImage as jest.Mock
     const layer = new Layer({ valign: VerticalAlign.Bottom, img: 'abc' });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [img, x, y, w, h] = drawImage.mock.calls[0];
 
     expect(y).toBe(300);
@@ -99,8 +117,9 @@ describe('renderer', () => {
   it('should render text valign middle', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ valign: VerticalAlign.Middle, font: 'Roboto', txt: 'abc', fontSize: 10 });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [txt, x, y] = fillText.mock.calls[0];
 
     expect(y).toBe(205);
@@ -109,8 +128,9 @@ describe('renderer', () => {
   it('should render text valign bottom', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ valign: VerticalAlign.Bottom, font: 'Roboto', txt: 'abc', fontSize: 10 });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [txt, x, y] = fillText.mock.calls[0];
 
     expect(y).toBe(400);
@@ -119,8 +139,9 @@ describe('renderer', () => {
   it('should render text center', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ txt: 'abcd', txtAlign: TextAlign.Center, font: 'Roboto' });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [txt, x, y] = fillText.mock.calls[0];
 
     expect(x).toBe(400);
@@ -129,8 +150,9 @@ describe('renderer', () => {
   it('should render text center', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ txt: 'abcd', x: 100, txtAlign: TextAlign.Center, font: 'Roboto' });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [txt, x, y] = fillText.mock.calls[0];
 
     expect(x).toBe(500);
@@ -139,8 +161,9 @@ describe('renderer', () => {
   it('should render text center', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ txt: 'abcd', x: 100, w: 200, txtAlign: TextAlign.Center, font: 'Roboto' });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
     const [txt, x, y] = fillText.mock.calls[0];
 
     expect(x).toBe(200);
@@ -149,8 +172,9 @@ describe('renderer', () => {
   it('should split text in lines if does not fit', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ txt: 'ab cd efg', w: 3, fontSize: 10, font: 'Roboto' });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
 
     expect(fillText.mock.calls.length).toBe(3);
     expect(fillText.mock.calls[0][0]).toBe('ab');
@@ -161,8 +185,9 @@ describe('renderer', () => {
   it('should split text in lines if does not fit', async () => {
     const fillText = ctx.fillText as jest.Mock
     const layer = new Layer({ txt: 'ab cdef efg', w: 3, fontSize: 10, font: 'Roboto' });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
 
     expect(fillText.mock.calls.length).toBe(3);
     expect(fillText.mock.calls[0][0]).toBe('ab');
@@ -173,8 +198,9 @@ describe('renderer', () => {
   it('should repeat image in x-axis', async () => {
     const drawImage = ctx.drawImage as jest.Mock
     const layer = new Layer({ img: 'abc', rp: RepeatPattern.X });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
 
     expect(drawImage.mock.calls.length).toBe(3);
     expect(drawImage.mock.calls[0][1]).toBe(0); // 1st x
@@ -188,8 +214,9 @@ describe('renderer', () => {
   it('should repeat image in y-axis', async () => {
     const drawImage = ctx.drawImage as jest.Mock
     const layer = new Layer({ img: 'abc', rp: RepeatPattern.Y });
+    const renderer = getRendererForLayer(layer);
 
-    await renderer.render(canvas, layer);
+    await renderer.render();
 
     expect(drawImage.mock.calls.length).toBe(4);
     expect(drawImage.mock.calls[0][1]).toBe(0); // 1st x
