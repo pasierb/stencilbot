@@ -16,7 +16,18 @@ export class BrowserRenderer extends Renderer {
     return this.container.children[layer.order!] as HTMLCanvasElement
   }
 
+  loadImage(uri: string): Promise<HTMLImageElement> {
+    return this.imageProvider.load(uri);
+  }
+
   onBeforeRender() {
+    return Promise.all([
+      this.preloadFonts(),
+      this.preloadImages()
+    ])
+  }
+
+  private preloadFonts() {
     return Promise.all(
       this.project.layers
         .filter(({ fontObject }) => !!fontObject)
@@ -24,7 +35,11 @@ export class BrowserRenderer extends Renderer {
     );
   }
 
-  loadImage(uri: string): Promise<HTMLImageElement> {
-    return this.imageProvider.load(uri);
+  private preloadImages() {
+    return Promise.all(
+      this.project.layers
+        .filter(({ img }) => !!img)
+        .map(({ img }) => this.imageProvider.load(img!))
+    );
   }
 }
