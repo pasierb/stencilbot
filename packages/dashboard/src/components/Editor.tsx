@@ -1,22 +1,26 @@
-import React, { FunctionComponent, useState } from 'react';
-import { useRouter } from 'next/router'
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Layout, Collapse, Button, Card, Input, Form } from 'antd';
-import { ArrowLeftOutlined, PlusOutlined, EyeOutlined, ZoomInOutlined, UndoOutlined, ZoomOutOutlined } from '@ant-design/icons';
-import { Layer, LayerType, Project } from '@stencilbot/renderer';
-import { ProjectPreview } from './ProjectPreview';
-import { LayerForm } from './LayerForm';
-import { ProjectForm } from './ProjectForm';
+import React, { FunctionComponent, useState } from "react";
+import { useRouter } from "next/router";
+import { Layout, Collapse, Button, Card, Input, Form } from "antd";
+import {
+  ArrowLeftOutlined,
+  PlusOutlined,
+  EyeOutlined,
+  ZoomInOutlined,
+  UndoOutlined,
+  ZoomOutOutlined,
+} from "@ant-design/icons";
+import { Layer, LayerType, Project } from "@stencilbot/renderer";
+import { ProjectPreview } from "./ProjectPreview";
+import { LayerForm } from "./LayerForm";
+import { ProjectForm } from "./ProjectForm";
 
-import style from './Editor.module.css';
+import style from "./Editor.module.css";
 
 const siderWidth = 300; //px
 
 const PanelHeader: FunctionComponent<{ layer: Layer }> = ({ layer }) => (
   <div>
-    {layer.type === LayerType.Text && (
-      <span>{layer.txt}</span>
-    )}
+    {layer.type === LayerType.Text && <span>{layer.txt}</span>}
     {layer.type === LayerType.Image && (
       <img src={layer.img} height="40" alt="preview" />
     )}
@@ -24,7 +28,7 @@ const PanelHeader: FunctionComponent<{ layer: Layer }> = ({ layer }) => (
 );
 
 interface EditorProps {
-  project: Project
+  project: Project;
 }
 
 export const Editor: FunctionComponent<EditorProps> = (props) => {
@@ -35,7 +39,7 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
   const handleProjectChange = (project: Project) => {
     router.push(`/projects/edit?${project.toSearchString()}`);
     setProject(project);
-  }
+  };
 
   const handleChangeLayer = (layer: Layer) => {
     const i = project.layers.findIndex(({ id }) => id === layer.id);
@@ -43,100 +47,96 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
     if (i !== -1) {
       const newLayers = [...project.layers];
       newLayers[i] = layer;
-      const newProject = new Project(project.width, project.height, newLayers)
+      const newProject = new Project(project.width, project.height, newLayers);
 
       router.push(`/projects/edit?${newProject.toSearchString()}`);
       setProject(newProject);
     }
-  }
+  };
 
   const handleRemoveLayer = (layer: Layer) => {
     const i = project.layers.findIndex(({ id }) => id === layer.id);
 
-    const newLayers = [...project.layers.slice(0, i), ...project.layers.slice(i+1)];
-    const newProject = new Project(project.width, project.height, newLayers)
+    const newLayers = [
+      ...project.layers.slice(0, i),
+      ...project.layers.slice(i + 1),
+    ];
+    const newProject = new Project(project.width, project.height, newLayers);
 
     router.push(`/projects/edit?${newProject.toSearchString()}`);
     setProject(newProject);
-  }
+  };
 
   const handleAddLayer = () => {
-    const order = Math.max(-1, ...project.layers.map(l => l.order || 0)) + 1
+    const order = Math.max(-1, ...project.layers.map((l) => l.order || 0)) + 1;
     const newLayer = new Layer({ order });
     const newLayers = [...project.layers, newLayer];
-    const newProject = new Project(project.width, project.height, newLayers)
+    const newProject = new Project(project.width, project.height, newLayers);
 
     router.push(`/projects/edit?${newProject.toSearchString()}`);
     setProject(newProject);
-  }
+  };
 
   const handlePromoteLayer = (layer: Layer) => {
     const { layers } = project;
 
-    const i = layers.findIndex(l => l.id === layer.id);
-    if (i === layers.length -  1) {
+    const i = layers.findIndex((l) => l.id === layer.id);
+    if (i === layers.length - 1) {
       return;
     }
 
-    [layers[i+1], layers[i]] = [layers[i], layers[i+1]];
+    [layers[i + 1], layers[i]] = [layers[i], layers[i + 1]];
     layers.forEach((l, i) => {
       l.order = i;
     });
 
     setProject(new Project(project.width, project.height, layers));
-  }
+  };
 
   const handleDemoteLayer = (layer: Layer) => {
     const { layers } = project;
 
-    const i = layers.findIndex(l => l.id === layer.id);
+    const i = layers.findIndex((l) => l.id === layer.id);
     if (i === 0) {
       return;
     }
 
-    [layers[i-1], layers[i]] = [layers[i], layers[i-1]];
+    [layers[i - 1], layers[i]] = [layers[i], layers[i - 1]];
     layers.forEach((l, i) => {
       l.order = i;
     });
 
     setProject(new Project(project.width, project.height, layers));
-  }
+  };
 
   const handlePreview = () => {
     window.open(
       `${process.env.NEXT_PUBLIC_API_HOST}/project?${project.toSearchString()}`,
-      '_stencilbot_preview'
+      "_stencilbot_preview"
     );
-  }
+  };
 
   const handleBack = () => {
-    router.push('/');
-  }
+    router.push("/");
+  };
 
   return (
     <Layout className={style.Editor}>
-      <TransformWrapper
-        defaultScale={1}
-        options={{
-          minScale: 0,
-          centerContent: true,
-          limitToBounds: false
-        }}
-      >
-        {({ resetTransform, zoomIn, zoomOut, scale }) => (
-          <React.Fragment>
-            <Layout.Content>
-              <TransformComponent>
-                <div className={style.workbench}>
-                  <ProjectPreview project={project} />
-                </div>
-              </TransformComponent>
+      <React.Fragment>
+        <Layout.Content>
+          <div className={style.workbench}>
+            <ProjectPreview project={project} />
+          </div>
 
-              <Button size="large" className={style.backButton} onClick={handleBack}>
-                <ArrowLeftOutlined />
-              </Button>
+          <Button
+            size="large"
+            className={style.backButton}
+            onClick={handleBack}
+          >
+            <ArrowLeftOutlined />
+          </Button>
 
-              <div className={style.zoomControl}>
+          {/* <div className={style.zoomControl}>
                 <Form layout="inline">
                   <Form.Item>
                     <Input.Group style={{ display: 'flex' }}>
@@ -168,46 +168,58 @@ export const Editor: FunctionComponent<EditorProps> = (props) => {
                     />
                   </Form.Item>
                 </Form>
-              </div>
-            </Layout.Content>
+              </div> */}
+        </Layout.Content>
 
-            <Layout.Sider width={siderWidth} collapsible>
-              <Card title="Project" size="small" style={{ minWidth: siderWidth * .8 }}>
-                <ProjectForm project={project} onSubmit={handleProjectChange} />
+        <Layout.Sider width={siderWidth} collapsible>
+          <Card
+            title="Project"
+            size="small"
+            style={{ minWidth: siderWidth * 0.8 }}
+          >
+            <ProjectForm project={project} onSubmit={handleProjectChange} />
 
-                <Button onClick={handlePreview} title="See preview" icon={<EyeOutlined />}>
-                  Preview 
-                </Button>
-              </Card>
-              <Card
-                title={`Layers (${project.layers.length})`}
-                size="small"
-                style={{ minWidth: siderWidth * .8 }}
-                extra={
-                  <Button onClick={handleAddLayer} title="Add layer">
-                    <PlusOutlined />
-                  </Button>
-                }
-              >
-                <Collapse accordion onChange={(id) => setSelectedLayerId(id as string)}>
-                  {[...project.layers].reverse().map((layer) => (
-                    <Collapse.Panel key={layer.id} header={<PanelHeader layer={layer} />}>
-                      <LayerForm
-                        key={layer.id + '-form'}
-                        layer={layer}
-                        onSubmit={handleChangeLayer}
-                        onRemove={handleRemoveLayer}
-                        onPromote={handlePromoteLayer}
-                        onDemote={handleDemoteLayer}
-                      />
-                    </Collapse.Panel>
-                  ))}
-                </Collapse>
-              </Card>
-            </Layout.Sider>
-          </React.Fragment>
-        )}
-      </TransformWrapper>
+            <Button
+              onClick={handlePreview}
+              title="See preview"
+              icon={<EyeOutlined />}
+            >
+              Preview
+            </Button>
+          </Card>
+          <Card
+            title={`Layers (${project.layers.length})`}
+            size="small"
+            style={{ minWidth: siderWidth * 0.8 }}
+            extra={
+              <Button onClick={handleAddLayer} title="Add layer">
+                <PlusOutlined />
+              </Button>
+            }
+          >
+            <Collapse
+              accordion
+              onChange={(id) => setSelectedLayerId(id as string)}
+            >
+              {[...project.layers].reverse().map((layer) => (
+                <Collapse.Panel
+                  key={layer.id}
+                  header={<PanelHeader layer={layer} />}
+                >
+                  <LayerForm
+                    key={layer.id + "-form"}
+                    layer={layer}
+                    onSubmit={handleChangeLayer}
+                    onRemove={handleRemoveLayer}
+                    onPromote={handlePromoteLayer}
+                    onDemote={handleDemoteLayer}
+                  />
+                </Collapse.Panel>
+              ))}
+            </Collapse>
+          </Card>
+        </Layout.Sider>
+      </React.Fragment>
     </Layout>
-  )
-}
+  );
+};

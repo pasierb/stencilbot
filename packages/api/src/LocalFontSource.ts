@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
-import { Font } from "./Font";
+import { Font } from "@stencilbot/renderer";
 import { FontSource } from "./FontSource";
 
 export class LocalFontSource implements FontSource {
-  constructor(public readonly sourceDir: string) {}
+  constructor(public readonly sourceDir: string) { }
 
   async exists(font: Font) {
     return fs.existsSync(this.getFileName(font));
@@ -15,20 +15,10 @@ export class LocalFontSource implements FontSource {
   }
 
   async set(font: Font, body: Buffer) {
-    console.info(`Writing font`);
-
-    try {
-      fs.writeFileSync(this.getFileName(font), body);
-    } catch (err) {
-      console.error(err);
-
-      throw err;
-    }
+    fs.writeFileSync(this.getFileName(font), body);
   }
 
   public getFileName(font: Font): string {
-    const fontFileName = `${font.key}.ttf`;
-
-    return path.join(this.sourceDir, fontFileName);
+    return path.join(this.sourceDir, font.fileName);
   }
 }

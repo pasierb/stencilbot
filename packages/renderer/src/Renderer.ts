@@ -93,12 +93,13 @@ export abstract class Renderer {
       txt,
       color,
       fontSize = 14,
-      fontFamily,
-      fontWeight = '',
-      fontStyle = ''
+      fontObject
+      // fontFamily,
+      // fontWeight = '',
+      // fontStyle = ''
     } = layer;
 
-    if (!txt || !fontFamily) {
+    if (!txt || !fontObject) {
       return;
     }
 
@@ -107,10 +108,10 @@ export abstract class Renderer {
     }
 
     const fontDeclaration = [
-      fontStyle,
-      fontWeight,
+      fontObject.style,
+      fontObject.weight,
       `${fontSize}px`,
-      [fontFamily, ...fallbackFontFamilies].map(it => `"${it}"`).join(',')
+      [fontObject.family, ...fallbackFontFamilies].map(it => `"${it}"`).join(',')
     ].filter(it => !!it).join(' ');
 
     ctx.font = fontDeclaration;

@@ -14,6 +14,10 @@ dotenv.config();
 const googleFontsApiKey = process.env.GOOGLE_FONTS_API_KEY;
 const port = 3001;
 
+if (!googleFontsApiKey) {
+  throw new Error("GOOGLE_FONTS_API_KEY env variable is not set");
+}
+
 const localFontSource = new LocalFontSource(path.resolve(__dirname, "../tmp"));
 const googleFontsService = new GoogleFontsService(googleFontsApiKey);
 const fontProvider = new FontProvider(localFontSource, googleFontsService);
@@ -22,8 +26,10 @@ const projectHandler = new ProjectHandler(fontProvider, imageProvider);
 
 const server = http.createServer(async (req, res) => {
   try {
-    const queryString = url.parse(req.url).query;
-    const query = querystring.parse(queryString) as {[key: string]: string };
+    const queryString = url.parse(req.url!).query;
+    const query = querystring.parse(queryString!) as {[key: string]: string };
+
+    console.info(`Query:`, JSON.stringify(query));
 
     const result = await projectHandler.handle({
       queryStringParameters: query

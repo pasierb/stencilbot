@@ -12,7 +12,7 @@ export class ProjectHandler implements Handler {
   constructor(readonly fontProvider: FontProvider, readonly imageProvider: ImageProvider) {}
 
   async handle(event: APIGatewayProxyEvent) {
-    const project = Project.fromSearchParams(event.queryStringParameters);
+    const project = Project.fromSearchParams(event.queryStringParameters!);
     const renderer = new ServerRenderer(project, this.fontProvider, this.imageProvider);
 
     await renderer.render()

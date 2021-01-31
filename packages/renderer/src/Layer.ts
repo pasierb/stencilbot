@@ -1,3 +1,5 @@
+import { Font } from "./Font";
+
 export type LayerInit = {
   id?: string
   order?: number
@@ -146,30 +148,38 @@ export class Layer {
     return LayerType.Empty;
   }
 
-  get fontVariant() {
-    return this.font?.split(':')[1]
-  }
-
-  get fontFamily() {
-    return this.font?.split(':')[0]
-  }
-
-  get fontStyle() {
-    const match = this.fontVariant?.match(fontVariantRegExp);
-    let style = match && match[2];
-
-    if (style === 'regular') {
-      style = undefined;
+  get fontObject(): Font | undefined {
+    if (!this.font) {
+      return undefined;
     }
 
-    return style;
+    return new Font(this.font);
   }
 
-  get fontWeight() {
-    const match = this.fontVariant?.match(fontVariantRegExp);
+  // get fontVariant() {
+  //   return this.font?.split(':')[1]
+  // }
 
-    return match && match[1];
-  }
+  // get fontFamily(): string | undefined {
+  //   return this.font?.split(':')[0]
+  // }
+
+  // get fontStyle(): string | undefined {
+  //   const match = this.fontVariant?.match(fontVariantRegExp);
+  //   let style = match && match[2];
+
+  //   if (style === 'regular') {
+  //     style = undefined;
+  //   }
+
+  //   return style || undefined;
+  // }
+
+  // get fontWeight(): string | undefined {
+  //   const match = this.fontVariant?.match(fontVariantRegExp);
+
+  //   return (match && match[1]) || undefined;
+  // }
 
   toSearchString() {
     const { order } = this;

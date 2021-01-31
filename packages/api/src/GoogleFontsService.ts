@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { Font } from "./Font";
+import { Font } from "@stencilbot/renderer";
 
 interface GoogleWebFontFamily {
   family: string
@@ -18,9 +18,9 @@ interface GoogleWebFontsAPIResponse {
 }
 
 export class GoogleFontsService {
-  private _data: GoogleWebFontsAPIResponse;
+  private _data: GoogleWebFontsAPIResponse | undefined;
 
-  constructor(private readonly apiKey) {}
+  constructor(private readonly apiKey: string) {}
 
   private getVariant(font: Font): string {
     return [font.weight, font.style].filter(it => !!it).join('') || "regular";
@@ -29,9 +29,13 @@ export class GoogleFontsService {
   async getFontBody(font: Font): Promise<Buffer> {
     const data = await this.getData();
     const variant = this.getVariant(font);
-    const family = data.items.find(it => it.family === font.family);
-    const fontURL = family.files[variant];
 
+    const family = data.items.find(it => it.family === font.family);
+    if (!family) {
+      throw new Error();
+    }
+
+    const fontURL = family.files[variant];
     if (!fontURL) {
       throw new Error(`Could not find font variant "${variant}" in ${JSON.stringify(family)}`);
     }
@@ -49,8 +53,11 @@ export class GoogleFontsService {
     if (!this._data) {
       this._data = await fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${this.apiKey}`)
         .then(r => r.json())
+        .catch(err => {
+          throw new Error(`Failed to fetch Google Fonts data: ${err}`)
+        })
     }
 
-    return this._data;
+    return this._data!;
   }
 }

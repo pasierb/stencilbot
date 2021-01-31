@@ -1,4 +1,4 @@
-import { Font } from "./Font";
+import { Font } from "@stencilbot/renderer";
 
 export interface FontSource {
   exists: (font: Font) => Promise<boolean>;

@@ -1,13 +1,12 @@
-import { Renderer, Project } from "@stencilbot/renderer";
-import { Canvas, createCanvas, loadImage, registerFont } from 'canvas';
-import { Font } from "./Font";
+import { Renderer, Project, Font } from "@stencilbot/renderer";
+import { Canvas, createCanvas, loadImage, registerFont, Image } from 'canvas';
 import { FontProvider } from "./FontProvider";
 import { ImageProvider } from "./ImageProvider";
 
 export class ServerRenderer extends Renderer {
   public readonly base: Canvas;
   
-  constructor(project: Project, readonly fontProvider: FontProvider, readonly imageProvider: ImageProvider) {
+  constructor(project: Project, private readonly fontProvider: FontProvider, private readonly imageProvider: ImageProvider) {
     super(project);
     this.base = createCanvas(project.width, project.height);
   }
@@ -16,9 +15,10 @@ export class ServerRenderer extends Renderer {
     return createCanvas(this.project.width, this.project.height) as unknown as HTMLCanvasElement;
   }
 
-  loadImage(uri: string) {
-    return this.imageProvider.load(uri)
-      .then(buf => loadImage(buf) as unknown as CanvasImageSource)
+  loadImage(uri: string): Promise<CanvasImageSource> {
+    return this.imageProvider
+      .load(uri)
+      .then(buf => loadImage(buf) as unknown as Promise<CanvasImageSource>)
   }
 
   onBeforeRender() {
@@ -42,15 +42,9 @@ export class ServerRenderer extends Renderer {
   }
 
   private registerFonts() {
-    return Promise.all(this.project.layers.map(layer =>
+    return Promise.all(this.project.layers.map(({ fontObject: font }) =>
       new Promise((resolve, reject) => {
-        if (layer.font) {
-          const font = new Font({
-            family: layer.fontFamily,
-            style: layer.fontStyle,
-            weight: layer.fontWeight
-          });
-
+        if (font) {
           return this.fontProvider
             .getPath(font)
             .then(fontPath => {
@@ -75,7 +69,8 @@ export class ServerRenderer extends Renderer {
         if (img) {
           this.imageProvider
             .load(img)
-            .then(resolve);
+            .then(resolve)
+            .catch(reject)
         } else {
           resolve(null);
         }

@@ -1,5 +1,5 @@
+import { Font } from "@stencilbot/renderer";
 import { FontSource } from "./FontSource";
-import { Font } from "./Font";
 import { GoogleFontsService } from "./GoogleFontsService";
 import { LocalFontSource } from "./LocalFontSource";
 
@@ -14,7 +14,7 @@ export class FontProvider {
     const exists = await this.localSource.exists(font);
 
     if (!exists) {
-      let fontBody: Buffer;
+      let fontBody: Buffer | undefined = undefined;
       let sourceIndex = 0;
       for (let i=0; i<this.additionalSources.length; i++) {
         const source = this.additionalSources[i];
@@ -30,8 +30,6 @@ export class FontProvider {
       if (!fontBody) {
         fontBody = await this.service.getFontBody(font);
       }
-
-      console.log({ fontBody });
 
       const promises: Promise<unknown>[] = [this.localSource.set(font, fontBody)];
       for (let i=sourceIndex-1; i>=0; i--) {

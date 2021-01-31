@@ -6,18 +6,17 @@
     "@ant-design/icons": "^4.2.1",
     "@sentry/browser": "^5.17.0",
     "@stencilbot/renderer": "^0.0.1",
-    "antd": "^4.3.0",
-    "lodash": "^4.17.15",
-    "next": "^9.4.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-zoom-pan-pinch": "^1.6.1",
+    "antd": "^4.11.2",
+    "lodash": "^4.17.20",
+    "next": "^10.0.6",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "webfontloader": "^1.6.28"
   },
   "scripts": {
     "start": "next start",
     "dev": "next",
-    "build": "next build && next export && tsc -p tsconfig.cdk.json",
+    "build": "next build && next export && npx tsc -p tsconfig.cdk.json",
     "deploy": "cdk deploy",
     "deploy:ci": "npm run deploy -- --require-approval never"
   },
@@ -46,15 +45,12 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
     "@types/lodash": "^4.14.155",
-    "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/webfontloader": "^1.6.32",
     "aws-cdk": "^1.45.0",
     "dotenv": "^8.2.0",
-    "rollup": "^2.11.2",
-    "typescript": "~3.7.2"
+    "rollup": "^2.11.2"
   }
 }

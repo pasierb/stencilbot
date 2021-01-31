@@ -49,15 +49,12 @@
     "@rollup/plugin-typescript": "^4.1.2",
     "@types/aws-lambda": "^8.10.51",
     "@types/fs-extra": "^9.0.1",
-    "@types/node": "^14.0.5",
     "@types/node-fetch": "^2.5.7",
     "aws-cdk": "^1.45.0",
     "aws-sdk": "^2.631.0",
     "canvas": "^2.6.1",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "rollup": "^2.11.2",
-    "typescript": "^3.9.3"
+    "rollup": "^2.11.2"
   },
   "dependencies": {
     "@sentry/node": "^5.17.0",
