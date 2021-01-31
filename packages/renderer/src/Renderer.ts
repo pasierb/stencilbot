@@ -94,9 +94,6 @@ export abstract class Renderer {
       color,
       fontSize = 14,
       fontObject
-      // fontFamily,
-      // fontWeight = '',
-      // fontStyle = ''
     } = layer;
 
     if (!txt || !fontObject) {

@@ -156,31 +156,6 @@ export class Layer {
     return new Font(this.font);
   }
 
-  // get fontVariant() {
-  //   return this.font?.split(':')[1]
-  // }
-
-  // get fontFamily(): string | undefined {
-  //   return this.font?.split(':')[0]
-  // }
-
-  // get fontStyle(): string | undefined {
-  //   const match = this.fontVariant?.match(fontVariantRegExp);
-  //   let style = match && match[2];
-
-  //   if (style === 'regular') {
-  //     style = undefined;
-  //   }
-
-  //   return style || undefined;
-  // }
-
-  // get fontWeight(): string | undefined {
-  //   const match = this.fontVariant?.match(fontVariantRegExp);
-
-  //   return (match && match[1]) || undefined;
-  // }
-
   toSearchString() {
     const { order } = this;
     const items: string[] = [];
