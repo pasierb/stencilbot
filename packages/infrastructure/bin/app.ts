@@ -5,7 +5,7 @@ import { PipelineStack } from "../src/PipelineStack";
 import { getStage } from "../src/constants";
 
 const stage = getStage(process.env.STAGE || "beta");
-const googleFontsApiKey = process.env.GOOGLE_FONTS_API_KEY || "AIzaSyCeT2toZp4PiLqySsuUPWxPun5QLNXNRk4";
+const googleFontsApiKey = process.env.GOOGLE_FONTS_API_KEY;
 const certificateArn = 'arn:aws:acm:us-east-1:112135394201:certificate/00212b82-36e1-4411-b722-ec445048fd07';
 
 if (!googleFontsApiKey) {
