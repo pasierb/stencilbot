@@ -19,7 +19,8 @@
   "scripts": {
     "clean": "rm -rf lib",
     "prebuild": "npm run clean",
-    "build": "tsc",
+    "build": "npm run compile",
+    "compile": "tsc",
     "dev": "tsc --watch"
   },
   "bugs": {

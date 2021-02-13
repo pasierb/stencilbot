@@ -15,8 +15,6 @@ export class ProjectHandler implements Handler {
   ) {}
 
   async handle(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-    console.log('ProjectHandler', { fontProvider: this.fontProvider, imageProvider: this.imageProvider });
-
     const project = Project.fromSearchParams(event.queryStringParameters || {});
     const renderer = new ServerRenderer(project, this.fontProvider, this.imageProvider);
 

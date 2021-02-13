@@ -27,14 +27,14 @@ export class ServerRenderer extends Renderer {
       );
   }
 
-  onBeforeRender() {
+  onBeforeRender(): Promise<any> {
     return Promise.all([
       this.preloadImages(),
       this.registerFonts()
     ]);
   }
 
-  onAfterRender(layers: HTMLCanvasElement[]): void {
+  async onAfterRender(layers: HTMLCanvasElement[]): Promise<void> {
     this.combineLayers(layers);
   }
 

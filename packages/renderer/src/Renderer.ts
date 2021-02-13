@@ -7,37 +7,33 @@ type RepeatSlot = {
   y: number
 }
 
-const fallbackFontFamilies = ['Noto Color Emoji']
-
 export abstract class Renderer {
   constructor(protected readonly project: Project) {}
 
   abstract loadImage(uri: string): Promise<CanvasImageSource>
   abstract getLayerCanvas(layer: Layer): HTMLCanvasElement
 
-  async render() {
-    console.debug('Start rendering', JSON.stringify(this.project));
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  protected async onBeforeRender(): Promise<any> {}
 
-    console.debug('Running onBeforeRender hook');
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  protected async onAfterRender(layers: HTMLCanvasElement[]): Promise<any> {}
+
+  async render(): Promise<HTMLCanvasElement[]> {
     await this.onBeforeRender();
 
     const layers = await Promise.all(this.project.layers.map(layer => {
       const canvas = this.getLayerCanvas(layer);
 
-      console.debug('Rendering layer', JSON.stringify(layer));
       return this.renderLayer(canvas, layer);
     }))
 
-    console.debug('Running onAfterRender hook');
     await this.onAfterRender(layers);
 
     return layers;
   }
 
-  onBeforeRender() {}
-  onAfterRender(layers: HTMLCanvasElement[]) {}
-
-  renderLayer(canvas: HTMLCanvasElement, layer: Layer) {
+  renderLayer(canvas: HTMLCanvasElement, layer: Layer): Promise<HTMLCanvasElement> {
     return this.setupCanvas(canvas, async (ctx) => {
       if (layer.alpha !== undefined) {
         ctx.globalAlpha = layer.alpha;
@@ -49,7 +45,10 @@ export abstract class Renderer {
     });
   }
 
-  protected async setupCanvas(canvas: HTMLCanvasElement, callback: (ctx: CanvasRenderingContext2D) => void) {
+  protected async setupCanvas(
+    canvas: HTMLCanvasElement,
+    callback: (ctx: CanvasRenderingContext2D) => void
+  ): Promise<HTMLCanvasElement> {
     const ctx = canvas.getContext("2d");
 
     if (!ctx) throw new Error("2D Context not available");
@@ -63,7 +62,10 @@ export abstract class Renderer {
     return canvas;
   }
 
-  protected async withCleanContext(ctx: CanvasRenderingContext2D, callback: (ctx: CanvasRenderingContext2D) => void) {
+  protected async withCleanContext(
+    ctx: CanvasRenderingContext2D,
+    callback: (ctx: CanvasRenderingContext2D) => void
+  ): Promise<void> {
     ctx.save();
 
     await callback(ctx);
@@ -71,8 +73,11 @@ export abstract class Renderer {
     ctx.restore();
   }
 
-  protected renderBackground(ctx: CanvasRenderingContext2D, layer: Layer) {
-    let {
+  protected renderBackground(
+    ctx: CanvasRenderingContext2D,
+    layer: Layer
+  ): void {
+    const {
       w = ctx.canvas.width,
       h = ctx.canvas.height,
       x = 0,
@@ -86,10 +91,15 @@ export abstract class Renderer {
     }
   }
 
-  protected renderText(ctx: CanvasRenderingContext2D, layer: Layer) {
+  protected renderText(
+    ctx: CanvasRenderingContext2D,
+    layer: Layer
+  ): void {
     let {
       x = 0,
-      y = 0,
+      y = 0
+    } = layer;
+    const {
       w: width = ctx.canvas.width,
       h: height = ctx.canvas.height,
       lineH = 1,
@@ -113,7 +123,7 @@ export abstract class Renderer {
       fontObject.style,
       fontObject.weight,
       `${fontSize}px`,
-      [fontObject.family, ...fallbackFontFamilies].map(it => `"${it}"`).join(',')
+      [fontObject.family].map(it => `"${it}"`).join(',') // TODO: figure fallback fonts
     ].filter(it => !!it).join(' ');
 
     ctx.font = fontDeclaration;
@@ -165,8 +175,11 @@ export abstract class Renderer {
     });
   }
 
-  protected async renderImage(ctx: CanvasRenderingContext2D, layer: Layer) {
-    let {
+  protected async renderImage(
+    ctx: CanvasRenderingContext2D,
+    layer: Layer
+  ): Promise<void> {
+    const {
       x: lx = 0,
       y: ly = 0,
       img,
@@ -219,7 +232,11 @@ export abstract class Renderer {
     });
   }
 
-  protected getScale(canvas: HTMLCanvasElement, img: CanvasImageSource, layer: Layer): IntrinsicScale {
+  protected getScale(
+    canvas: HTMLCanvasElement,
+    img: CanvasImageSource,
+    layer: Layer
+  ): IntrinsicScale {
     const {
       w = canvas.width,
       h = canvas.height
@@ -243,7 +260,11 @@ export abstract class Renderer {
     }
   }
 
-  protected fitText(ctx: CanvasRenderingContext2D, text: string, width: number = ctx.canvas.width): string[] {
+  protected fitText(
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    width: number = ctx.canvas.width
+  ): string[] {
     if (!text) {
       return [];
     }

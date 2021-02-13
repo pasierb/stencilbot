@@ -28,7 +28,7 @@ export class Font {
     return style;
   }
 
-  get fileName() {
+  get fileName(): string {
     return `${[this.family, this.variant].join('-')}.ttf`
   }
 }

@@ -16,7 +16,7 @@ export class Project {
     return new Project(+width, +height, layers);
   }
 
-  toSearchString() {
+  toSearchString(): string {
     return [
       `w=${this.width}`,
       `h=${this.height}`,

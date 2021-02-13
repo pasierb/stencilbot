@@ -57,7 +57,6 @@ export enum LayerType {
 type LayerAttributeName = keyof LayerInit;
 
 const layerParamRegExp = /^(\d+)\.(\w+)$/;
-const fontVariantRegExp = /^(\d{3})?(\w+)?$/
 
 const serializeableAttributes: LayerAttributeName[] = [
   'x',
@@ -108,7 +107,7 @@ export class Layer {
     });
   }
 
-  setAttribue(key: keyof LayerInit, value: any) {
+  setAttribue(key: keyof LayerInit, value: string | number | undefined): void {
     switch(key) {
       case 'x':
       case 'y':
@@ -116,15 +115,16 @@ export class Layer {
       case 'h':
       case 'fontSize':
       case 'order':
-        this[key] = value !== undefined ? parseInt(value) : undefined;
+        this[key] = value !== undefined ? parseInt(value + "") : undefined;
         break;
       case 'lineH':
       case 'alpha':
-        this[key] = value !== undefined ? parseFloat(value) : undefined;
+        this[key] = value !== undefined ? parseFloat(value + "") : undefined;
         break;
       default:
-        this[key] = value;
-        break;
+        if (value !== undefined) {
+          this[key] = value + "";
+        }
     }
   }
 
@@ -156,20 +156,22 @@ export class Layer {
     return new Font(this.font);
   }
 
-  toSearchString() {
+  toSearchString(): string {
     const { order } = this;
     const items: string[] = [];
 
     serializeableAttributes.forEach(attr => {
-      if (this[attr] !== undefined) {
-        items.push(`${order}.${attr}=${encodeURIComponent(this[attr]!.toString())}`)
+      const value = this[attr];
+
+      if (value !== undefined) {
+        items.push(`${order}.${attr}=${encodeURIComponent(value.toString())}`)
       }
     });
 
     return items.join('&');
   }
 
-  static generateId() {
+  static generateId(): string {
     return '_' + Math.random().toString(36).substr(2, 9);
   }
 

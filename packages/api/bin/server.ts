@@ -38,7 +38,7 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(result.statusCode, result.headers as OutgoingHttpHeaders);
     res.end(Buffer.from(result.body, 'base64'));
   } catch (err) {
-    console.error(err);
+    console.error(`Error: `, err);
 
     res.writeHead(500);
     res.end(err.message);
