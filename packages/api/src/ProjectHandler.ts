@@ -1,5 +1,5 @@
 import { Project } from '@stencilbot/renderer'
-import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda'
+import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import { FontProvider } from './FontProvider';
 import { ImageProvider } from "./ImageProvider";
 import { ServerRenderer } from './ServerRenderer';
@@ -9,10 +9,15 @@ interface Handler {
 }
 
 export class ProjectHandler implements Handler {
-  constructor(readonly fontProvider: FontProvider, readonly imageProvider: ImageProvider) {}
+  constructor(
+    public readonly fontProvider: FontProvider,
+    public readonly imageProvider: ImageProvider
+  ) {}
 
-  async handle(event: APIGatewayProxyEvent) {
-    const project = Project.fromSearchParams(event.queryStringParameters!);
+  async handle(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+    console.log('ProjectHandler', { fontProvider: this.fontProvider, imageProvider: this.imageProvider });
+
+    const project = Project.fromSearchParams(event.queryStringParameters || {});
     const renderer = new ServerRenderer(project, this.fontProvider, this.imageProvider);
 
     await renderer.render()

@@ -10,7 +10,7 @@ RUN yum install -y gcc gcc-c++ git make openssl-devel tar zip cairo \
     cairo-devel cairomm-devel libjpeg-turbo-devel pango pango-devel \
     pangomm pangomm-devel giflib-devel
 
-RUN curl https://nodejs.org/download/release/v12.15.0/node-v12.15.0-linux-x64.tar.gz | tar xz -C /usr --strip-components=1
+RUN curl https://nodejs.org/download/release/v14.15.3/node-v14.15.3-linux-x64.tar.gz | tar xz -C /usr --strip-components=1
 RUN npm i canvas
 RUN mkdir -p out
 

@@ -154,7 +154,7 @@ export const LayerForm: FunctionComponent<LayerFormProps> = ({ layer, onSubmit, 
               form.setFieldsValue({ font: v.value });
               form.submit();
             }}
-            defaultValue={layer.fontFamily}
+            defaultValue={layer.fontObject?.family}
           />
         </Form.Item>
         <Form.Item label={<FontSizeOutlined title="Font size" />} name="fontSize" colon={false}>
