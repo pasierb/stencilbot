@@ -15,7 +15,10 @@ The same background, different title and subtitle:
 ## Development
 
 ```bash
-npm run dev
+npm install
+npx lerna bootstrap
+
+npm run dev # local dev server, go to localhost:3000
 ```
 
 ```bash
