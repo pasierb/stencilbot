@@ -16,9 +16,8 @@
   "scripts": {
     "start": "next start",
     "dev": "next",
-    "build": "next build && next export && npx tsc -p tsconfig.cdk.json",
-    "deploy": "cdk deploy",
-    "deploy:ci": "npm run deploy -- --require-approval never"
+    "clean": "rm -rf lib out",
+    "build": "next build && next export"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -36,12 +35,6 @@
     ]
   },
   "devDependencies": {
-    "@aws-cdk/aws-certificatemanager": "^1.45.0",
-    "@aws-cdk/aws-cloudfront": "^1.45.0",
-    "@aws-cdk/aws-iam": "1.45.0",
-    "@aws-cdk/aws-s3": "^1.45.0",
-    "@aws-cdk/aws-s3-deployment": "^1.45.0",
-    "@aws-cdk/core": "^1.45.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -49,7 +42,6 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/webfontloader": "^1.6.32",
-    "aws-cdk": "^1.45.0",
     "dotenv": "^8.2.0",
     "rollup": "^2.11.2"
   }

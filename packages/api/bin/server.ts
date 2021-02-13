@@ -1,4 +1,4 @@
-import http from "http";
+import http, { OutgoingHttpHeaders } from "http";
 import path from "path";
 import url from "url";
 import dotenv from "dotenv";
@@ -35,7 +35,7 @@ const server = http.createServer(async (req, res) => {
       queryStringParameters: query
     } as APIGatewayProxyEvent);
 
-    res.writeHead(result.statusCode, result.headers);
+    res.writeHead(result.statusCode, result.headers as OutgoingHttpHeaders);
     res.end(Buffer.from(result.body, 'base64'));
   } catch (err) {
     console.error(err);

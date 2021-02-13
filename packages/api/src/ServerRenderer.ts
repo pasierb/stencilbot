@@ -6,12 +6,16 @@ import { ImageProvider } from "./ImageProvider";
 export class ServerRenderer extends Renderer {
   public readonly base: Canvas;
   
-  constructor(project: Project, private readonly fontProvider: FontProvider, private readonly imageProvider: ImageProvider) {
+  constructor(
+    project: Project,
+    private readonly fontProvider: FontProvider,
+    private readonly imageProvider: ImageProvider
+  ) {
     super(project);
     this.base = createCanvas(project.width, project.height);
   }
 
-  getLayerCanvas() {
+  getLayerCanvas(): HTMLCanvasElement {
     return createCanvas(this.project.width, this.project.height) as unknown as HTMLCanvasElement;
   }
 
@@ -30,7 +34,7 @@ export class ServerRenderer extends Renderer {
     ]);
   }
 
-  onAfterRender(layers: HTMLCanvasElement[]) {
+  onAfterRender(layers: HTMLCanvasElement[]): void {
     this.combineLayers(layers);
   }
 
@@ -55,8 +59,8 @@ export class ServerRenderer extends Renderer {
                 family: font!.family,
                 weight: font!.weight,
                 style: font!.style
-              });
             })
+          })
         )
     );
   }
