@@ -91,10 +91,19 @@ export abstract class Renderer {
     }
   }
 
-  protected renderText(
+  protected async fillText(
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    x: number,
+    y: number
+  ): Promise<void> {
+    ctx.fillText(text, x, y);
+  }
+
+  protected async renderText(
     ctx: CanvasRenderingContext2D,
     layer: Layer
-  ): void {
+  ): Promise<void> {
     let {
       x = 0,
       y = 0
@@ -166,13 +175,13 @@ export abstract class Renderer {
       height: +height
     });
 
-    slots.forEach(({ x, y }) => {
-      lines.forEach((line, i) => {
+    await Promise.all(slots.map(({ x, y }) =>
+      Promise.all(lines.map((line, i) => {
         const yi = +y + ((i + 1) * h) - offset;
 
-        ctx.fillText(line, +x, yi);
-      });
-    });
+        return this.fillText(ctx, line, +x, yi);
+      }))
+    ));
   }
 
   protected async renderImage(

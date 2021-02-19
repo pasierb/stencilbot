@@ -1,5 +1,6 @@
-import { Renderer, Project, Font } from "@stencilbot/renderer";
-import { Canvas, createCanvas, loadImage, registerFont, Image } from 'canvas';
+import { Renderer, Project } from "@stencilbot/renderer";
+import { Canvas, createCanvas, loadImage, registerFont } from 'canvas';
+import { fillTextWithTwemoji } from "node-canvas-with-twemoji-and-discord-emoji";
 import { FontProvider } from "./FontProvider";
 import { ImageProvider } from "./ImageProvider";
 
@@ -32,6 +33,10 @@ export class ServerRenderer extends Renderer {
       this.preloadImages(),
       this.registerFonts()
     ]);
+  }
+
+  async fillText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number): Promise<void> {
+    await fillTextWithTwemoji(ctx, text, x, y);
   }
 
   async onAfterRender(layers: HTMLCanvasElement[]): Promise<void> {

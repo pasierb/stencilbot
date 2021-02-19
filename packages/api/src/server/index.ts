@@ -4,11 +4,11 @@ import url from "url";
 import dotenv from "dotenv";
 import querystring from "querystring";
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { ProjectHandler } from "../src/ProjectHandler";
-import { LocalFontSource } from "../src/LocalFontSource";
-import { FontProvider } from "../src/FontProvider";
-import { ImageProvider } from "../src/ImageProvider";
-import { GoogleFontsService } from "../src/GoogleFontsService";
+import { ProjectHandler } from "../ProjectHandler";
+import { LocalFontSource } from "../LocalFontSource";
+import { FontProvider } from "../FontProvider";
+import { ImageProvider } from "../ImageProvider";
+import { GoogleFontsService } from "../GoogleFontsService";
 
 dotenv.config();
 const googleFontsApiKey = process.env.GOOGLE_FONTS_API_KEY;
@@ -18,7 +18,7 @@ if (!googleFontsApiKey) {
   throw new Error("GOOGLE_FONTS_API_KEY env variable is not set");
 }
 
-const localFontSource = new LocalFontSource(path.resolve(__dirname, "../tmp"));
+const localFontSource = new LocalFontSource(path.resolve(__dirname, "../../tmp"));
 const googleFontsService = new GoogleFontsService(googleFontsApiKey);
 const fontProvider = new FontProvider(localFontSource, googleFontsService);
 const imageProvider = new ImageProvider();

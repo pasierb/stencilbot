@@ -18,7 +18,8 @@
   },
   "scripts": {
     "clean": "rm -rf lib dist",
-    "dev": "ts-node bin/server.ts",
+    "dev": "ts-node --pretty --files src/server",
+    "compile": "tsc",
     "build:js": "tsc && rollup -c",
     "build": "npm run build:js && node bin/copyFonts && . bin/buildLayers.sh",
     "prebuild": "npm run clean"
@@ -46,6 +47,7 @@
     "@sentry/node": "^5.17.0",
     "@stencilbot/renderer": "^0.0.1",
     "fs-extra": "^9.0.0",
+    "node-canvas-with-twemoji-and-discord-emoji": "^1.1.8",
     "node-fetch": "^2.6.0"
   }
 }
