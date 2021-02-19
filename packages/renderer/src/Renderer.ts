@@ -100,6 +100,13 @@ export abstract class Renderer {
     ctx.fillText(text, x, y);
   }
 
+  protected measureText(
+    ctx: CanvasRenderingContext2D,
+    text: string,
+  ): { width: number } {
+    return ctx.measureText(text);
+  }
+
   protected async renderText(
     ctx: CanvasRenderingContext2D,
     layer: Layer
@@ -278,7 +285,7 @@ export abstract class Renderer {
       return [];
     }
 
-    if (ctx.measureText(text).width <= width) {
+    if (this.measureText(ctx, text).width <= width) {
       return [text];
     }
 
@@ -289,7 +296,7 @@ export abstract class Renderer {
     while(words.length) {
       const word = words.shift()!;
 
-      if (ctx.measureText([...curr, word].join(' ')).width <= width) {
+      if (this.measureText(ctx, [...curr, word].join(' ')).width <= width) {
         curr.push(word);
       } else {
         result.push(curr.join(' '));
