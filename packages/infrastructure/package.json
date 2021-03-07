@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"
   },
-  "dependencies": {
+  "devDependencies": {
     "@aws-cdk/core": "1.89.0",
     "@aws-cdk/aws-codebuild": "1.89.0",
     "@aws-cdk/aws-lambda": "1.89.0",
