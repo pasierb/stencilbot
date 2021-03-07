@@ -49,7 +49,7 @@ export class PipelineStack extends Stack {
       },
       environmentVariables: {
         SECRETS_ID: {
-          value: secrets.secretName
+          value: secrets.secretArn
         }
       },
       role: deployRole

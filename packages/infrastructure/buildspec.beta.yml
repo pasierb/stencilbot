@@ -10,7 +10,7 @@ env:
 phases:
   install:
     runtime-versions:
-      runtime: version
+      nodejs: 14
     commands:
       - npm install
   build:
