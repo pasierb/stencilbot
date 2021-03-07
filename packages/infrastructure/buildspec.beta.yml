@@ -3,10 +3,14 @@ version: 0.2
 env:
   variables:
     NODE_ENV: development
-    NEXT_PUBLIC_API_HOST: api-beta.stencilbot.io
+    NEXT_PUBLIC_API_HOST: https://api-beta.stencilbot.io
   secrets-manager:
     NEXT_PUBLIC_GOOGLE_FONTS_API_KEY: $SECRETS_ID:GOOGLE_FONTS_API_KEY
     GOOGLE_FONTS_API_KEY: $SECRETS_ID:GOOGLE_FONTS_API_KEY
+  exported-variables:
+    - NEXT_PUBLIC_API_HOST
+    - NEXT_PUBLIC_GOOGLE_FONTS_API_KEY
+    - GOOGLE_FONTS_API_KEY
 
 phases:
   install:
