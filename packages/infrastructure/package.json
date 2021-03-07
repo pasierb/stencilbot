@@ -7,10 +7,10 @@
   "license": "ISC",
   "main": "lib/infrastructure.js",
   "directories": {
-    "lib": "lib"
+    "lib": "src"
   },
   "files": [
-    "lib"
+    "src"
   ],
   "publishConfig": {
     "access": "public"
@@ -20,12 +20,14 @@
     "url": "git+https://github.com/pasierb/stencilbot.git"
   },
   "scripts": {
-    "deploy:app": "cdk deploy SBApiStack SBDashboardStack"
+    "build": "cdk synth",
+    "deploy:pipeline": "cdk deploy SBPipelineStack-beta SBPipelineStack-prod",
+    "deploy:beta": "cdk deploy SBApiStack-beta-eu-west-1 SBDashboardStack-beta-eu-west-1"
   },
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"
   },
-  "devDependencies": {
+  "dependencies": {
     "@aws-cdk/core": "1.89.0",
     "@aws-cdk/aws-codebuild": "1.89.0",
     "@aws-cdk/aws-lambda": "1.89.0",
@@ -34,7 +36,9 @@
     "@aws-cdk/aws-iam": "1.89.0",
     "@aws-cdk/aws-s3": "1.89.0",
     "@aws-cdk/aws-s3-deployment": "1.89.0",
+    "@aws-cdk/aws-secretsmanager": "1.89.0",
     "@aws-cdk/aws-cloudfront": "1.89.0",
+    "@aws-cdk/aws-route53": "1.89.0",
     "@aws-cdk/aws-logs": "1.89.0",
     "aws-cdk": "1.89.0",
     "ts-node": "^9.1.1",

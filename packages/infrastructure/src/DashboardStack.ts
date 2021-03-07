@@ -7,14 +7,15 @@ import * as cloudfront from "@aws-cdk/aws-cloudfront";
 import { dashboardPackagePath, Stage } from "./constants";
 
 interface DashboardStackProps extends StackProps {
-  refererHeader: string
   stage: Stage
-  certificateArn: string
+  edgeCertificateArn: string
 }
 
 export class DashboardStack extends Stack {
   constructor(scope: App, id: string, props: DashboardStackProps) {
     super(scope, id, props);
+
+    const refererHeader = `${Date.now()}`;
 
     const bucket = new s3.Bucket(this, 'sb-dashboard-static', {
       websiteIndexDocument: 'index.html',
@@ -30,7 +31,7 @@ export class DashboardStack extends Stack {
       ],
       conditions: {
         'StringLike': {
-          'aws:Referer': props.refererHeader
+          'aws:Referer': refererHeader
         }
       }
     });
@@ -39,7 +40,7 @@ export class DashboardStack extends Stack {
 
     bucket.addToResourcePolicy(bucketWebsitePolicy);
 
-    new s3Deployment.BucketDeployment(this, 'dashboard-static-deployment', {
+    new s3Deployment.BucketDeployment(this, 'sb-dashboard-static-deployment', {
       destinationBucket: bucket,
       sources: [
         s3Deployment.Source.asset(path.join(dashboardPackagePath, './out'))
@@ -57,10 +58,6 @@ export class DashboardStack extends Stack {
             domainName: bucket.bucketWebsiteDomainName,
             originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY
           },
-          // s3OriginSource: {
-          //   s3BucketSource: bucket,
-          //   originAccessIdentity: new cloudfront.OriginAccessIdentity(this, "sb-dashboard-access-identity")
-          // },
           behaviors: [
             {
               allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
@@ -71,7 +68,7 @@ export class DashboardStack extends Stack {
             }
           ],
           originHeaders: {
-            Referer: props.refererHeader
+            Referer: refererHeader
           }
         }
       ],
@@ -83,19 +80,27 @@ export class DashboardStack extends Stack {
           responsePagePath: '/404.html'
         }
       ],
-      aliasConfiguration: {
-        names: this.getAliasNames(props.stage),
-        acmCertRef: props.certificateArn
+      viewerCertificate: {
+        aliases: this.getAliasNames(props.stage),
+        props: {
+          acmCertificateArn: props.edgeCertificateArn,
+          sslSupportMethod: "sni-only"
+        }
       }
-    })
+    });
   }
 
   private getAliasNames(stage: Stage): string[] {
-    return stage === Stage.prod ? [
-      'stencilbot.io',
-      'www.stencilbot.io'
-    ] : [
-      'beta.stencilbot.io',
-    ];
+    switch (stage) {
+      case Stage.prod: {
+        return [
+          'stencilbot.io',
+          'www.stencilbot.io'
+        ];
+      }
+      case Stage.beta: {
+        return ['beta.stencilbot.io'];
+      }
+    }
   }
 }

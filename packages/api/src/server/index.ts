@@ -11,9 +11,9 @@ import { ImageProvider } from "../ImageProvider";
 import { GoogleFontsService } from "../GoogleFontsService";
 
 dotenv.config();
-const googleFontsApiKey = process.env.GOOGLE_FONTS_API_KEY;
 const port = 3001;
 
+const googleFontsApiKey = process.env.GOOGLE_FONTS_API_KEY;
 if (!googleFontsApiKey) {
   throw new Error("GOOGLE_FONTS_API_KEY env variable is not set");
 }

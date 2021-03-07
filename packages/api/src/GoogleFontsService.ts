@@ -53,11 +53,6 @@ export class GoogleFontsService {
     if (!this._data) {
       this._data = await fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${this.apiKey}`)
         .then(r => r.json())
-        .then(r => {
-          console.log(r);
-
-          return r;
-        })
         .catch(err => {
           throw new Error(`Failed to fetch Google Fonts data: ${err}`)
         })

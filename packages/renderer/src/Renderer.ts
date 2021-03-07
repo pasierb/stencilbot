@@ -8,7 +8,7 @@ type RepeatSlot = {
 }
 
 export abstract class Renderer {
-  constructor(protected readonly project: Project) {}
+  constructor(public readonly project: Project) {}
 
   abstract loadImage(uri: string): Promise<CanvasImageSource>
   abstract getLayerCanvas(layer: Layer): HTMLCanvasElement
