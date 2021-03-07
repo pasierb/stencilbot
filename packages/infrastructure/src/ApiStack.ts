@@ -68,11 +68,11 @@ export class ApiStack extends Stack {
 
     const nodeModulesLayer = new lambda.LayerVersion(this, 'sb-api-node-modules', {
       compatibleRuntimes: [lambda.Runtime.NODEJS_14_X],
-      code: lambda.Code.fromAsset(path.join(apiPackagePath, 'tmp/canvas.zip'))
+      code: lambda.Code.fromAsset(path.join(apiPackagePath, 'node_modules'))
     });
 
     const projectFunction = new lambda.Function(this, "sb-api-project-function", {
-      code: lambda.Code.fromAsset(path.join(apiPackagePath, "dist")),
+      code: lambda.Code.fromAsset(path.join(apiPackagePath, "lib")),
       handler: "lambda/index.handler",
       environment: {
         GOOGLE_FONTS_API_KEY: props.googleFontsApiKey,

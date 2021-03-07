@@ -20,8 +20,7 @@
     "clean": "rm -rf lib dist",
     "dev": "ts-node --pretty --files src/server",
     "compile": "tsc",
-    "build:js": "tsc && rollup -c",
-    "build": "npm run build:js && node bin/copyFonts && . bin/buildLayers.sh",
+    "build": "npm run compile",
     "prebuild": "npm run clean"
   },
   "bugs": {
@@ -39,16 +38,15 @@
     "@types/fs-extra": "^9.0.1",
     "@types/node": "^14.14.31",
     "@types/node-fetch": "^2.5.7",
-    "canvas": "^2.6.1",
     "dotenv": "^8.2.0",
-    "rollup": "^2.38.5",
-    "tslib": "^2.1.0"
+    "rollup": "^2.38.5"
   },
   "dependencies": {
     "@sentry/node": "^5.17.0",
     "@stencilbot/renderer": "^0.0.1",
     "fs-extra": "^9.0.0",
     "node-canvas-with-twemoji-and-discord-emoji": "^1.1.8",
+    "canvas": "^2.6.1",
     "node-fetch": "^2.6.0"
   }
 }
