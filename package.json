@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "postinstall": "lerna bootstrap",
     "dev": "lerna run dev --stream --parallel",
     "lint": "eslint --ext .js,.ts",
     "clean": "lerna run clean && lerna clean",
