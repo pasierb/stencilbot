@@ -6,7 +6,7 @@ WORKDIR ${APP}/nodejs
 
 ENV NODE_ENV production
 
-RUN yum install -y gcc gcc-c++ git make openssl-devel tar zip cairo \
+RUN yum install -y -q gcc gcc-c++ git make openssl-devel tar zip cairo \
     cairo-devel cairomm-devel libjpeg-turbo-devel pango pango-devel \
     pangomm pangomm-devel giflib-devel
 
@@ -24,4 +24,4 @@ RUN cp /usr/lib64/libpixman-1.so.0 .
 
 WORKDIR ${APP}
 
-CMD ["zip", "-r", "out/canvas.zip", "nodejs", "lib"]
+CMD ["zip", "-rq", "out/canvas.zip", "nodejs", "lib"]
