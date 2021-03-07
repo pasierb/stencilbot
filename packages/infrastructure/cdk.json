@@ -1,3 +1,4 @@
 {
-  "app": "ts-node bin/app.ts"
+  "app": "ts-node bin/app.ts",
+  "requireApproval": "never"
 }

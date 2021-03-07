@@ -20,4 +20,4 @@ phases:
       - npm run build
   post_build:
     commands:
-      - npx lerna run deploy:beta -- --require-approval=never
+      - npx lerna run deploy:beta
