@@ -9,13 +9,14 @@ import { dashboardPackagePath, Stage } from "./constants";
 interface DashboardStackProps extends StackProps {
   stage: Stage
   edgeCertificateArn: string
+  refererHeader: string
 }
 
 export class DashboardStack extends Stack {
   constructor(scope: App, id: string, props: DashboardStackProps) {
     super(scope, id, props);
 
-    const refererHeader = `${Date.now()}`;
+    const refererHeader = props.refererHeader;
 
     const bucket = new s3.Bucket(this, 'sb-dashboard-static', {
       websiteIndexDocument: 'index.html',

@@ -39,7 +39,8 @@ const app = new App();
       region
     },
     stage,
-    edgeCertificateArn: edgeCertificateArn
+    edgeCertificateArn: edgeCertificateArn,
+    refererHeader: `sb-${stage}`
   });
 });
 
