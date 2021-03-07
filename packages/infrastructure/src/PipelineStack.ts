@@ -45,6 +45,7 @@ export class PipelineStack extends Stack {
       }),
       buildSpec: this.buildSpecFileName,
       environment: {
+        privileged: true,
         buildImage: LinuxBuildImage.STANDARD_5_0
       },
       environmentVariables: {
@@ -52,7 +53,7 @@ export class PipelineStack extends Stack {
           value: secrets.secretArn
         }
       },
-      role: deployRole
+      role: deployRole,
     });
   }
 

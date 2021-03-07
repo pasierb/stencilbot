@@ -1,7 +1,6 @@
 {
   "name": "@stencilbot/dashboard",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
     "@sentry/browser": "^5.17.0",
