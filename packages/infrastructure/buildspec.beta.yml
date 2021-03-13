@@ -22,6 +22,7 @@ phases:
   build:
     commands:
       - npm run build
+      - ./bin/build-api-image.sh
   post_build:
     commands:
       - npx lerna run deploy:beta

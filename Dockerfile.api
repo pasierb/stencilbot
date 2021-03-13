@@ -5,9 +5,13 @@ ARG FUNCTION_DIR=$WORKDIR
 
 COPY . $WORKDIR
 
-RUN npm install 
-RUN npx lerna bootstrap
-RUN npm test
-RUN npm run build
+RUN cd /var/task/packages/renderer && npm prune --production
+RUN cd /var/task/packages/api && npm rebuild canvas --update-binary && npm prune --production
+RUN npx lerna link
+
+FROM public.ecr.aws/lambda/nodejs:14
+
+WORKDIR /var/task
+COPY --from=build-image /var/task/packages /var/task/packages
 
 CMD ["packages/api/lib/lambda/index.handler"]
