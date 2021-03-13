@@ -66,21 +66,15 @@ export class ApiStack extends Stack {
       }
     });
 
-    const nodeModulesLayer = new lambda.LayerVersion(this, 'sb-api-node-modules', {
-      compatibleRuntimes: [lambda.Runtime.NODEJS_14_X],
-      code: lambda.Code.fromAsset(path.join(apiPackagePath, 'node_modules'))
-    });
-
     const projectFunction = new lambda.Function(this, "sb-api-project-function", {
-      code: lambda.Code.fromAsset(path.join(apiPackagePath, "lib")),
-      handler: "lambda/index.handler",
+      code: lambda.Code.fromAsset(path.join(apiPackagePath, "tmp/lambda.zip")),
+      handler: "lib/lambda/index.handler",
       environment: {
         GOOGLE_FONTS_API_KEY: props.googleFontsApiKey,
         BUCKET: bucket.bucketName,
         BUCKET_URL: this.cdnDomainName
       },
       runtime: lambda.Runtime.NODEJS_14_X,
-      layers: [nodeModulesLayer],
       timeout: Duration.seconds(5),
       logRetention: logs.RetentionDays.ONE_MONTH
     });
