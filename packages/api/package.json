@@ -20,29 +20,25 @@
     "clean": "rm -rf lib dist",
     "dev": "ts-node --pretty --files src/server",
     "compile": "tsc",
-    "build": "npm run compile",
+    "bundle": "./bin/packageLambda.sh",
+    "build": "npm run compile && npm run bundle",
     "prebuild": "npm run clean"
   },
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^12.0.0",
-    "@rollup/plugin-json": "^4.0.3",
-    "@rollup/plugin-node-resolve": "^8.0.0",
     "@types/aws-lambda": "^8.10.51",
     "@types/fs-extra": "^9.0.1",
     "@types/node": "^14.14.31",
     "@types/node-fetch": "^2.5.7",
     "dotenv": "^8.2.0",
-    "rollup": "^2.38.5",
     "ts-mockito": "^2.6.1"
   },
   "dependencies": {
-    "@sentry/node": "^5.17.0",
-    "@stencilbot/renderer": "^0.0.1",
-    "aws-sdk": "^2.631.0",
+    "@stencilbot/renderer": "*",
     "canvas": "^2.6.1",
+    "aws-sdk": "^2.631.0",
     "fs-extra": "^9.0.0",
     "node-canvas-with-twemoji-and-discord-emoji": "^1.1.8",
     "node-fetch": "^2.6.0"
