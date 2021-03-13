@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@sentry/node": "^5.17.0",
-    "@stencilbot/renderer": "^0.0.1",
+    "@stencilbot/renderer": "*",
     "fs-extra": "^9.0.0",
     "node-canvas-with-twemoji-and-discord-emoji": "^1.1.8",
     "canvas": "^2.6.1",

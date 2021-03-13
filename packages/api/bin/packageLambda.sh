@@ -1,11 +1,11 @@
 WORKDIR=$(pwd)/tmp
 
+rm -rf $WORKDIR
 mkdir -p $WORKDIR
-rm -rf $WORKDIR/build
 
-rsync --recursive --copy-links $PWD $WORKDIR/build
+rsync -Lr $PWD $WORKDIR/build
 
 cd $WORKDIR/build/api
 
-npm prune --production 
+# npm prune --production 
 zip -rq ${WORKDIR}/lambda.zip node_modules lib
