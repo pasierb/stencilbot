@@ -68,9 +68,7 @@ export class ApiStack extends Stack {
       }
     });
 
-    const apiRepository = new ecr.Repository(this, "sb-api-function-repository", {
-      imageScanOnPush: true,
-    });
+    const apiRepository = ecr.Repository.fromRepositoryName(this, "sb-api-function-repository", "stencilbot-api");
 
     const projectFunction = new lambda.DockerImageFunction(this,  "sb-api-project-function", {
       code: lambda.DockerImageCode.fromEcr(apiRepository, {
