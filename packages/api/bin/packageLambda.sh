@@ -3,7 +3,7 @@ WORKDIR=$(pwd)/tmp
 mkdir -p $WORKDIR
 rm -rf $WORKDIR/build
 
-rsync --archive --copy-links $PWD $WORKDIR/build
+rsync --recursive --copy-links $PWD $WORKDIR/build
 
 cd $WORKDIR/build/api
 
