@@ -38,7 +38,7 @@
   "dependencies": {
     "@stencilbot/renderer": "*",
     "canvas": "^2.6.1",
-    "aws-sdk": "^2.631.0",
+    "aws-sdk": "^2.0",
     "fs-extra": "^9.0.0",
     "node-canvas-with-twemoji-and-discord-emoji": "^1.1.8",
     "node-fetch": "^2.6.0"

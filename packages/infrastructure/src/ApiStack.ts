@@ -1,4 +1,3 @@
-import path from "path";
 import { App, CfnOutput, Duration, RemovalPolicy, Stack, StackProps } from "@aws-cdk/core";
 import * as apigateway from '@aws-cdk/aws-apigateway';
 import * as lambda from "@aws-cdk/aws-lambda";
@@ -9,8 +8,7 @@ import * as cloudfront from "@aws-cdk/aws-cloudfront";
 import * as certificateManager from "@aws-cdk/aws-certificatemanager";
 import * as route53 from "@aws-cdk/aws-route53";
 import * as ecr from "@aws-cdk/aws-ecr";
-import { apiPackagePath, Stage } from "./constants";
-import { Code } from "@aws-cdk/aws-lambda";
+import { Stage } from "./constants";
 
 interface ApiStackProps extends StackProps {
   googleFontsApiKey: string;
