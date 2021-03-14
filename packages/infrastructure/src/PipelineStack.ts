@@ -1,7 +1,8 @@
-import { App, Stack, StackProps } from "@aws-cdk/core";
-import { BuildSpec, EventAction, FilterGroup, LinuxBuildImage, Project, Source } from "@aws-cdk/aws-codebuild";
+import { App, Stack, StackProps, Duration } from "@aws-cdk/core";
+import { BuildSpec, EventAction, FilterGroup, LinuxBuildImage, Project, Source, Cache } from "@aws-cdk/aws-codebuild";
 import * as secretsmanager from "@aws-cdk/aws-secretsmanager";
 import * as iam from "@aws-cdk/aws-iam";
+import * as s3 from "@aws-cdk/aws-s3";
 import { Stage } from "./constants";
 
 interface PipelineStackProps extends StackProps {
@@ -43,6 +44,7 @@ export class PipelineStack extends Stack {
         repo: "stencilbot",
         webhookFilters: this.webhookFilters
       }),
+      cache: Cache.bucket(new s3.Bucket(this, "sb-code-project-cache")),
       buildSpec: this.buildSpecFileName,
       environment: {
         privileged: true,
@@ -54,6 +56,7 @@ export class PipelineStack extends Stack {
         }
       },
       role: deployRole,
+      timeout: Duration.minutes(10)
     });
   }
 

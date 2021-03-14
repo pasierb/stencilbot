@@ -25,3 +25,8 @@ phases:
   post_build:
     commands:
       - npx lerna run deploy:beta
+
+cache:
+  paths:
+    - node_modules/**/*
+    - packages/*/node_modules/**/*
