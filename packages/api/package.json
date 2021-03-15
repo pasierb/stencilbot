@@ -21,28 +21,26 @@
     "dev": "ts-node --pretty --files src/server",
     "compile": "tsc",
     "bundle": "./bin/packageLambda.sh",
-    "build": "npm run compile && npm run bundle",
+    "build": "npm run compile",
     "prebuild": "npm run clean"
   },
   "bugs": {
     "url": "https://github.com/pasierb/stencilbot/issues"
-  },
-  "peerDependencies": {
-    "aws-sdk": "^2.631.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.51",
     "@types/fs-extra": "^9.0.1",
     "@types/node": "^14.14.31",
     "@types/node-fetch": "^2.5.7",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "ts-mockito": "^2.6.1"
   },
   "dependencies": {
-    "@sentry/node": "^5.17.0",
     "@stencilbot/renderer": "*",
+    "canvas": "^2.6.1",
+    "aws-sdk": "^2.0",
     "fs-extra": "^9.0.0",
     "node-canvas-with-twemoji-and-discord-emoji": "^1.1.8",
-    "canvas": "^2.6.1",
     "node-fetch": "^2.6.0"
   }
 }

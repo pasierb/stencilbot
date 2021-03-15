@@ -1,4 +1,3 @@
-import path from "path";
 import { App, CfnOutput, Duration, RemovalPolicy, Stack, StackProps } from "@aws-cdk/core";
 import * as apigateway from '@aws-cdk/aws-apigateway';
 import * as lambda from "@aws-cdk/aws-lambda";
@@ -8,7 +7,8 @@ import * as logs from "@aws-cdk/aws-logs";
 import * as cloudfront from "@aws-cdk/aws-cloudfront";
 import * as certificateManager from "@aws-cdk/aws-certificatemanager";
 import * as route53 from "@aws-cdk/aws-route53";
-import { apiPackagePath, Stage } from "./constants";
+import * as ecr from "@aws-cdk/aws-ecr";
+import { Stage } from "./constants";
 
 interface ApiStackProps extends StackProps {
   googleFontsApiKey: string;
@@ -66,15 +66,17 @@ export class ApiStack extends Stack {
       }
     });
 
-    const projectFunction = new lambda.Function(this, "sb-api-project-function", {
-      code: lambda.Code.fromAsset(path.join(apiPackagePath, "tmp/lambda.zip")),
-      handler: "lib/lambda/index.handler",
+    const apiRepository = ecr.Repository.fromRepositoryName(this, "sb-api-function-repository", "stencilbot-api");
+
+    const projectFunction = new lambda.DockerImageFunction(this,  "sb-api-project-function", {
+      code: lambda.DockerImageCode.fromEcr(apiRepository, {
+        tag: this.apiContainerImageTag
+      }),
       environment: {
         GOOGLE_FONTS_API_KEY: props.googleFontsApiKey,
         BUCKET: bucket.bucketName,
         BUCKET_URL: this.cdnDomainName
       },
-      runtime: lambda.Runtime.NODEJS_14_X,
       timeout: Duration.seconds(5),
       logRetention: logs.RetentionDays.ONE_MONTH
     });
@@ -98,6 +100,11 @@ export class ApiStack extends Stack {
       endpointTypes: [apigateway.EndpointType.REGIONAL],
       binaryMediaTypes: ["image/png", "*/*"]
     });
+
+    new CfnOutput(this, "ApiRepositoryName", {
+      value: apiRepository.repositoryName,
+      exportName: "StencilbotApiRepositoryName"
+    })
 
     new CfnOutput(this, "SourceBucketName", { value: bucket.bucketName })
 
@@ -128,6 +135,17 @@ export class ApiStack extends Stack {
       }
       case Stage.prod: {
         return "api.stencilbot.io";
+      }
+    }
+  }
+
+  get apiContainerImageTag(): string {
+    switch (this.stage) {
+      case Stage.beta: {
+        return "beta";
+      }
+      case Stage.prod: {
+        return "latest";
       }
     }
   }
